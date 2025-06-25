@@ -1,28 +1,56 @@
-name: ci
+name: Multisig CI
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-test-program:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Setup Solana Environment
+        uses: DhruvWebDev/solana-setup-action@v0.0.4
+        with:
+          node-version: '20'
+          solana-cli-version: '1.18.26'
+          anchor-version: '0.31.1'
+          x-ray-enabled: true
+            
+      - name: Verify Solana CLI version
+        run: solana --version
 
-    - name: Build
-      run: |
-        npm install
-        grunt
+      - name: solana config
+        run: |
+          solana config get
+          solana config set --url devnet
+          solana-keygen new --no-bip39-passphrase
+          solana address 
+          solana airdrop 2
+          solana balance 
+
+      - name: Verify Anchor CLI version
+        run: anchor --version
+
+      - name: Anchor Build
+        run: anchor build
+        working-directory: ./multisig
+
+      - name: Install npm packages
+        run: npm install
+        working-directory: ./multisig
+
+      - name: Anchor Test
+        run: anchor test
+        working-directory: ./multisig
+
+    
+
+      # Optional: if x-ray supports outputting SARIF
+      # - name: Upload SARIF report
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: multisig/output.sarif
