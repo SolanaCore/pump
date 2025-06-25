@@ -1,16 +1,21 @@
+pub mod constants;
+pub mod error;
+pub mod instructions;
+pub mod state;
+
 use anchor_lang::prelude::*;
 
-declare_id!("4QKMkU8HQTSWEFTieQ1Hnd5SXRjJKJhJrXnyD7zFmRwL");
+pub use constants::*;
+pub use instructions::*;
+pub use state::*;
+
+declare_id!("FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q");
 
 #[program]
 pub mod pump {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("Greetings from: {:?}", ctx.program_id);
-        Ok(())
+        initialize::handler(ctx)
     }
 }
-
-#[derive(Accounts)]
-pub struct Initialize {}
