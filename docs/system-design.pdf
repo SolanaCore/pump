@@ -1,0 +1,100 @@
+Here’s a clearer and more concise version of your file with improved structure, grammar, math formatting, and consistent tone:
+
+---
+
+## Virtual Liquidity: Two Main Purposes
+
+### 1. Initial Price Calculation
+
+The initial price (in tokens per SOL) is defined by the ratio:
+
+$$
+\text{Initial Price} = \frac{\text{virtual\_token\_liquidity}}{\text{virtual\_sol\_liquidity}}
+$$
+
+This enables token launches without requiring upfront SOL.
+
+---
+
+### 2. Bonding Curve Control
+
+The virtual reserve values shape the AMM bonding curve:
+
+* `300 SOL : 800M tokens` → **Linear curve**
+* `30 SOL : 800M tokens` → **Exponential curve**
+
+![Bonding Curve Example](image.png)
+
+---
+
+## 📈 Buy Formula
+
+Let:
+
+* Virtual SOL reserve `x = 30 SOL`
+* Virtual token reserve `y = 800,000,000 tokens`
+* User sends `Δx = 1 SOL`
+
+We apply the **constant product formula**:
+
+$$
+x \cdot y = x' \cdot y'
+\quad\text{where } x' = x + \Delta x
+$$
+
+### Derivation:
+
+$$
+y' = \frac{x \cdot y}{x + \Delta x}
+$$
+
+$$
+y' = \frac{30 \cdot 800{,}000{,}000}{31} = 774{,}193{,}548
+$$
+
+$$
+\Delta y = y - y' = 800{,}000{,}000 - 774{,}193{,}548 = 25{,}806{,}452
+$$
+
+✅ **User receives `25,806,452` tokens**
+
+![Buy Formula](image-1.png)
+
+---
+
+## 📉 Sell Formula (Using Buy Output)
+
+Now, the user sells the `Δy = 25,806,452` tokens back.
+
+Let:
+
+* `x = 30 SOL`
+* `y = 774,193,548 tokens` (updated after buy)
+* `y' = y + Δy = 800,000,000`
+
+We again use the constant product formula:
+
+$$
+x' = \frac{x \cdot y}{y + \Delta y}
+= \frac{30 \cdot 774{,}193{,}548}{800{,}000{,}000} = 29.032
+$$
+
+$$
+\Delta x = x - x' = 30 - 29.032 = 0.968\ \text{SOL}
+$$
+
+✅ **User receives `~0.968 SOL`**
+❌ Loss due to slippage = `1 - 0.968 = 0.032 SOL`
+
+![Sell Formula](image-3.png)
+
+---
+
+### ✅ Summary (Round Trip):
+
+| Action   | Input             | Output            |
+| -------- | ----------------- | ----------------- |
+| **Buy**  | 1 SOL             | 25,806,452 tokens |
+| **Sell** | 25,806,452 tokens | \~0.968 SOL       |
+| **Loss** | –                 | 0.032 SOL         |
+
