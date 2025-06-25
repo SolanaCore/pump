@@ -1,12 +1,4 @@
-    /*
-    Bonding Curve State
-    >Virtual_sol_reserve
-    >Virtual_token_reserve
-    >token_sold
-    >token_mint
-    >is_active 
-    >bump
-    */
+
     use anchor_lang::prelude::*;
     use crate::error::ErrorCode;
 
@@ -107,7 +99,8 @@ mod tests {
     use anchor_lang::prelude::*;
 
  #[test]
-fn test_bonding_curve_buy_and_sell_logic() {
+
+ fn test_bonding_curve_buy_and_sell_logic() {
     let mut bonding_curve = BondingCurve {
         virtual_sol_reserve: 30,
         virtual_token_reserve: 800_000_000,
@@ -146,5 +139,6 @@ fn test_bonding_curve_buy_and_sell_logic() {
     assert_eq!(bonding_curve.virtual_token_reserve, new_token_reserve);
     assert_eq!(bonding_curve.virtual_sol_reserve, expected_sol_reserve_after_sell);
     assert_eq!(bonding_curve.token_sold, token_to_send - max_token);
-}
+
+ }
 }
