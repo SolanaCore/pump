@@ -14,7 +14,7 @@ use anchor_spl::{
 
 use crate::state::{BondingCurve, GlobalConfig};
 use crate::constants::{ANCHOR_DISCRIMINATOR, BONDING_SEED};
-use crate::utils::*; // assumes mint_token and create_metadata_account_v3 are here
+// use crate::utils::*; // assumes mint_token and create_metadata_account_v3 are here
 
 use anchor_spl::token::TokenAccount;
 use anchor_spl::token::Mint;
