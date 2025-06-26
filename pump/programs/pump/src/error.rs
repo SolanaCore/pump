@@ -10,4 +10,6 @@ pub enum ErrorCode {
     InvalidTokenAmount,
     #[msg("the sol amount can't be zero")]
     InvalidSolAmount,
+    #[msg("Invalis Inputs check the that either name, ticker, uri or description are not empty")]
+    InvalidInputs,
 }
