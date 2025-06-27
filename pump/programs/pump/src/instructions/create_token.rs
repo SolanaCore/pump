@@ -8,6 +8,7 @@ use anchor_spl::{
         mpl_token_metadata::types::DataV2,
         CreateMetadataAccountsV3,
         Metadata as Metaplex,
+        mpl_token_metadata::ID as METAPLEX_ID,
     },
 };
 // use anchor_lang::prelude::{Mint, TokenAccount}; // ✅ Fix: Use the correct types for Anchor compatibility
@@ -27,7 +28,7 @@ pub struct CreateToken<'info> {
     #[account(
         init_if_needed,
         payer = signer,
-        seeds = ["BONDING_SEED".as_bytes(), signer.key().as_ref()],
+        seeds = ["BONDING_SEED".as_bytes(), mint.key().as_ref()],
         space = ANCHOR_DISCRIMINATOR + BondingCurve::INIT_SPACE,
         bump,
     )]
@@ -60,6 +61,7 @@ pub struct CreateToken<'info> {
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
     pub associated_token_program: Program<'info, AssociatedToken>,
+    #[account(address = METAPLEX_ID)]
     pub token_metadata_program: Program<'info, Metaplex>,
 }
 
