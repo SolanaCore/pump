@@ -17,20 +17,11 @@ use crate::state::{BondingCurve, GlobalConfig};
 use crate::constants::{ANCHOR_DISCRIMINATOR, BONDING_SEED};
 // use crate::utils::*; // assumes mint_token and create_metadata_account_v3 are here
 
-use anchor_spl::token::TokenAccount;
-use anchor_spl::token::Mint;
-
 
 #[derive(Account)]
 pub struct SellToken {
     #[account(mut)]
     pub signer: Signer<'info>
-
-    #[account(
-    seeds = ["bonding_curve_sol_escrow".as_bytes(), bonding_curve.key().as_ref()],
-    bump
-     )]
-    pub sol_ata: Account<'info, SystemAccount>
 
         #[account(
         init_if_needed,
@@ -45,12 +36,6 @@ pub struct SellToken {
         associated_token::authority = bonding_curve
     )]
     pub token_escrow: Account<'info, TokenAccount>
-
-     #[account(
-        seeds = ["bonding_curve_sol_escrow".as_bytes(), bonding_curve.key().as_ref()],
-        bump,
-    )]
-    pub sol_escrow: SystemAccount<'info>
 
     #[account(
         seeds = [b"BONDING_CURVE", token_mint.key().as_ref()],
@@ -86,7 +71,9 @@ pub fn sell_token(ctx: Context<SellToken>, max_token:u64) -> Result<()> {
         token_program: &AccountInfo<'info>,
     
     */
+    let signer = &[b"BONDING_CURVE", ctx.acccounts.token_mint.key().as_ref(), &[ctx.acccounts.bonding_curve.bump]];
+    let signer_seeds:&[&[&[u8]]] = &[&signer[..]];
 
-    bonding_curve.transfer_token(ctx.acccounts.token_ata.to_account_info(), ctx.acccounts.token_escrow.to_account_info(), &[], swapAmount.tokan_to_send,ctx.acccounts.signer.to_account_info() ctx.acccounts.token_program.to_account_info());
-    bonding_curve.transfer_token(ctx.acccounts.sol_escrow.to_account_info(), ctx.acccounts.sol_ata.to_account_info,signer_seeds, swapAmount.max_sol,ctx.acccounts.bonding_curve.to_account_info() ctx.acccounts.token_program.to_account_info())
-}
+    bonding_curve.transfer_token(ctx.acccounts.token_ata.to_account_info(), ctx.acccounts.token_escrow.to_account_info(), &[], swapAmount.tokan_to_send, ctx.acccounts.token_program.to_account_info());
+    bonding_curve.transfer_sol(ctx.acccounts.bonding_curve.to_account_info(), ctx.acccounts.signer.to_account_info, signer_seeds, swapAmount.max_sol, ctx.acccounts.bonding_curve.to_account_info(), ctx.acccounts.system_program.to_account_info())
+} 

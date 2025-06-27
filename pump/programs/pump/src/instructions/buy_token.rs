@@ -1,6 +1,6 @@
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token::{mint_to, MintTo, Token},
+    token::{mint_to, MintTo, Token, transfer_checked, TransferChecked},
     metadata::{
         create_metadata_accounts_v3,
         mpl_token_metadata::types::DataV2,
@@ -8,19 +8,14 @@ use anchor_spl::{
         Metadata as Metaplex,
     },
 };
-
 use anchor_lang::prelude::*;
+use anchor_lang::system_program::{transfer, Transfer}
+
 use crate::state::*;
 #[derive(Account)]
 pub struct BuyToken {
     #[account(mut)]
     pub signer: Signer<'info>
-
-    #[account(
-    seeds = ["bonding_curve_sol_escrow".as_bytes(), bonding_curve.key().as_ref()],
-    bump
-     )]
-    pub sol_ata: Account<'info, SystemAccount>
 
         #[account(
         init_if_needed,
@@ -36,11 +31,6 @@ pub struct BuyToken {
     )]
     pub token_escrow: Account<'info, TokenAccount>
 
-     #[account(
-        seeds = ["bonding_curve_sol_escrow".as_bytes(), bonding_curve.key().as_ref()],
-        bump,
-    )]
-    pub sol_escrow: SystemAccount<'info>
 
     #[account(
         seeds = [b"BONDING_CURVE", token_mint.key().as_ref()],
@@ -69,12 +59,13 @@ pub fn buy_token(ctx:Context<BuyToken>, maxSol:u64) -> Result<()> {
         amount: u64,
         token_program: &AccountInfo<'info>,
     */
+    
     // User -> sol_escrow
-    bonding_curve.transfer_token(ctx.acccounts.sol_ata.to_account_info(), ctx.acccounts.sol_escrow.to_account_info(), &[], swapAmount.max_sol, ctx.acccounts.signer.to_account_info(),ctx.acccounts.token_program.to_account_info());
+    bonding_curve.transfer_sol(ctx.acccounts.signer.to_account_info(), ctx.acccounts.bonding_curve.to_account_info(), &[], swapAmount.max_sol, ctx.acccounts.system_program.to_account_info());
     //token_escrow -> token_ata
     let signer = &[b"BONDING_CURVE", ctx.acccounts.token_mint.key().as_ref(), &[ctx.acccounts.bonding_curve.bump]];
     let signer_seeds:&[&[&[u8]]] = &[&signer[..]];
 
-    bonding_curve.transfer_token(ctx.accounts.token_escrow.to_account_info(), ctx.accounts.token_ata.to_account_info, signer_seeds, swapAmount.token_to_send,ctx.acccounts.bonding_curve.to_account_info(), ctx.acccounts.token_program.to_account_info());
+    bonding_curve.transfer_token(ctx.accounts.token_escrow.to_account_info(), ctx.accounts.token_ata.to_account_info, signer_seeds, swapAmount.token_to_send, ctx.acccounts.bonding_curve.to_account_info(), ctx.acccounts.token_program.to_account_info());
     Ok(())
 }

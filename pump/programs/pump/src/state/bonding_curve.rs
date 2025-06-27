@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use anchor_lang::system_program::{transfer, Transfer};
 use anchor_spl::{
     associated_token::AssociatedToken,
     token::{mint_to, Mint, MintTo, Token, TokenAccount, transfer as spl_transfer, Transfer as SplTransfer},
@@ -223,6 +224,25 @@ impl<'info> BondingCurve {
             signer,
         );
         spl_transfer(cpi_ctx, amount)?;
+        Ok(())
+    }
+
+    pub fn transfer_sol(
+        from: AccountInfo<'info>,
+        to: AccountInfo<'info>,
+        signer: Option<&[&[&[u8]]]>,
+        amount: u64,
+        system_program: AccountInfo<'info>,
+    ) -> Result<()> {
+        let cpi_ctx = match signer {
+            Some(seeds) => CpiContext::new_with_signer(
+                system_program,
+                Transfer { from, to },
+                seeds,
+            ),
+            None => CpiContext::new(system_program, Transfer { from, to }),
+        };
+        transfer(cpi_ctx, amount)?;
         Ok(())
     }
 }
