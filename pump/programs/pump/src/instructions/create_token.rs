@@ -20,7 +20,7 @@ use crate::constants::{ANCHOR_DISCRIMINATOR, BONDING_SEED};
 use anchor_spl::token::TokenAccount;
 use anchor_spl::token::Mint;
 #[derive(Accounts)]
-pub struct CreateToken<'info> {
+pub struct CreateToken<'info>{
     #[account(mut)]
     pub signer: Signer<'info>,
     pub global_state: Account<'info, GlobalConfig>,
@@ -51,43 +51,42 @@ pub struct CreateToken<'info> {
     )]
     pub bonding_curve_ata: Account<'info, TokenAccount>,
 
-    #[account(
-        seeds = ["bonding_curve_sol_escrow".as_bytes(), bonding_curve.key().as_ref()],
-        bump,
-    )]
-    pub bonding_curve_sol_escrow: SystemAccount<'info>,
-
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     #[account(address = METAPLEX_ID)]
     pub token_metadata_program: Program<'info, Metaplex>,
+    /// CHECK:New Metaplex Account being created
+
+     #[account(
+        mut,
+     )]
+    pub metadata: UncheckedAccount<'info>,
 }
 
 pub fn create_token(
     ctx: &mut Context<CreateToken>,
-    bump: u8,
     sol_reserve: &u64,
     token_reserve: &u64,
-    token_mint: &Pubkey,
     name: &str,
     ticker: &str,
     uri: &str,
 ) -> Result<()> {
     // Step 1: Initialize bonding curve state
     ctx.accounts.bonding_curve.init_bonding_curve(
-        sol_reserve,
-        token_reserve,
-        token_mint,
-        &bump,
+        &sol_reserve,
+        &token_reserve,
+        &ctx.accounts.mint.key(),
+        &ctx.bumps.bonding_curve.clone(),
     )?;
 
     // Step 2: Prepare signer seeds
-    let bump_bytes = [bump];
+    let bump_bytes = [ctx.bumps.bonding_curve.clone()];
+    let binding = ctx.accounts.mint.key();
     let seeds: &[&[u8]] = &[
         b"BONDING_SEED",
-        ctx.accounts.signer.key.as_ref(),
+        binding.as_ref(),
         &bump_bytes,
     ];
     let signer_seeds: &[&[&[u8]]] = &[seeds];
@@ -101,7 +100,7 @@ pub fn create_token(
         &ctx.accounts.signer.to_account_info(),
         &ctx.accounts.bonding_curve.to_account_info(),
         &ctx.accounts.mint.to_account_info(),
-        &ctx.accounts.mint.to_account_info(),
+        &ctx.accounts.metadata.to_account_info(),
         &ctx.accounts.bonding_curve.to_account_info(),
         &ctx.accounts.system_program.to_account_info(),
         &ctx.accounts.rent.to_account_info(),

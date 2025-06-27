@@ -206,45 +206,44 @@ impl<'info> BondingCurve {
         Ok(())
     }
 
-    pub fn transfer_token(
-        from: AccountInfo<'info>,
-        to: AccountInfo<'info>,
-        signer: &[&[&[u8]]],
-        amount: u64,
-        authority: AccountInfo<'info>,
-        token_program: AccountInfo<'info>,
-    ) -> Result<()> {
-        let cpi_ctx = CpiContext::new_with_signer(
-            token_program,
-            SplTransfer {
-                from: from.clone(),
-                to: to,
-                authority: authority.clone(),
-            },
-            signer,
-        );
-        spl_transfer(cpi_ctx, amount)?;
-        Ok(())
-    }
+        pub fn transfer_token(
+            &self,
+            from: AccountInfo<'info>,
+            to: AccountInfo<'info>,
+            signer: &[&[&[u8]]],
+            amount: u64,
+            authority: AccountInfo<'info>,
+            token_program: AccountInfo<'info>,
+        ) -> Result<()> {
+            let cpi_ctx = CpiContext::new_with_signer(
+                token_program,
+                SplTransfer {
+                    from: from.clone(),
+                    to: to,
+                    authority: authority.clone(),
+                },
+                signer,
+            );
+            spl_transfer(cpi_ctx, amount)?;
+            Ok(())
+        }
 
-    pub fn transfer_sol(
-        from: AccountInfo<'info>,
-        to: AccountInfo<'info>,
-        signer: Option<&[&[&[u8]]]>,
-        amount: u64,
-        system_program: AccountInfo<'info>,
-    ) -> Result<()> {
-        let cpi_ctx = match signer {
-            Some(seeds) => CpiContext::new_with_signer(
-                system_program,
-                Transfer { from, to },
-                seeds,
-            ),
-            None => CpiContext::new(system_program, Transfer { from, to }),
-        };
-        transfer(cpi_ctx, amount)?;
-        Ok(())
-    }
+        pub fn transfer_sol(
+            &self,
+            from: AccountInfo<'info>,
+            to: AccountInfo<'info>,
+            signer_seeds: &[&[&[u8]]],
+            amount: u64,
+            system_program: AccountInfo<'info>,
+        ) -> Result<()> {
+            let cpi_ctx = CpiContext::new_with_signer(
+                            system_program,
+                            Transfer { from, to },
+                            signer_seeds,
+                        );
+            transfer(cpi_ctx, amount)?;
+            Ok(())
+        }
 }
 
 #[cfg(test)]
