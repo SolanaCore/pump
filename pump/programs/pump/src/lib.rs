@@ -26,7 +26,7 @@ pub mod admin {
 }
 
 #[program]
-pub mod pump_program { 
+pub mod pump { 
     use super::*;
 
     pub fn init_global_config(ctx: &Context<InitGlobalConfig>) -> Result<()> {
