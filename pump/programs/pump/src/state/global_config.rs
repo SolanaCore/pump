@@ -11,11 +11,11 @@ pub struct GlobalConfig {
 
 impl GlobalConfig {
     pub fn init_global_config(&mut self, bump:&u8) -> Result<()> {
-        self.token_to_sell = 800_000_000; // Example value, adjust as needed
-        self.token_to_mint = 1_000_000_000; // Example value, adjust as needed
-        self.virtual_token_reserve = 1_000_000_000; // Example value, adjust as needed
-        self.virtual_sol_reserve = 30; // Example value, adjust as needed
-        self.bump = *bump; // This should be set to the appropriate value later
+        self.token_to_sell = 800_000_000; 
+        self.token_to_mint = 1_000_000_000; 
+        self.virtual_token_reserve = 800_000_000; 
+        self.virtual_sol_reserve = 30; 
+        self.bump = *bump; 
         Ok(())
     }
     pub fn virtual_token_reserve(&self) -> u64 {

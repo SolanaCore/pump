@@ -20,7 +20,7 @@ use crate::constants::{ANCHOR_DISCRIMINATOR, BONDING_SEED};
 use anchor_spl::token::TokenAccount;
 use anchor_spl::token::Mint;
 #[derive(Accounts)]
-pub struct CreateToken<'info> {
+pub struct CreateToken<'info>{
     #[account(mut)]
     pub signer: Signer<'info>,
     pub global_state: Account<'info, GlobalConfig>,

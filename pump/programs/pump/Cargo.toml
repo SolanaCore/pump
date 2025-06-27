@@ -18,7 +18,7 @@
     anchor-debug = []
     custom-heap = []
     custom-panic = []
-
+    devnet = []
     [dependencies]
 anchor-lang = {version = "0.31.1", features = ["init-if-needed"]}
 anchor-spl = { version = "0.31.1", features = ["metadata"]}
