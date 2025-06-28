@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
+} from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
 
 /** OverflowDetected: Overflow detected */
 export const PUMP_ERROR__OVERFLOW_DETECTED = 0x1770; // 6000
@@ -33,7 +33,7 @@ export type PumpError =
   | typeof PUMP_ERROR__UNDERFLOW_DETECTED;
 
 let pumpErrorMessages: Record<PumpError, string> | undefined;
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   pumpErrorMessages = {
     [PUMP_ERROR__INVALID_INPUTS]: `Invalis Inputs check the that either name, ticker, uri or description are not empty`,
     [PUMP_ERROR__INVALID_SOL_AMOUNT]: `the sol amount can't be zero`,
@@ -44,11 +44,11 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export function getPumpErrorMessage(code: PumpError): string {
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== 'production') {
     return (pumpErrorMessages as Record<PumpError, string>)[code];
   }
 
-  return "Error message not available in production bundles.";
+  return 'Error message not available in production bundles.';
 }
 
 export function isPumpError<TProgramErrorCode extends PumpError>(
@@ -56,13 +56,13 @@ export function isPumpError<TProgramErrorCode extends PumpError>(
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode,
+  code?: TProgramErrorCode
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     PUMP_PROGRAM_ADDRESS,
-    code,
+    code
   );
 }

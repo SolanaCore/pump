@@ -12,16 +12,16 @@ import {
   getBytesEncoder,
   type Address,
   type ReadonlyUint8Array,
-} from "@solana/kit";
+} from '@solana/kit';
 import {
   type ParsedBuyTokenInstruction,
   type ParsedCreateTokenInstruction,
   type ParsedInitGlobalConfigInstruction,
   type ParsedSellTokenInstruction,
-} from "../instructions";
+} from '../instructions';
 
 export const PUMP_PROGRAM_ADDRESS =
-  "FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q" as Address<"FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q">;
+  'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q' as Address<'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'>;
 
 export enum PumpAccount {
   BondingCurve,
@@ -29,16 +29,16 @@ export enum PumpAccount {
 }
 
 export function identifyPumpAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
 ): PumpAccount {
-  const data = "data" in account ? account.data : account;
+  const data = 'data' in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([23, 183, 248, 55, 96, 216, 172, 96]),
+        new Uint8Array([23, 183, 248, 55, 96, 216, 172, 96])
       ),
-      0,
+      0
     )
   ) {
     return PumpAccount.BondingCurve;
@@ -47,15 +47,15 @@ export function identifyPumpAccount(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([149, 8, 156, 202, 160, 252, 176, 217]),
+        new Uint8Array([149, 8, 156, 202, 160, 252, 176, 217])
       ),
-      0,
+      0
     )
   ) {
     return PumpAccount.GlobalConfig;
   }
   throw new Error(
-    "The provided account could not be identified as a pump account.",
+    'The provided account could not be identified as a pump account.'
   );
 }
 
@@ -67,16 +67,16 @@ export enum PumpInstruction {
 }
 
 export function identifyPumpInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
 ): PumpInstruction {
-  const data = "data" in instruction ? instruction.data : instruction;
+  const data = 'data' in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([138, 127, 14, 91, 38, 87, 115, 105]),
+        new Uint8Array([138, 127, 14, 91, 38, 87, 115, 105])
       ),
-      0,
+      0
     )
   ) {
     return PumpInstruction.BuyToken;
@@ -85,9 +85,9 @@ export function identifyPumpInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([84, 52, 204, 228, 24, 140, 234, 75]),
+        new Uint8Array([84, 52, 204, 228, 24, 140, 234, 75])
       ),
-      0,
+      0
     )
   ) {
     return PumpInstruction.CreateToken;
@@ -96,9 +96,9 @@ export function identifyPumpInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([140, 136, 214, 48, 87, 0, 120, 255]),
+        new Uint8Array([140, 136, 214, 48, 87, 0, 120, 255])
       ),
-      0,
+      0
     )
   ) {
     return PumpInstruction.InitGlobalConfig;
@@ -107,20 +107,20 @@ export function identifyPumpInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([109, 61, 40, 187, 230, 176, 135, 174]),
+        new Uint8Array([109, 61, 40, 187, 230, 176, 135, 174])
       ),
-      0,
+      0
     )
   ) {
     return PumpInstruction.SellToken;
   }
   throw new Error(
-    "The provided instruction could not be identified as a pump instruction.",
+    'The provided instruction could not be identified as a pump instruction.'
   );
 }
 
 export type ParsedPumpInstruction<
-  TProgram extends string = "FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q",
+  TProgram extends string = 'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q',
 > =
   | ({
       instructionType: PumpInstruction.BuyToken;

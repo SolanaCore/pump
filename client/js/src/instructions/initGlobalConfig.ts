@@ -30,9 +30,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
-import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
+} from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
+import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
 
 export const INIT_GLOBAL_CONFIG_DISCRIMINATOR = new Uint8Array([
   140, 136, 214, 48, 87, 0, 120, 255,
@@ -40,7 +40,7 @@ export const INIT_GLOBAL_CONFIG_DISCRIMINATOR = new Uint8Array([
 
 export function getInitGlobalConfigDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    INIT_GLOBAL_CONFIG_DISCRIMINATOR,
+    INIT_GLOBAL_CONFIG_DISCRIMINATOR
   );
 }
 
@@ -49,10 +49,10 @@ export type InitGlobalConfigInstruction<
   TAccountGlobalConfig extends string | IAccountMeta<string> = string,
   TAccountSigner extends
     | string
-    | IAccountMeta<string> = "52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg",
+    | IAccountMeta<string> = '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg',
   TAccountSystemProgram extends
     | string
-    | IAccountMeta<string> = "11111111111111111111111111111111",
+    | IAccountMeta<string> = '11111111111111111111111111111111',
   TRemainingAccounts extends readonly IAccountMeta<string>[] = [],
 > = IInstruction<TProgram> &
   IInstructionWithData<Uint8Array> &
@@ -80,14 +80,14 @@ export type InitGlobalConfigInstructionDataArgs = {};
 
 export function getInitGlobalConfigInstructionDataEncoder(): Encoder<InitGlobalConfigInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: INIT_GLOBAL_CONFIG_DISCRIMINATOR }),
+    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: INIT_GLOBAL_CONFIG_DISCRIMINATOR })
   );
 }
 
 export function getInitGlobalConfigInstructionDataDecoder(): Decoder<InitGlobalConfigInstructionData> {
   return getStructDecoder([
-    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -97,7 +97,7 @@ export function getInitGlobalConfigInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getInitGlobalConfigInstructionDataEncoder(),
-    getInitGlobalConfigInstructionDataDecoder(),
+    getInitGlobalConfigInstructionDataDecoder()
   );
 }
 
@@ -122,7 +122,7 @@ export async function getInitGlobalConfigInstructionAsync<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress },
+  config?: { programAddress?: TProgramAddress }
 ): Promise<
   InitGlobalConfigInstruction<
     TProgramAddress,
@@ -153,21 +153,21 @@ export async function getInitGlobalConfigInstructionAsync<
         getBytesEncoder().encode(
           new Uint8Array([
             103, 108, 111, 98, 97, 108, 95, 99, 111, 110, 102, 105, 103,
-          ]),
+          ])
         ),
       ],
     });
   }
   if (!accounts.signer.value) {
     accounts.signer.value =
-      "52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg" as Address<"52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg">;
+      '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg' as Address<'52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'>;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
+      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
   const instruction = {
     accounts: [
       getAccountMeta(accounts.globalConfig),
@@ -207,7 +207,7 @@ export function getInitGlobalConfigInstruction<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress },
+  config?: { programAddress?: TProgramAddress }
 ): InitGlobalConfigInstruction<
   TProgramAddress,
   TAccountGlobalConfig,
@@ -231,14 +231,14 @@ export function getInitGlobalConfigInstruction<
   // Resolve default values.
   if (!accounts.signer.value) {
     accounts.signer.value =
-      "52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg" as Address<"52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg">;
+      '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg' as Address<'52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'>;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
+      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
   const instruction = {
     accounts: [
       getAccountMeta(accounts.globalConfig),
@@ -276,11 +276,11 @@ export function parseInitGlobalConfigInstruction<
 >(
   instruction: IInstruction<TProgram> &
     IInstructionWithAccounts<TAccountMetas> &
-    IInstructionWithData<Uint8Array>,
+    IInstructionWithData<Uint8Array>
 ): ParsedInitGlobalConfigInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error("Not enough accounts");
+    throw new Error('Not enough accounts');
   }
   let accountIndex = 0;
   const getNextAccount = () => {

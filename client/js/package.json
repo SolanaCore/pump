@@ -1,24 +1,18 @@
 {
-  "name": "@solanacore/bonding_curve",
-  "version": "0.0.1",
-  "description": "typescript sdk",
-  "main": "src/*",
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
-    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
-    },
-  "keywords": ["bonding_curve", "ts", "sdk", "smart contracts", "solana", "bonding_curve"],
-  "author": "DhruvWebDev",
-  "license": "MIT",
-  "type": "module",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "dependencies": {
     "@solana/kit": "^2.1.1",
     "tsc": "^2.0.4",
-    "typescript": "^5.8.3",
-    "prettier": "^3.6.1"
-  },
-    "homepage": "https://github.com/SolanaCore/pump/blob/main/client#readme",
-     "bugs": {
-    "url": "https://github.com/SolanaCore/pump/issues"
+    "typescript": "^5.8.3"
   }
 }
