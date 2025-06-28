@@ -5,7 +5,6 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-
 export * from "./buyToken";
 export * from "./createToken";
 export * from "./initGlobalConfig";

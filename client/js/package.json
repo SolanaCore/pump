@@ -1,24 +1,35 @@
 {
   "name": "@solanacore/bonding_curve",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "typescript sdk",
-  "main": "src/*",
+  "main": "dist/index.js",
   "scripts": {
-     "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
+    "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
     "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
-    },
-  "keywords": ["bonding_curve", "ts", "sdk", "smart contracts", "solana", "bonding_curve"],
-  "author": "DhruvWebDev",
+  },
+  "keywords": [
+    "bonding_curve",
+    "ts",
+    "sdk",
+    "smart contracts",
+    "solana",
+    "bonding_curve"
+  ],
+  "author": "@solanacore",
   "license": "MIT",
   "type": "module",
   "dependencies": {
     "@solana/kit": "^2.1.1",
+    "@solanacore/bonding_curve": "^0.0.1",
+    "prettier": "^3.6.1",
     "tsc": "^2.0.4",
-    "typescript": "^5.8.3",
-    "prettier": "^3.6.1"
+    "typescript": "^5.8.3"
   },
-    "homepage": "https://github.com/SolanaCore/pump/blob/main/client#readme",
-     "bugs": {
+  "homepage": "https://github.com/SolanaCore/pump/blob/main/client#readme",
+  "bugs": {
     "url": "https://github.com/SolanaCore/pump/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.6"
   }
 }
