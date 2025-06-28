@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@solanacore/bonding_curve": "^0.0.3",
     "@tailwindcss/postcss": "^4",
     "@types/bn.js": "^5.2.0",
     "@types/node": "^20",
@@ -24,6 +25,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsc": "^2.0.4",
+    "typescript": "^5.8.3"
   }
 }
