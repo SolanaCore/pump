@@ -16,7 +16,7 @@ import {
   type ActionPostResponse,
   createPostResponse,
 } from "@solana/actions"
-import {getCreateTokenInstructionAsync } from "../../../../../../client/js/src/instructions/createToken"
+import { getCreateTokenInstructionAsync } from "@solanacore/bonding_curve"
 const PROGRAM_ID = new PublicKey("FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q")
 const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
 const RENT_PROGRAM_ID = new PublicKey("SysvarRent111111111111111111111111111111111")
