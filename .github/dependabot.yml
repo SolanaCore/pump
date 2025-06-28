@@ -8,4 +8,16 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "./pump" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "daily"
+
+updates:
+  - package-ecosystem: "pnpm" # See documentation for possible values
+    directory: "./blinks" # Location of package manifests
+    schedule:
+      interval: "daily"
+
+updates:
+  - package-ecosystem: "npm" # See documentation for possible values
+    directory: "./client/js" # Location of package manifests
+    schedule:
+      interval: "daily"
