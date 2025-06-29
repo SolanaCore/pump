@@ -61,7 +61,7 @@ describe("pump - create_token", () => {
         .accounts({
           signer: provider.wallet.publicKey,
           globalState: globalConfigPda,
-          bondingCurve: bondingCurvePda,
+          bondingCurve: bondingCurvePda, 
           mint: mint.publicKey,
           bondingCurveAta,
           tokenProgram: TOKEN_PROGRAM_ID,

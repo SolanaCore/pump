@@ -4,7 +4,6 @@ import {
   PublicKey,
   SystemProgram,
   clusterApiUrl,
-  LAMPORTS_PER_SOL,
   TransactionInstruction,
   Transaction,
 } from "@solana/web3.js"
@@ -21,6 +20,7 @@ const PROGRAM_ID = new PublicKey("FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q")
 const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
 const RENT_PROGRAM_ID = new PublicKey("SysvarRent111111111111111111111111111111111")
 
+export type TransactionSigner<TAddress extends string = string> = TransactionModifyingSigner<TAddress> | TransactionPartialSigner<TAddress> | TransactionSendingSigner<TAddress>;
 
 // GET request handler
 export async function GET(request: Request) {
@@ -34,6 +34,7 @@ export async function GET(request: Request) {
     links: {
       actions: [
         {
+          type:"message",
           label: "Create Token",
           href: `${url.origin}/api/actions/create-token?name={name}&ticker={ticker}&uri={uri}&solReserve={solReserve}&tokenReserve={tokenReserve}`,
           parameters: [
@@ -134,7 +135,7 @@ export async function POST(request: Request) {
 
     const instruction = await getCreateTokenInstructionAsync(
       {
-        signer: sender.toBase58(),
+        signer: TransactionSigner<sender.toBase58(),
         globalState: globalState.toBase58(),
         bondingCurve: bondingCurve.toBase58(),
         mint: mintPublicKey.toBase58(),
