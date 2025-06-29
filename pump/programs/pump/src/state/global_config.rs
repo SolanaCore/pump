@@ -14,7 +14,7 @@ impl GlobalConfig {
         self.token_to_sell = 800_000_000; 
         self.token_to_mint = 1_000_000_000; 
         self.virtual_token_reserve = 800_000_000; 
-        self.virtual_sol_reserve = 30; 
+        self.virtual_sol_reserve = 30_000_000_000; 
         self.bump = *bump; 
         Ok(())
     }

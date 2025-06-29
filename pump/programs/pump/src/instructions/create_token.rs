@@ -28,7 +28,7 @@ pub struct CreateToken<'info>{
     #[account(
         init_if_needed,
         payer = signer,
-        seeds = ["BONDING_SEED".as_bytes(), mint.key().as_ref()],
+        seeds = ["BONDING_CURVE".as_bytes(), mint.key().as_ref()],
         space = ANCHOR_DISCRIMINATOR + BondingCurve::INIT_SPACE,
         bump,
     )]
@@ -59,9 +59,7 @@ pub struct CreateToken<'info>{
     pub token_metadata_program: Program<'info, Metaplex>,
     /// CHECK:New Metaplex Account being created
 
-     #[account(
-        mut,
-     )]
+     #[account(mut)]
     pub metadata: UncheckedAccount<'info>,
 }
 
@@ -85,7 +83,7 @@ pub fn create_token(
     let bump_bytes = [ctx.bumps.bonding_curve.clone()];
     let binding = ctx.accounts.mint.key();
     let seeds: &[&[u8]] = &[
-        b"BONDING_SEED",
+        b"BONDING_CURVE",
         binding.as_ref(),
         &bump_bytes,
     ];
