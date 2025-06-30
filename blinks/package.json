@@ -14,20 +14,20 @@
     "@solana/web3.js": "^1.98.2",
     "bn.js": "^5.2.2",
     "next": "15.3.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@eslint/eslintrc": "^3.3.1",
     "@solanacore/bonding_curve": "^0.0.3",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/bn.js": "^5.2.0",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
+    "@types/node": "^20.19.2",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "eslint": "^9.30.0",
     "eslint-config-next": "15.3.4",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.11",
     "tsc": "^2.0.4",
     "typescript": "^5.8.3"
   }
