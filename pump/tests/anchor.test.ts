@@ -105,7 +105,7 @@
     });
 
     it("sells tokens", async () => {
-      const maxToken = new anchor.BN(25);
+      const maxToken = new anchor.BN(25_000_000_000);
       const tokenAta = await getAssociatedTokenAddress(mint.publicKey, payerPublicKey);
       console.log(mint.publicKey);
       const tx =  await program.methods

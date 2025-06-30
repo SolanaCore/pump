@@ -194,7 +194,7 @@ impl<'info> BondingCurve {
             signer_seeds,
         );
 
-        mint_to(cpi_ctx, 1_000_000_000)?;
+        mint_to(cpi_ctx, 1_000_000_000_000_000)?;
         Ok(())
     }
 
