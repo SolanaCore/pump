@@ -12,4 +12,6 @@ pub enum ErrorCode {
     InvalidSolAmount,
     #[msg("Invalis Inputs check the that either name, ticker, uri or description are not empty")]
     InvalidInputs,
+    #[msg("insufficient funds in the account 'from' account")]
+    InsufficientFunds,
 }

@@ -135,7 +135,7 @@ export async function POST(request: Request) {
 
     const instruction = await getCreateTokenInstructionAsync(
       {
-        signer: TransactionSigner<sender.toBase58(),
+        signer: sender.toBase58(),
         globalState: globalState.toBase58(),
         bondingCurve: bondingCurve.toBase58(),
         mint: mintPublicKey.toBase58(),
