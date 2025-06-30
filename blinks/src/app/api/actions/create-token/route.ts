@@ -20,8 +20,6 @@ const PROGRAM_ID = new PublicKey("FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q")
 const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
 const RENT_PROGRAM_ID = new PublicKey("SysvarRent111111111111111111111111111111111")
 
-export type TransactionSigner<TAddress extends string = string> = TransactionModifyingSigner<TAddress> | TransactionPartialSigner<TAddress> | TransactionSendingSigner<TAddress>;
-
 // GET request handler
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -122,7 +120,7 @@ export async function POST(request: Request) {
     const [globalState] = PublicKey.findProgramAddressSync([Buffer.from("global_config")], PROGRAM_ID)
 
     const [bondingCurve] = PublicKey.findProgramAddressSync(
-      [Buffer.from("BONDING_SEED"), mintPublicKey.toBuffer()],
+      [Buffer.from("BONDING_CURVE"), mintPublicKey.toBuffer()],
       PROGRAM_ID,
     )
 
