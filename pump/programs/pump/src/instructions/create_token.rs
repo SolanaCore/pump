@@ -27,9 +27,14 @@ pub struct CreateToken<'info>{
     #[account(mut)]
     pub signer: Signer<'info>,
     pub global_state: Box<Account<'info, GlobalConfig>>,
+        #[account(
+            seeds = [BONDING_SEED.as_bytes(), mint.key().as_ref(), bonding_curve.key().as_ref()],
+            bump,
+        )]
+        pub sol_escrow: SystemAccount<'info>,
 
     #[account(
-        init,
+        init_if_needed,
         payer = signer,
         seeds = ["BONDING_CURVE".as_bytes(), mint.key().as_ref()],
         space = ANCHOR_DISCRIMINATOR + BondingCurve::INIT_SPACE,
@@ -38,7 +43,7 @@ pub struct CreateToken<'info>{
     pub bonding_curve: Box<Account<'info, BondingCurve>>,
 
     #[account(
-        init,
+        init_if_needed,
         payer = signer,
         mint::decimals = 6,
         mint::authority = bonding_curve,
@@ -68,7 +73,7 @@ pub struct CreateToken<'info>{
 }
 
 pub fn create_token(
-    ctx: &mut Context<CreateToken>,
+    ctx:Context<CreateToken>,
     sol_reserve: &u64,
     token_reserve: &u64,
     name: &str,

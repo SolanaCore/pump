@@ -20,7 +20,9 @@ use crate::BONDING_SEED;
 pub struct BuyToken<'info>{
     #[account(mut)]
     pub signer: Signer<'info>,
+
         #[account(
+            mut,
             seeds = [BONDING_SEED.as_bytes(), token_mint.key().as_ref(), bonding_curve.key().as_ref()],
             bump,
         )]
@@ -71,12 +73,25 @@ pub fn buy_token(ctx: &mut Context<BuyToken>, max_sol:u64) -> Result<()> {
     */
     
     // User -> sol_escrow
-    let  _ = &bonding_curve.transfer_sol(&ctx.accounts.signer.to_account_info(), &ctx.accounts.sol_escrow.to_account_info(), swap_amount.max_sol,  &[],ctx.accounts.system_program.to_account_info());
+    let sol_escrow = ctx.accounts.sol_escrow.to_account_info();
+    let signer_info = ctx.accounts.signer.to_account_info();
+    msg!("Transferring {} lamports from signer to sol_escrow", swap_amount.max_sol);
+
+    // sol_escrow.add_lamports(swap_amount.max_sol)?;
+    // signer_info.sub_lamports(swap_amount.max_sol)?;
+        &bonding_curve.transfer_sol(&ctx.accounts.signer.to_account_info(), &sol_escrow.to_account_info(), swap_amount.max_sol,  &[],ctx.accounts.system_program.to_account_info());
+
+    /*
+       // ✅ Transfer lamports
+    **bonding_curve_info.try_borrow_mut_lamports()? -= swap_amount.max_sol;
+    **signer_info.try_borrow_mut_lamports()? += swap_amount.max_sol;
+    */
     //token_escrow -> token_ata
     let binding = ctx.accounts.token_mint.key();
     let signer = &[b"BONDING_CURVE", binding.as_ref(), &[bonding_curve.bump.clone()]];
     let signer_seeds:&[&[&[u8]]] = &[&signer[..]];
 
+    //transfer token
     let _ = &bonding_curve.transfer_token(ctx.accounts.token_escrow.to_account_info(), ctx.accounts.token_ata.to_account_info(), signer_seeds, swap_amount.token_to_send, ctx.accounts.bonding_curve.to_account_info(),ctx.accounts.token_mint.to_account_info(), ctx.accounts.token_program.to_account_info());
     Ok(())
 }

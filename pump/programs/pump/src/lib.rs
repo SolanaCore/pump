@@ -33,7 +33,7 @@ pub mod pump {
     }
 
     pub fn create_token(
-        mut ctx: Context<CreateToken>,
+        ctx: Context<CreateToken>,
         sol_reserve: u64,
         token_reserve: u64,
         name: String,
@@ -41,7 +41,7 @@ pub mod pump {
         uri: String,
     ) -> Result<()> {
         instructions::create_token(
-            &mut ctx,
+            ctx,
             &sol_reserve,
             &token_reserve,
             &name,
@@ -61,17 +61,3 @@ pub mod pump {
         Ok(())
     }
 }
-
-
-/*
-error: More than one fallback function found
-  --> programs/pump/src/lib.rs:30:5
-   |
-30 | /     pub fn init_global_config(mut ctx: &Context<InitGlobalConfig>) -> Result<()> {
-31 | |         instructions::init_global_config(&mut ctx)?;
-32 | |         Ok(())
-33 | |     }
-   | |_____^
-
-   Due to marking the ctx ref in the args 
-*/

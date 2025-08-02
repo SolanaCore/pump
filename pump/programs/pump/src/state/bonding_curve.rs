@@ -340,7 +340,8 @@ mod tests {
             virtual_token_reserve: u64::MAX,
             ..get_default_curve()
         };
-        let result = bonding_curve.buy_logic(1);
+        let result = bonding_curve.buy_logic(1_000_000_000);
+        
         assert!(result.is_err());
     }
 
