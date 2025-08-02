@@ -14,10 +14,17 @@ use anchor_spl::token::TokenAccount;
 use crate::SwapAmount;
 use crate::state::*;
 use crate::ErrorCode::*;
+use crate::BONDING_SEED;
+
 #[derive(Accounts)]
 pub struct BuyToken<'info>{
     #[account(mut)]
     pub signer: Signer<'info>,
+        #[account(
+            seeds = [BONDING_SEED.as_bytes(), token_mint.key().as_ref(), bonding_curve.key().as_ref()],
+            bump,
+        )]
+        pub sol_escrow: SystemAccount<'info>,
 
         #[account(
         init_if_needed,
@@ -64,7 +71,7 @@ pub fn buy_token(ctx: &mut Context<BuyToken>, max_sol:u64) -> Result<()> {
     */
     
     // User -> sol_escrow
-    let  _ = &bonding_curve.transfer_sol(&ctx.accounts.signer.to_account_info(), &bonding_curve.to_account_info(), swap_amount.max_sol,  &[],ctx.accounts.system_program.to_account_info());
+    let  _ = &bonding_curve.transfer_sol(&ctx.accounts.signer.to_account_info(), &ctx.accounts.sol_escrow.to_account_info(), swap_amount.max_sol,  &[],ctx.accounts.system_program.to_account_info());
     //token_escrow -> token_ata
     let binding = ctx.accounts.token_mint.key();
     let signer = &[b"BONDING_CURVE", binding.as_ref(), &[bonding_curve.bump.clone()]];

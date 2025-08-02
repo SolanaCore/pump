@@ -11,6 +11,9 @@ use anchor_spl::{
         mpl_token_metadata::ID as METAPLEX_ID,
     },
 };
+use crate::{
+    error::ErrorCode,
+};
 // use anchor_lang::prelude::{Mint, TokenAccount}; // ✅ Fix: Use the correct types for Anchor compatibility
 
 use crate::state::{BondingCurve, GlobalConfig};
@@ -79,7 +82,7 @@ pub fn create_token(
         &ctx.accounts.mint.key(),
         &ctx.bumps.bonding_curve.clone(),
     )?;
-    require!(ctx.accounts.bonding_curve.virtual_token_reserve == *token_reserve, ErrorCode::MetadataFailed.into());
+    require!(ctx.accounts.bonding_curve.virtual_token_reserve == *token_reserve, ErrorCode::MetadataFailed);
 
 
     // Step 2: Prepare signer seeds

@@ -32,6 +32,12 @@ pub struct SellToken<'info>{
         )]
     pub token_ata: Box<Account<'info, TokenAccount>>,
 
+        #[account(
+        seeds = [BONDING_SEED.as_bytes(), token_mint.key().as_ref(), bonding_curve.key().as_ref()],
+        bump,
+    )]
+    pub sol_escrow: SystemAccount<'info>,
+
     #[account(
     mut,
     constraint = token_escrow.mint == token_mint.key(),
@@ -62,17 +68,17 @@ pub fn sell_token(ctx: &mut Context<SellToken>, max_token: u64) -> Result<()> {
     let bonding_curve = &mut ctx.accounts.bonding_curve; // ✅ MUTABLE borrow
     let swap_amount: SwapAmount = bonding_curve.sell_logic(max_token)?;
 
-    let bonding_curve_info = bonding_curve.to_account_info();
+    let sol_escrow = ctx.accounts.sol_escrow.to_account_info();
     let signer_info = ctx.accounts.signer.to_account_info();
 
     // ✅ Check if PDA has enough lamports
     require!(
-        **bonding_curve_info.lamports.borrow() >= swap_amount.max_sol,
+        **sol_escrow.lamports.borrow() >= swap_amount.max_sol,
         ErrorCode::InsufficientFunds
     );
 
     // ✅ Transfer lamports
-    **bonding_curve_info.try_borrow_mut_lamports()? -= swap_amount.max_sol;
+    **sol_escrow.try_borrow_mut_lamports()? -= swap_amount.max_sol;
     **signer_info.try_borrow_mut_lamports()? += swap_amount.max_sol;
 
     // ✅ Prepare signer seeds
