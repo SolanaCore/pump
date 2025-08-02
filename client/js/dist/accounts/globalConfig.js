@@ -5,7 +5,7 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { assertAccountExists, assertAccountsExist, combineCodec, decodeAccount, fetchEncodedAccount, fetchEncodedAccounts, fixDecoderSize, fixEncoderSize, getBytesDecoder, getBytesEncoder, getStructDecoder, getStructEncoder, getU64Decoder, getU64Encoder, getU8Decoder, getU8Encoder, transformEncoder, } from "@solana/kit";
+import { assertAccountExists, assertAccountsExist, combineCodec, decodeAccount, fetchEncodedAccount, fetchEncodedAccounts, fixDecoderSize, fixEncoderSize, getBytesDecoder, getBytesEncoder, getStructDecoder, getStructEncoder, getU64Decoder, getU64Encoder, getU8Decoder, getU8Encoder, transformEncoder, } from '@solana/kit';
 export const GLOBAL_CONFIG_DISCRIMINATOR = new Uint8Array([
     149, 8, 156, 202, 160, 252, 176, 217,
 ]);
@@ -14,22 +14,22 @@ export function getGlobalConfigDiscriminatorBytes() {
 }
 export function getGlobalConfigEncoder() {
     return transformEncoder(getStructEncoder([
-        ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
-        ["tokenToSell", getU64Encoder()],
-        ["tokenToMint", getU64Encoder()],
-        ["virtualTokenReserve", getU64Encoder()],
-        ["virtualSolReserve", getU64Encoder()],
-        ["bump", getU8Encoder()],
+        ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
+        ['tokenToSell', getU64Encoder()],
+        ['tokenToMint', getU64Encoder()],
+        ['virtualTokenReserve', getU64Encoder()],
+        ['virtualSolReserve', getU64Encoder()],
+        ['bump', getU8Encoder()],
     ]), (value) => (Object.assign(Object.assign({}, value), { discriminator: GLOBAL_CONFIG_DISCRIMINATOR })));
 }
 export function getGlobalConfigDecoder() {
     return getStructDecoder([
-        ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
-        ["tokenToSell", getU64Decoder()],
-        ["tokenToMint", getU64Decoder()],
-        ["virtualTokenReserve", getU64Decoder()],
-        ["virtualSolReserve", getU64Decoder()],
-        ["bump", getU8Decoder()],
+        ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+        ['tokenToSell', getU64Decoder()],
+        ['tokenToMint', getU64Decoder()],
+        ['virtualTokenReserve', getU64Decoder()],
+        ['virtualSolReserve', getU64Decoder()],
+        ['bump', getU8Decoder()],
     ]);
 }
 export function getGlobalConfigCodec() {

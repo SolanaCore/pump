@@ -5,14 +5,14 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { AccountRole, isProgramDerivedAddress, isTransactionSigner as kitIsTransactionSigner, upgradeRoleToSigner, } from "@solana/kit";
+import { AccountRole, isProgramDerivedAddress, isTransactionSigner as kitIsTransactionSigner, upgradeRoleToSigner, } from '@solana/kit';
 /**
  * Asserts that the given value is not null or undefined.
  * @internal
  */
 export function expectSome(value) {
     if (value == null) {
-        throw new Error("Expected a value but received null or undefined.");
+        throw new Error('Expected a value but received null or undefined.');
     }
     return value;
 }
@@ -22,9 +22,9 @@ export function expectSome(value) {
  */
 export function expectAddress(value) {
     if (!value) {
-        throw new Error("Expected a Address.");
+        throw new Error('Expected a Address.');
     }
-    if (typeof value === "object" && "address" in value) {
+    if (typeof value === 'object' && 'address' in value) {
         return value.address;
     }
     if (Array.isArray(value)) {
@@ -38,7 +38,7 @@ export function expectAddress(value) {
  */
 export function expectProgramDerivedAddress(value) {
     if (!value || !Array.isArray(value) || !isProgramDerivedAddress(value)) {
-        throw new Error("Expected a ProgramDerivedAddress.");
+        throw new Error('Expected a ProgramDerivedAddress.');
     }
     return value;
 }
@@ -48,7 +48,7 @@ export function expectProgramDerivedAddress(value) {
  */
 export function expectTransactionSigner(value) {
     if (!value || !isTransactionSigner(value)) {
-        throw new Error("Expected a TransactionSigner.");
+        throw new Error('Expected a TransactionSigner.');
     }
     return value;
 }
@@ -59,7 +59,7 @@ export function expectTransactionSigner(value) {
 export function getAccountMetaFactory(programAddress, optionalAccountStrategy) {
     return (account) => {
         if (!account.value) {
-            if (optionalAccountStrategy === "omitted")
+            if (optionalAccountStrategy === 'omitted')
                 return;
             return Object.freeze({
                 address: programAddress,
@@ -76,7 +76,7 @@ export function getAccountMetaFactory(programAddress, optionalAccountStrategy) {
 }
 export function isTransactionSigner(value) {
     return (!!value &&
-        typeof value === "object" &&
-        "address" in value &&
+        typeof value === 'object' &&
+        'address' in value &&
         kitIsTransactionSigner(value));
 }

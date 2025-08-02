@@ -10,7 +10,8 @@ pub struct InitGlobalConfig<'info> {
         seeds = [b"global_config"],
         bump,
     )] 
-    pub global_config: Account<'info, GlobalConfig>,
+    pub global_config: Box<Account<'info, GlobalConfig>>,
+    
     #[account(mut, address = crate::admin::id())]
     pub signer: Signer<'info>,
     pub system_program: Program<'info, System>,

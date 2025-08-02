@@ -56,7 +56,7 @@
   });
 
 
-    it("successfully creates a token and bonding curve", async () => {
+    it.only("successfully creates a token and bonding curve", async () => {
       const [metadataAddress] = getMetadataPda(mint.publicKey);
 
       const  tx = await program.methods

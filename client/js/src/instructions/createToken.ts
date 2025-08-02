@@ -39,13 +39,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
+} from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from "../shared";
+} from '../shared';
 
 export const CREATE_TOKEN_DISCRIMINATOR = new Uint8Array([
   84, 52, 204, 228, 24, 140, 234, 75,
@@ -53,7 +53,7 @@ export const CREATE_TOKEN_DISCRIMINATOR = new Uint8Array([
 
 export function getCreateTokenDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    CREATE_TOKEN_DISCRIMINATOR,
+    CREATE_TOKEN_DISCRIMINATOR
   );
 }
 
@@ -63,22 +63,22 @@ export type CreateTokenInstruction<
   TAccountGlobalState extends string | IAccountMeta<string> = string,
   TAccountBondingCurve extends string | IAccountMeta<string> = string,
   TAccountMint extends string | IAccountMeta<string> = string,
-  TAccountBondingCurveAta extends string | IAccountMeta<string> = string,
+  TAccountTokenEscrow extends string | IAccountMeta<string> = string,
   TAccountTokenProgram extends
     | string
-    | IAccountMeta<string> = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    | IAccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
   TAccountSystemProgram extends
     | string
-    | IAccountMeta<string> = "11111111111111111111111111111111",
+    | IAccountMeta<string> = '11111111111111111111111111111111',
   TAccountRent extends
     | string
-    | IAccountMeta<string> = "SysvarRent111111111111111111111111111111111",
+    | IAccountMeta<string> = 'SysvarRent111111111111111111111111111111111',
   TAccountAssociatedTokenProgram extends
     | string
-    | IAccountMeta<string> = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+    | IAccountMeta<string> = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
   TAccountTokenMetadataProgram extends
     | string
-    | IAccountMeta<string> = "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s",
+    | IAccountMeta<string> = 'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s',
   TAccountMetadata extends string | IAccountMeta<string> = string,
   TRemainingAccounts extends readonly IAccountMeta<string>[] = [],
 > = IInstruction<TProgram> &
@@ -98,9 +98,9 @@ export type CreateTokenInstruction<
       TAccountMint extends string
         ? WritableSignerAccount<TAccountMint> & IAccountSignerMeta<TAccountMint>
         : TAccountMint,
-      TAccountBondingCurveAta extends string
-        ? WritableAccount<TAccountBondingCurveAta>
-        : TAccountBondingCurveAta,
+      TAccountTokenEscrow extends string
+        ? WritableAccount<TAccountTokenEscrow>
+        : TAccountTokenEscrow,
       TAccountTokenProgram extends string
         ? ReadonlyAccount<TAccountTokenProgram>
         : TAccountTokenProgram,
@@ -143,25 +143,25 @@ export type CreateTokenInstructionDataArgs = {
 export function getCreateTokenInstructionDataEncoder(): Encoder<CreateTokenInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
-      ["solReserve", getU64Encoder()],
-      ["tokenReserve", getU64Encoder()],
-      ["name", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ["ticker", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ["uri", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
+      ['solReserve', getU64Encoder()],
+      ['tokenReserve', getU64Encoder()],
+      ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ['ticker', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ['uri', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
     ]),
-    (value) => ({ ...value, discriminator: CREATE_TOKEN_DISCRIMINATOR }),
+    (value) => ({ ...value, discriminator: CREATE_TOKEN_DISCRIMINATOR })
   );
 }
 
 export function getCreateTokenInstructionDataDecoder(): Decoder<CreateTokenInstructionData> {
   return getStructDecoder([
-    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
-    ["solReserve", getU64Decoder()],
-    ["tokenReserve", getU64Decoder()],
-    ["name", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ["ticker", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ["uri", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ['solReserve', getU64Decoder()],
+    ['tokenReserve', getU64Decoder()],
+    ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ['ticker', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ['uri', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
   ]);
 }
 
@@ -171,7 +171,7 @@ export function getCreateTokenInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getCreateTokenInstructionDataEncoder(),
-    getCreateTokenInstructionDataDecoder(),
+    getCreateTokenInstructionDataDecoder()
   );
 }
 
@@ -180,7 +180,7 @@ export type CreateTokenAsyncInput<
   TAccountGlobalState extends string = string,
   TAccountBondingCurve extends string = string,
   TAccountMint extends string = string,
-  TAccountBondingCurveAta extends string = string,
+  TAccountTokenEscrow extends string = string,
   TAccountTokenProgram extends string = string,
   TAccountSystemProgram extends string = string,
   TAccountRent extends string = string,
@@ -192,18 +192,18 @@ export type CreateTokenAsyncInput<
   globalState: Address<TAccountGlobalState>;
   bondingCurve?: Address<TAccountBondingCurve>;
   mint: TransactionSigner<TAccountMint>;
-  bondingCurveAta?: Address<TAccountBondingCurveAta>;
+  tokenEscrow?: Address<TAccountTokenEscrow>;
   tokenProgram?: Address<TAccountTokenProgram>;
   systemProgram?: Address<TAccountSystemProgram>;
   rent?: Address<TAccountRent>;
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
   tokenMetadataProgram?: Address<TAccountTokenMetadataProgram>;
   metadata: Address<TAccountMetadata>;
-  solReserve: CreateTokenInstructionDataArgs["solReserve"];
-  tokenReserve: CreateTokenInstructionDataArgs["tokenReserve"];
-  name: CreateTokenInstructionDataArgs["name"];
-  ticker: CreateTokenInstructionDataArgs["ticker"];
-  uri: CreateTokenInstructionDataArgs["uri"];
+  solReserve: CreateTokenInstructionDataArgs['solReserve'];
+  tokenReserve: CreateTokenInstructionDataArgs['tokenReserve'];
+  name: CreateTokenInstructionDataArgs['name'];
+  ticker: CreateTokenInstructionDataArgs['ticker'];
+  uri: CreateTokenInstructionDataArgs['uri'];
 };
 
 export async function getCreateTokenInstructionAsync<
@@ -211,7 +211,7 @@ export async function getCreateTokenInstructionAsync<
   TAccountGlobalState extends string,
   TAccountBondingCurve extends string,
   TAccountMint extends string,
-  TAccountBondingCurveAta extends string,
+  TAccountTokenEscrow extends string,
   TAccountTokenProgram extends string,
   TAccountSystemProgram extends string,
   TAccountRent extends string,
@@ -225,7 +225,7 @@ export async function getCreateTokenInstructionAsync<
     TAccountGlobalState,
     TAccountBondingCurve,
     TAccountMint,
-    TAccountBondingCurveAta,
+    TAccountTokenEscrow,
     TAccountTokenProgram,
     TAccountSystemProgram,
     TAccountRent,
@@ -233,7 +233,7 @@ export async function getCreateTokenInstructionAsync<
     TAccountTokenMetadataProgram,
     TAccountMetadata
   >,
-  config?: { programAddress?: TProgramAddress },
+  config?: { programAddress?: TProgramAddress }
 ): Promise<
   CreateTokenInstruction<
     TProgramAddress,
@@ -241,7 +241,7 @@ export async function getCreateTokenInstructionAsync<
     TAccountGlobalState,
     TAccountBondingCurve,
     TAccountMint,
-    TAccountBondingCurveAta,
+    TAccountTokenEscrow,
     TAccountTokenProgram,
     TAccountSystemProgram,
     TAccountRent,
@@ -259,7 +259,7 @@ export async function getCreateTokenInstructionAsync<
     globalState: { value: input.globalState ?? null, isWritable: false },
     bondingCurve: { value: input.bondingCurve ?? null, isWritable: true },
     mint: { value: input.mint ?? null, isWritable: true },
-    bondingCurveAta: { value: input.bondingCurveAta ?? null, isWritable: true },
+    tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: true },
     tokenProgram: { value: input.tokenProgram ?? null, isWritable: false },
     systemProgram: { value: input.systemProgram ?? null, isWritable: false },
     rent: { value: input.rent ?? null, isWritable: false },
@@ -287,16 +287,16 @@ export async function getCreateTokenInstructionAsync<
       programAddress,
       seeds: [
         getBytesEncoder().encode(
-          new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 83, 69, 69, 68]),
+          new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
         ),
         getAddressEncoder().encode(expectAddress(accounts.mint.value)),
       ],
     });
   }
-  if (!accounts.bondingCurveAta.value) {
-    accounts.bondingCurveAta.value = await getProgramDerivedAddress({
+  if (!accounts.tokenEscrow.value) {
+    accounts.tokenEscrow.value = await getProgramDerivedAddress({
       programAddress:
-        "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">,
+        'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>,
       seeds: [
         getAddressEncoder().encode(expectAddress(accounts.bondingCurve.value)),
         getBytesEncoder().encode(
@@ -304,7 +304,7 @@ export async function getCreateTokenInstructionAsync<
             6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206, 235,
             121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140, 245, 133,
             126, 255, 0, 169,
-          ]),
+          ])
         ),
         getAddressEncoder().encode(expectAddress(accounts.mint.value)),
       ],
@@ -312,33 +312,33 @@ export async function getCreateTokenInstructionAsync<
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
+      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
+      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
   }
   if (!accounts.rent.value) {
     accounts.rent.value =
-      "SysvarRent111111111111111111111111111111111" as Address<"SysvarRent111111111111111111111111111111111">;
+      'SysvarRent111111111111111111111111111111111' as Address<'SysvarRent111111111111111111111111111111111'>;
   }
   if (!accounts.associatedTokenProgram.value) {
     accounts.associatedTokenProgram.value =
-      "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">;
+      'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>;
   }
   if (!accounts.tokenMetadataProgram.value) {
     accounts.tokenMetadataProgram.value =
-      "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s" as Address<"metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s">;
+      'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s' as Address<'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'>;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
   const instruction = {
     accounts: [
       getAccountMeta(accounts.signer),
       getAccountMeta(accounts.globalState),
       getAccountMeta(accounts.bondingCurve),
       getAccountMeta(accounts.mint),
-      getAccountMeta(accounts.bondingCurveAta),
+      getAccountMeta(accounts.tokenEscrow),
       getAccountMeta(accounts.tokenProgram),
       getAccountMeta(accounts.systemProgram),
       getAccountMeta(accounts.rent),
@@ -348,7 +348,7 @@ export async function getCreateTokenInstructionAsync<
     ],
     programAddress,
     data: getCreateTokenInstructionDataEncoder().encode(
-      args as CreateTokenInstructionDataArgs,
+      args as CreateTokenInstructionDataArgs
     ),
   } as CreateTokenInstruction<
     TProgramAddress,
@@ -356,7 +356,7 @@ export async function getCreateTokenInstructionAsync<
     TAccountGlobalState,
     TAccountBondingCurve,
     TAccountMint,
-    TAccountBondingCurveAta,
+    TAccountTokenEscrow,
     TAccountTokenProgram,
     TAccountSystemProgram,
     TAccountRent,
@@ -373,7 +373,7 @@ export type CreateTokenInput<
   TAccountGlobalState extends string = string,
   TAccountBondingCurve extends string = string,
   TAccountMint extends string = string,
-  TAccountBondingCurveAta extends string = string,
+  TAccountTokenEscrow extends string = string,
   TAccountTokenProgram extends string = string,
   TAccountSystemProgram extends string = string,
   TAccountRent extends string = string,
@@ -385,18 +385,18 @@ export type CreateTokenInput<
   globalState: Address<TAccountGlobalState>;
   bondingCurve: Address<TAccountBondingCurve>;
   mint: TransactionSigner<TAccountMint>;
-  bondingCurveAta: Address<TAccountBondingCurveAta>;
+  tokenEscrow: Address<TAccountTokenEscrow>;
   tokenProgram?: Address<TAccountTokenProgram>;
   systemProgram?: Address<TAccountSystemProgram>;
   rent?: Address<TAccountRent>;
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
   tokenMetadataProgram?: Address<TAccountTokenMetadataProgram>;
   metadata: Address<TAccountMetadata>;
-  solReserve: CreateTokenInstructionDataArgs["solReserve"];
-  tokenReserve: CreateTokenInstructionDataArgs["tokenReserve"];
-  name: CreateTokenInstructionDataArgs["name"];
-  ticker: CreateTokenInstructionDataArgs["ticker"];
-  uri: CreateTokenInstructionDataArgs["uri"];
+  solReserve: CreateTokenInstructionDataArgs['solReserve'];
+  tokenReserve: CreateTokenInstructionDataArgs['tokenReserve'];
+  name: CreateTokenInstructionDataArgs['name'];
+  ticker: CreateTokenInstructionDataArgs['ticker'];
+  uri: CreateTokenInstructionDataArgs['uri'];
 };
 
 export function getCreateTokenInstruction<
@@ -404,7 +404,7 @@ export function getCreateTokenInstruction<
   TAccountGlobalState extends string,
   TAccountBondingCurve extends string,
   TAccountMint extends string,
-  TAccountBondingCurveAta extends string,
+  TAccountTokenEscrow extends string,
   TAccountTokenProgram extends string,
   TAccountSystemProgram extends string,
   TAccountRent extends string,
@@ -418,7 +418,7 @@ export function getCreateTokenInstruction<
     TAccountGlobalState,
     TAccountBondingCurve,
     TAccountMint,
-    TAccountBondingCurveAta,
+    TAccountTokenEscrow,
     TAccountTokenProgram,
     TAccountSystemProgram,
     TAccountRent,
@@ -426,14 +426,14 @@ export function getCreateTokenInstruction<
     TAccountTokenMetadataProgram,
     TAccountMetadata
   >,
-  config?: { programAddress?: TProgramAddress },
+  config?: { programAddress?: TProgramAddress }
 ): CreateTokenInstruction<
   TProgramAddress,
   TAccountSigner,
   TAccountGlobalState,
   TAccountBondingCurve,
   TAccountMint,
-  TAccountBondingCurveAta,
+  TAccountTokenEscrow,
   TAccountTokenProgram,
   TAccountSystemProgram,
   TAccountRent,
@@ -450,7 +450,7 @@ export function getCreateTokenInstruction<
     globalState: { value: input.globalState ?? null, isWritable: false },
     bondingCurve: { value: input.bondingCurve ?? null, isWritable: true },
     mint: { value: input.mint ?? null, isWritable: true },
-    bondingCurveAta: { value: input.bondingCurveAta ?? null, isWritable: true },
+    tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: true },
     tokenProgram: { value: input.tokenProgram ?? null, isWritable: false },
     systemProgram: { value: input.systemProgram ?? null, isWritable: false },
     rent: { value: input.rent ?? null, isWritable: false },
@@ -475,33 +475,33 @@ export function getCreateTokenInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
+      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
+      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
   }
   if (!accounts.rent.value) {
     accounts.rent.value =
-      "SysvarRent111111111111111111111111111111111" as Address<"SysvarRent111111111111111111111111111111111">;
+      'SysvarRent111111111111111111111111111111111' as Address<'SysvarRent111111111111111111111111111111111'>;
   }
   if (!accounts.associatedTokenProgram.value) {
     accounts.associatedTokenProgram.value =
-      "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">;
+      'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>;
   }
   if (!accounts.tokenMetadataProgram.value) {
     accounts.tokenMetadataProgram.value =
-      "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s" as Address<"metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s">;
+      'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s' as Address<'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'>;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
   const instruction = {
     accounts: [
       getAccountMeta(accounts.signer),
       getAccountMeta(accounts.globalState),
       getAccountMeta(accounts.bondingCurve),
       getAccountMeta(accounts.mint),
-      getAccountMeta(accounts.bondingCurveAta),
+      getAccountMeta(accounts.tokenEscrow),
       getAccountMeta(accounts.tokenProgram),
       getAccountMeta(accounts.systemProgram),
       getAccountMeta(accounts.rent),
@@ -511,7 +511,7 @@ export function getCreateTokenInstruction<
     ],
     programAddress,
     data: getCreateTokenInstructionDataEncoder().encode(
-      args as CreateTokenInstructionDataArgs,
+      args as CreateTokenInstructionDataArgs
     ),
   } as CreateTokenInstruction<
     TProgramAddress,
@@ -519,7 +519,7 @@ export function getCreateTokenInstruction<
     TAccountGlobalState,
     TAccountBondingCurve,
     TAccountMint,
-    TAccountBondingCurveAta,
+    TAccountTokenEscrow,
     TAccountTokenProgram,
     TAccountSystemProgram,
     TAccountRent,
@@ -541,7 +541,7 @@ export type ParsedCreateTokenInstruction<
     globalState: TAccountMetas[1];
     bondingCurve: TAccountMetas[2];
     mint: TAccountMetas[3];
-    bondingCurveAta: TAccountMetas[4];
+    tokenEscrow: TAccountMetas[4];
     tokenProgram: TAccountMetas[5];
     systemProgram: TAccountMetas[6];
     rent: TAccountMetas[7];
@@ -558,11 +558,11 @@ export function parseCreateTokenInstruction<
 >(
   instruction: IInstruction<TProgram> &
     IInstructionWithAccounts<TAccountMetas> &
-    IInstructionWithData<Uint8Array>,
+    IInstructionWithData<Uint8Array>
 ): ParsedCreateTokenInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 11) {
     // TODO: Coded error.
-    throw new Error("Not enough accounts");
+    throw new Error('Not enough accounts');
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -577,7 +577,7 @@ export function parseCreateTokenInstruction<
       globalState: getNextAccount(),
       bondingCurve: getNextAccount(),
       mint: getNextAccount(),
-      bondingCurveAta: getNextAccount(),
+      tokenEscrow: getNextAccount(),
       tokenProgram: getNextAccount(),
       systemProgram: getNextAccount(),
       rent: getNextAccount(),

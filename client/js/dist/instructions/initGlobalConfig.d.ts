@@ -5,11 +5,11 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { type Address, type Codec, type Decoder, type Encoder, type IAccountMeta, type IAccountSignerMeta, type IInstruction, type IInstructionWithAccounts, type IInstructionWithData, type ReadonlyAccount, type ReadonlyUint8Array, type TransactionSigner, type WritableAccount, type WritableSignerAccount } from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
+import { type Address, type Codec, type Decoder, type Encoder, type IAccountMeta, type IAccountSignerMeta, type IInstruction, type IInstructionWithAccounts, type IInstructionWithData, type ReadonlyAccount, type ReadonlyUint8Array, type TransactionSigner, type WritableAccount, type WritableSignerAccount } from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
 export declare const INIT_GLOBAL_CONFIG_DISCRIMINATOR: Uint8Array<ArrayBuffer>;
 export declare function getInitGlobalConfigDiscriminatorBytes(): ReadonlyUint8Array;
-export type InitGlobalConfigInstruction<TProgram extends string = typeof PUMP_PROGRAM_ADDRESS, TAccountGlobalConfig extends string | IAccountMeta<string> = string, TAccountSigner extends string | IAccountMeta<string> = "52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg", TAccountSystemProgram extends string | IAccountMeta<string> = "11111111111111111111111111111111", TRemainingAccounts extends readonly IAccountMeta<string>[] = []> = IInstruction<TProgram> & IInstructionWithData<Uint8Array> & IInstructionWithAccounts<[
+export type InitGlobalConfigInstruction<TProgram extends string = typeof PUMP_PROGRAM_ADDRESS, TAccountGlobalConfig extends string | IAccountMeta<string> = string, TAccountSigner extends string | IAccountMeta<string> = '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg', TAccountSystemProgram extends string | IAccountMeta<string> = '11111111111111111111111111111111', TRemainingAccounts extends readonly IAccountMeta<string>[] = []> = IInstruction<TProgram> & IInstructionWithData<Uint8Array> & IInstructionWithAccounts<[
     TAccountGlobalConfig extends string ? WritableAccount<TAccountGlobalConfig> : TAccountGlobalConfig,
     TAccountSigner extends string ? WritableSignerAccount<TAccountSigner> & IAccountSignerMeta<TAccountSigner> : TAccountSigner,
     TAccountSystemProgram extends string ? ReadonlyAccount<TAccountSystemProgram> : TAccountSystemProgram,

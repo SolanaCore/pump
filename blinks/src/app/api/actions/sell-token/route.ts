@@ -14,7 +14,7 @@ import {
   type ActionPostResponse,
   createPostResponse,
 } from "@solana/actions"
-import { getSellTokenInstructionAsync } from "@solanacore/bonding_curve"
+import { getBuyTokenInstructionAsync } from "@solanacore/bonding_curve"
 
 const PROGRAM_ID = new PublicKey("FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q")
 
@@ -24,15 +24,15 @@ export async function GET(request: Request) {
 
   const payload: ActionGetResponse = {
     icon: "https://ucarecdn.com/7aa46c85-08a4-4bc7-9376-88ec48bb1f43/-/preview/880x864/-/quality/smart/-/format/auto/",
-    title: "Sell Pump Token",
-    description: "Sell tokens back to the bonding curve for SOL",
-    label: "Sell Token",
+    title: "Buy Pump Token",
+    description: "Buy tokens from the bonding curve with SOL",
+    label: "Buy Token",
     links: {
       actions: [
         {
           type: "message",
-          label: "Sell Token",
-          href: `${url.origin}/api/actions/sell-token?tokenMint={tokenMint}&maxToken={maxToken}`,
+          label: "Buy Token",
+          href: `${url.origin}/api/actions/buy-token?tokenMint={tokenMint}&maxSol={maxSol}`,
           parameters: [
             {
               name: "tokenMint",
@@ -40,8 +40,8 @@ export async function GET(request: Request) {
               required: true,
             },
             {
-              name: "maxToken",
-              label: "Maximum tokens to sell",
+              name: "maxSol",
+              label: "Maximum SOL to spend (in lamports)",
               required: true,
             },
           ],
@@ -51,7 +51,11 @@ export async function GET(request: Request) {
   }
 
   return new Response(JSON.stringify(payload), {
-    headers: ACTIONS_CORS_HEADERS,
+    headers: {
+      ...ACTIONS_CORS_HEADERS,
+      "X-Action-Version": "2.2.0",
+      "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+    },
   })
 }
 
@@ -59,7 +63,11 @@ export async function GET(request: Request) {
 export async function OPTIONS(request: Request) {
   return new Response(null, {
     status: 200,
-    headers: ACTIONS_CORS_HEADERS,
+    headers: {
+      ...ACTIONS_CORS_HEADERS,
+      "X-Action-Version": "2.2.0",
+      "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+    },
   })
 }
 
@@ -70,20 +78,29 @@ export async function POST(request: Request) {
     const url = new URL(request.url)
 
     const tokenMintParam = url.searchParams.get("tokenMint")
-    const maxTokenParam = url.searchParams.get("maxToken")
+    console.log(tokenMintParam);
+    const maxSolParam = url.searchParams.get("maxSol")
 
-    if (!tokenMintParam || !maxTokenParam) {
+    if (!tokenMintParam || !maxSolParam) {
       return new Response(JSON.stringify({ error: { message: "Missing required parameters." } }), {
         status: 400,
-        headers: ACTIONS_CORS_HEADERS,
+        headers: {
+          ...ACTIONS_CORS_HEADERS,
+          "X-Action-Version": "2.2.0",
+          "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+        },
       })
     }
 
-    const maxToken = Number(maxTokenParam)
-    if (maxToken <= 0) {
-      return new Response(JSON.stringify({ error: { message: "Invalid token amount" } }), {
+const maxSol = Number(maxSolParam.replace(/_/g, ""));
+    if (maxSol <=  0) {
+      return new Response(JSON.stringify({ error: { message: "Invalid SOL amount" } }), {
         status: 400,
-        headers: ACTIONS_CORS_HEADERS,
+        headers: {
+          ...ACTIONS_CORS_HEADERS,
+          "X-Action-Version": "2.2.0",
+          "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+        },
       })
     }
 
@@ -96,7 +113,11 @@ export async function POST(request: Request) {
     } catch {
       return new Response(JSON.stringify({ error: { message: "Invalid account or token mint" } }), {
         status: 400,
-        headers: ACTIONS_CORS_HEADERS,
+        headers: {
+          ...ACTIONS_CORS_HEADERS,
+          "X-Action-Version": "2.2.0",
+          "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+        },
       })
     }
 
@@ -107,12 +128,12 @@ export async function POST(request: Request) {
       [Buffer.from("BONDING_CURVE"), tokenMint.toBuffer()],
       PROGRAM_ID,
     )
-
+    
     const tokenAta = await getAssociatedTokenAddress(tokenMint, sender)
     
     const tokenEscrow = await getAssociatedTokenAddress(tokenMint, bondingCurve, true)
 
-    const instruction = await getSellTokenInstructionAsync(
+    const instruction = await getBuyTokenInstructionAsync(
       {
         signer: sender.toBase58(),
         tokenAta: tokenAta.toBase58(),
@@ -122,7 +143,7 @@ export async function POST(request: Request) {
         systemProgram: SystemProgram.programId.toBase58(),
         tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID.toBase58(),
-        maxToken: maxToken,
+        maxSol: maxSol,
       },
       { programAddress: PROGRAM_ID.toBase58() },
     )
@@ -150,7 +171,7 @@ export async function POST(request: Request) {
     const payload: ActionPostResponse = await createPostResponse({
       fields: {
         transaction,
-        message: `Selling ${maxToken} tokens from ${tokenMint.toBase58()} for SOL`,
+        message: `Buying tokens from ${tokenMint.toBase58()} with max ${maxSol} lamports SOL`,
       },
     })
 
@@ -158,7 +179,7 @@ export async function POST(request: Request) {
       headers: ACTIONS_CORS_HEADERS,
     })
   } catch (error) {
-    console.error("Error creating sell token transaction:", error)
+    console.error("Error creating buy token transaction:", error)
     return new Response(JSON.stringify({ error: { message: "Failed to create transaction" } }), {
       status: 500,
       headers: ACTIONS_CORS_HEADERS,

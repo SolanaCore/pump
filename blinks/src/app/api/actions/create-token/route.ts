@@ -125,7 +125,6 @@ export async function POST(request: Request) {
     )
 
     const bondingCurveAta = await getAssociatedTokenAddress(mintPublicKey, bondingCurve, true)
-
     const [metadata] = PublicKey.findProgramAddressSync(
       [Buffer.from("metadata"), TOKEN_METADATA_PROGRAM_ID.toBuffer(), mintPublicKey.toBuffer()],
       TOKEN_METADATA_PROGRAM_ID,

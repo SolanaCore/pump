@@ -5,9 +5,9 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { combineCodec, fixDecoderSize, fixEncoderSize, getBytesDecoder, getBytesEncoder, getProgramDerivedAddress, getStructDecoder, getStructEncoder, transformEncoder, } from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
-import { getAccountMetaFactory } from "../shared";
+import { combineCodec, fixDecoderSize, fixEncoderSize, getBytesDecoder, getBytesEncoder, getProgramDerivedAddress, getStructDecoder, getStructEncoder, transformEncoder, } from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
+import { getAccountMetaFactory } from '../shared';
 export const INIT_GLOBAL_CONFIG_DISCRIMINATOR = new Uint8Array([
     140, 136, 214, 48, 87, 0, 120, 255,
 ]);
@@ -15,11 +15,11 @@ export function getInitGlobalConfigDiscriminatorBytes() {
     return fixEncoderSize(getBytesEncoder(), 8).encode(INIT_GLOBAL_CONFIG_DISCRIMINATOR);
 }
 export function getInitGlobalConfigInstructionDataEncoder() {
-    return transformEncoder(getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]), (value) => (Object.assign(Object.assign({}, value), { discriminator: INIT_GLOBAL_CONFIG_DISCRIMINATOR })));
+    return transformEncoder(getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]), (value) => (Object.assign(Object.assign({}, value), { discriminator: INIT_GLOBAL_CONFIG_DISCRIMINATOR })));
 }
 export function getInitGlobalConfigInstructionDataDecoder() {
     return getStructDecoder([
-        ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+        ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
     ]);
 }
 export function getInitGlobalConfigInstructionDataCodec() {
@@ -49,13 +49,13 @@ export async function getInitGlobalConfigInstructionAsync(input, config) {
     }
     if (!accounts.signer.value) {
         accounts.signer.value =
-            "52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg";
+            '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg';
     }
     if (!accounts.systemProgram.value) {
         accounts.systemProgram.value =
-            "11111111111111111111111111111111";
+            '11111111111111111111111111111111';
     }
-    const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+    const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
     const instruction = {
         accounts: [
             getAccountMeta(accounts.globalConfig),
@@ -81,13 +81,13 @@ export function getInitGlobalConfigInstruction(input, config) {
     // Resolve default values.
     if (!accounts.signer.value) {
         accounts.signer.value =
-            "52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg";
+            '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg';
     }
     if (!accounts.systemProgram.value) {
         accounts.systemProgram.value =
-            "11111111111111111111111111111111";
+            '11111111111111111111111111111111';
     }
-    const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+    const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
     const instruction = {
         accounts: [
             getAccountMeta(accounts.globalConfig),
@@ -102,7 +102,7 @@ export function getInitGlobalConfigInstruction(input, config) {
 export function parseInitGlobalConfigInstruction(instruction) {
     if (instruction.accounts.length < 3) {
         // TODO: Coded error.
-        throw new Error("Not enough accounts");
+        throw new Error('Not enough accounts');
     }
     let accountIndex = 0;
     const getNextAccount = () => {

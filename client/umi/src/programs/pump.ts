@@ -15,7 +15,7 @@ import {
 import { getPumpErrorFromCode, getPumpErrorFromName } from '../errors';
 
 export const PUMP_PROGRAM_ID =
-  'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q' as PublicKey<'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'>;
+  '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg' as PublicKey<'52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'>;
 
 export function createPumpProgram(): Program {
   return {

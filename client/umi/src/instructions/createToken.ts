@@ -36,7 +36,7 @@ export type CreateTokenInstructionAccounts = {
   globalState: PublicKey | Pda;
   bondingCurve?: PublicKey | Pda;
   mint: Signer;
-  bondingCurveAta?: PublicKey | Pda;
+  tokenEscrow?: PublicKey | Pda;
   tokenProgram?: PublicKey | Pda;
   systemProgram?: PublicKey | Pda;
   rent?: PublicKey | Pda;
@@ -101,7 +101,7 @@ export function createToken(
   // Program ID.
   const programId = context.programs.getPublicKey(
     'pump',
-    'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'
+    '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'
   );
 
   // Accounts.
@@ -122,10 +122,10 @@ export function createToken(
       value: input.bondingCurve ?? null,
     },
     mint: { index: 3, isWritable: true as boolean, value: input.mint ?? null },
-    bondingCurveAta: {
+    tokenEscrow: {
       index: 4,
       isWritable: true as boolean,
-      value: input.bondingCurveAta ?? null,
+      value: input.tokenEscrow ?? null,
     },
     tokenProgram: {
       index: 5,
@@ -162,15 +162,15 @@ export function createToken(
   if (!resolvedAccounts.bondingCurve.value) {
     resolvedAccounts.bondingCurve.value = context.eddsa.findPda(programId, [
       bytes().serialize(
-        new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 83, 69, 69, 68])
+        new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
       ),
       publicKeySerializer().serialize(
         expectPublicKey(resolvedAccounts.mint.value)
       ),
     ]);
   }
-  if (!resolvedAccounts.bondingCurveAta.value) {
-    resolvedAccounts.bondingCurveAta.value = context.eddsa.findPda(
+  if (!resolvedAccounts.tokenEscrow.value) {
+    resolvedAccounts.tokenEscrow.value = context.eddsa.findPda(
       context.programs.getPublicKey(
         'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
         'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'

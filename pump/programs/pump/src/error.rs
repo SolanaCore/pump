@@ -14,4 +14,8 @@ pub enum ErrorCode {
     InvalidInputs,
     #[msg("insufficient funds in the account 'from' account")]
     InsufficientFunds,
+    #[msg("the give token mint address is not owned by the bonding_curve")]
+    InvalidOwner,
+    #[msg("value didn't set MetadataFailed")]
+    MetadataFailed,
 }

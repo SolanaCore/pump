@@ -30,26 +30,26 @@ pub struct SellToken<'info>{
         constraint = token_ata.mint == token_mint.key(),
         constraint = token_ata.owner == signer.key(),
         )]
-    pub token_ata: Account<'info, TokenAccount>,
+    pub token_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
     mut,
     constraint = token_escrow.mint == token_mint.key(),
     constraint = token_escrow.owner == bonding_curve.key(),
     )]
-    pub token_escrow: Account<'info, TokenAccount>,
+    pub token_escrow: Box<Account<'info, TokenAccount>>,
 
     #[account(
         mut,
         seeds = [b"BONDING_CURVE", token_mint.key().as_ref()],
         bump,
     )]
-    pub bonding_curve: Account<'info, BondingCurve>,
+    pub bonding_curve: Box<Account<'info, BondingCurve>>,
 
     #[account(
         constraint = bonding_curve.token_mint == token_mint.key()
     )]
-    pub token_mint: Account<'info, Mint>,
+    pub token_mint: Box<Account<'info, Mint>>,
 
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
@@ -59,7 +59,7 @@ pub struct SellToken<'info>{
 
 pub fn sell_token(ctx: &mut Context<SellToken>, max_token: u64) -> Result<()> {
     
-    let mut bonding_curve = &mut ctx.accounts.bonding_curve; // ✅ MUTABLE borrow
+    let bonding_curve = &mut ctx.accounts.bonding_curve; // ✅ MUTABLE borrow
     let swap_amount: SwapAmount = bonding_curve.sell_logic(max_token)?;
 
     let bonding_curve_info = bonding_curve.to_account_info();
@@ -82,7 +82,7 @@ pub fn sell_token(ctx: &mut Context<SellToken>, max_token: u64) -> Result<()> {
     let signer_seeds: &[&[&[u8]]] = &[&signer[..]];
 
     // ✅ Token transfer (using mutable bonding_curve)
-    &bonding_curve.transfer_token(
+    let _ = &bonding_curve.transfer_token(
         ctx.accounts.token_ata.to_account_info(),
         ctx.accounts.token_escrow.to_account_info(),
         signer_seeds,

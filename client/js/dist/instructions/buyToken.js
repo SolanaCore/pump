@@ -5,9 +5,9 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { combineCodec, fixDecoderSize, fixEncoderSize, getAddressEncoder, getBytesDecoder, getBytesEncoder, getProgramDerivedAddress, getStructDecoder, getStructEncoder, getU64Decoder, getU64Encoder, transformEncoder, } from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
-import { expectAddress, getAccountMetaFactory, } from "../shared";
+import { combineCodec, fixDecoderSize, fixEncoderSize, getAddressEncoder, getBytesDecoder, getBytesEncoder, getProgramDerivedAddress, getStructDecoder, getStructEncoder, getU64Decoder, getU64Encoder, transformEncoder, } from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
+import { expectAddress, getAccountMetaFactory, } from '../shared';
 export const BUY_TOKEN_DISCRIMINATOR = new Uint8Array([
     138, 127, 14, 91, 38, 87, 115, 105,
 ]);
@@ -16,14 +16,14 @@ export function getBuyTokenDiscriminatorBytes() {
 }
 export function getBuyTokenInstructionDataEncoder() {
     return transformEncoder(getStructEncoder([
-        ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
-        ["maxSol", getU64Encoder()],
+        ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
+        ['maxSol', getU64Encoder()],
     ]), (value) => (Object.assign(Object.assign({}, value), { discriminator: BUY_TOKEN_DISCRIMINATOR })));
 }
 export function getBuyTokenInstructionDataDecoder() {
     return getStructDecoder([
-        ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
-        ["maxSol", getU64Decoder()],
+        ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+        ['maxSol', getU64Decoder()],
     ]);
 }
 export function getBuyTokenInstructionDataCodec() {
@@ -37,9 +37,9 @@ export async function getBuyTokenInstructionAsync(input, config) {
     const originalAccounts = {
         signer: { value: (_b = input.signer) !== null && _b !== void 0 ? _b : null, isWritable: true },
         tokenAta: { value: (_c = input.tokenAta) !== null && _c !== void 0 ? _c : null, isWritable: true },
-        tokenEscrow: { value: (_d = input.tokenEscrow) !== null && _d !== void 0 ? _d : null, isWritable: false },
-        bondingCurve: { value: (_e = input.bondingCurve) !== null && _e !== void 0 ? _e : null, isWritable: false },
-        tokenMint: { value: (_f = input.tokenMint) !== null && _f !== void 0 ? _f : null, isWritable: false },
+        tokenEscrow: { value: (_d = input.tokenEscrow) !== null && _d !== void 0 ? _d : null, isWritable: true },
+        tokenMint: { value: (_e = input.tokenMint) !== null && _e !== void 0 ? _e : null, isWritable: false },
+        bondingCurve: { value: (_f = input.bondingCurve) !== null && _f !== void 0 ? _f : null, isWritable: true },
         systemProgram: { value: (_g = input.systemProgram) !== null && _g !== void 0 ? _g : null, isWritable: false },
         tokenProgram: { value: (_h = input.tokenProgram) !== null && _h !== void 0 ? _h : null, isWritable: false },
         associatedTokenProgram: {
@@ -53,7 +53,7 @@ export async function getBuyTokenInstructionAsync(input, config) {
     // Resolve default values.
     if (!accounts.tokenAta.value) {
         accounts.tokenAta.value = await getProgramDerivedAddress({
-            programAddress: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+            programAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
             seeds: [
                 getAddressEncoder().encode(expectAddress(accounts.signer.value)),
                 getBytesEncoder().encode(new Uint8Array([
@@ -76,7 +76,7 @@ export async function getBuyTokenInstructionAsync(input, config) {
     }
     if (!accounts.tokenEscrow.value) {
         accounts.tokenEscrow.value = await getProgramDerivedAddress({
-            programAddress: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+            programAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
             seeds: [
                 getAddressEncoder().encode(expectAddress(accounts.bondingCurve.value)),
                 getBytesEncoder().encode(new Uint8Array([
@@ -90,24 +90,24 @@ export async function getBuyTokenInstructionAsync(input, config) {
     }
     if (!accounts.systemProgram.value) {
         accounts.systemProgram.value =
-            "11111111111111111111111111111111";
+            '11111111111111111111111111111111';
     }
     if (!accounts.tokenProgram.value) {
         accounts.tokenProgram.value =
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
     }
     if (!accounts.associatedTokenProgram.value) {
         accounts.associatedTokenProgram.value =
-            "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
+            'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL';
     }
-    const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+    const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
     const instruction = {
         accounts: [
             getAccountMeta(accounts.signer),
             getAccountMeta(accounts.tokenAta),
             getAccountMeta(accounts.tokenEscrow),
-            getAccountMeta(accounts.bondingCurve),
             getAccountMeta(accounts.tokenMint),
+            getAccountMeta(accounts.bondingCurve),
             getAccountMeta(accounts.systemProgram),
             getAccountMeta(accounts.tokenProgram),
             getAccountMeta(accounts.associatedTokenProgram),
@@ -125,9 +125,9 @@ export function getBuyTokenInstruction(input, config) {
     const originalAccounts = {
         signer: { value: (_b = input.signer) !== null && _b !== void 0 ? _b : null, isWritable: true },
         tokenAta: { value: (_c = input.tokenAta) !== null && _c !== void 0 ? _c : null, isWritable: true },
-        tokenEscrow: { value: (_d = input.tokenEscrow) !== null && _d !== void 0 ? _d : null, isWritable: false },
-        bondingCurve: { value: (_e = input.bondingCurve) !== null && _e !== void 0 ? _e : null, isWritable: false },
-        tokenMint: { value: (_f = input.tokenMint) !== null && _f !== void 0 ? _f : null, isWritable: false },
+        tokenEscrow: { value: (_d = input.tokenEscrow) !== null && _d !== void 0 ? _d : null, isWritable: true },
+        tokenMint: { value: (_e = input.tokenMint) !== null && _e !== void 0 ? _e : null, isWritable: false },
+        bondingCurve: { value: (_f = input.bondingCurve) !== null && _f !== void 0 ? _f : null, isWritable: true },
         systemProgram: { value: (_g = input.systemProgram) !== null && _g !== void 0 ? _g : null, isWritable: false },
         tokenProgram: { value: (_h = input.tokenProgram) !== null && _h !== void 0 ? _h : null, isWritable: false },
         associatedTokenProgram: {
@@ -141,24 +141,24 @@ export function getBuyTokenInstruction(input, config) {
     // Resolve default values.
     if (!accounts.systemProgram.value) {
         accounts.systemProgram.value =
-            "11111111111111111111111111111111";
+            '11111111111111111111111111111111';
     }
     if (!accounts.tokenProgram.value) {
         accounts.tokenProgram.value =
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
     }
     if (!accounts.associatedTokenProgram.value) {
         accounts.associatedTokenProgram.value =
-            "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
+            'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL';
     }
-    const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+    const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
     const instruction = {
         accounts: [
             getAccountMeta(accounts.signer),
             getAccountMeta(accounts.tokenAta),
             getAccountMeta(accounts.tokenEscrow),
-            getAccountMeta(accounts.bondingCurve),
             getAccountMeta(accounts.tokenMint),
+            getAccountMeta(accounts.bondingCurve),
             getAccountMeta(accounts.systemProgram),
             getAccountMeta(accounts.tokenProgram),
             getAccountMeta(accounts.associatedTokenProgram),
@@ -171,7 +171,7 @@ export function getBuyTokenInstruction(input, config) {
 export function parseBuyTokenInstruction(instruction) {
     if (instruction.accounts.length < 8) {
         // TODO: Coded error.
-        throw new Error("Not enough accounts");
+        throw new Error('Not enough accounts');
     }
     let accountIndex = 0;
     const getNextAccount = () => {
@@ -185,8 +185,8 @@ export function parseBuyTokenInstruction(instruction) {
             signer: getNextAccount(),
             tokenAta: getNextAccount(),
             tokenEscrow: getNextAccount(),
-            bondingCurve: getNextAccount(),
             tokenMint: getNextAccount(),
+            bondingCurve: getNextAccount(),
             systemProgram: getNextAccount(),
             tokenProgram: getNextAccount(),
             associatedTokenProgram: getNextAccount(),

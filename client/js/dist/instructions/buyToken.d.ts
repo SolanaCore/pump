@@ -5,16 +5,16 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { type Address, type Codec, type Decoder, type Encoder, type IAccountMeta, type IAccountSignerMeta, type IInstruction, type IInstructionWithAccounts, type IInstructionWithData, type ReadonlyAccount, type ReadonlyUint8Array, type TransactionSigner, type WritableAccount, type WritableSignerAccount } from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
+import { type Address, type Codec, type Decoder, type Encoder, type IAccountMeta, type IAccountSignerMeta, type IInstruction, type IInstructionWithAccounts, type IInstructionWithData, type ReadonlyAccount, type ReadonlyUint8Array, type TransactionSigner, type WritableAccount, type WritableSignerAccount } from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
 export declare const BUY_TOKEN_DISCRIMINATOR: Uint8Array<ArrayBuffer>;
 export declare function getBuyTokenDiscriminatorBytes(): ReadonlyUint8Array;
-export type BuyTokenInstruction<TProgram extends string = typeof PUMP_PROGRAM_ADDRESS, TAccountSigner extends string | IAccountMeta<string> = string, TAccountTokenAta extends string | IAccountMeta<string> = string, TAccountTokenEscrow extends string | IAccountMeta<string> = string, TAccountBondingCurve extends string | IAccountMeta<string> = string, TAccountTokenMint extends string | IAccountMeta<string> = string, TAccountSystemProgram extends string | IAccountMeta<string> = "11111111111111111111111111111111", TAccountTokenProgram extends string | IAccountMeta<string> = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", TAccountAssociatedTokenProgram extends string | IAccountMeta<string> = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL", TRemainingAccounts extends readonly IAccountMeta<string>[] = []> = IInstruction<TProgram> & IInstructionWithData<Uint8Array> & IInstructionWithAccounts<[
+export type BuyTokenInstruction<TProgram extends string = typeof PUMP_PROGRAM_ADDRESS, TAccountSigner extends string | IAccountMeta<string> = string, TAccountTokenAta extends string | IAccountMeta<string> = string, TAccountTokenEscrow extends string | IAccountMeta<string> = string, TAccountTokenMint extends string | IAccountMeta<string> = string, TAccountBondingCurve extends string | IAccountMeta<string> = string, TAccountSystemProgram extends string | IAccountMeta<string> = '11111111111111111111111111111111', TAccountTokenProgram extends string | IAccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA', TAccountAssociatedTokenProgram extends string | IAccountMeta<string> = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL', TRemainingAccounts extends readonly IAccountMeta<string>[] = []> = IInstruction<TProgram> & IInstructionWithData<Uint8Array> & IInstructionWithAccounts<[
     TAccountSigner extends string ? WritableSignerAccount<TAccountSigner> & IAccountSignerMeta<TAccountSigner> : TAccountSigner,
     TAccountTokenAta extends string ? WritableAccount<TAccountTokenAta> : TAccountTokenAta,
-    TAccountTokenEscrow extends string ? ReadonlyAccount<TAccountTokenEscrow> : TAccountTokenEscrow,
-    TAccountBondingCurve extends string ? ReadonlyAccount<TAccountBondingCurve> : TAccountBondingCurve,
+    TAccountTokenEscrow extends string ? WritableAccount<TAccountTokenEscrow> : TAccountTokenEscrow,
     TAccountTokenMint extends string ? ReadonlyAccount<TAccountTokenMint> : TAccountTokenMint,
+    TAccountBondingCurve extends string ? WritableAccount<TAccountBondingCurve> : TAccountBondingCurve,
     TAccountSystemProgram extends string ? ReadonlyAccount<TAccountSystemProgram> : TAccountSystemProgram,
     TAccountTokenProgram extends string ? ReadonlyAccount<TAccountTokenProgram> : TAccountTokenProgram,
     TAccountAssociatedTokenProgram extends string ? ReadonlyAccount<TAccountAssociatedTokenProgram> : TAccountAssociatedTokenProgram,
@@ -30,42 +30,42 @@ export type BuyTokenInstructionDataArgs = {
 export declare function getBuyTokenInstructionDataEncoder(): Encoder<BuyTokenInstructionDataArgs>;
 export declare function getBuyTokenInstructionDataDecoder(): Decoder<BuyTokenInstructionData>;
 export declare function getBuyTokenInstructionDataCodec(): Codec<BuyTokenInstructionDataArgs, BuyTokenInstructionData>;
-export type BuyTokenAsyncInput<TAccountSigner extends string = string, TAccountTokenAta extends string = string, TAccountTokenEscrow extends string = string, TAccountBondingCurve extends string = string, TAccountTokenMint extends string = string, TAccountSystemProgram extends string = string, TAccountTokenProgram extends string = string, TAccountAssociatedTokenProgram extends string = string> = {
+export type BuyTokenAsyncInput<TAccountSigner extends string = string, TAccountTokenAta extends string = string, TAccountTokenEscrow extends string = string, TAccountTokenMint extends string = string, TAccountBondingCurve extends string = string, TAccountSystemProgram extends string = string, TAccountTokenProgram extends string = string, TAccountAssociatedTokenProgram extends string = string> = {
     signer: TransactionSigner<TAccountSigner>;
     tokenAta?: Address<TAccountTokenAta>;
     tokenEscrow?: Address<TAccountTokenEscrow>;
-    bondingCurve?: Address<TAccountBondingCurve>;
     tokenMint: Address<TAccountTokenMint>;
+    bondingCurve?: Address<TAccountBondingCurve>;
     systemProgram?: Address<TAccountSystemProgram>;
     tokenProgram?: Address<TAccountTokenProgram>;
     associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
-    maxSol: BuyTokenInstructionDataArgs["maxSol"];
+    maxSol: BuyTokenInstructionDataArgs['maxSol'];
 };
-export declare function getBuyTokenInstructionAsync<TAccountSigner extends string, TAccountTokenAta extends string, TAccountTokenEscrow extends string, TAccountBondingCurve extends string, TAccountTokenMint extends string, TAccountSystemProgram extends string, TAccountTokenProgram extends string, TAccountAssociatedTokenProgram extends string, TProgramAddress extends Address = typeof PUMP_PROGRAM_ADDRESS>(input: BuyTokenAsyncInput<TAccountSigner, TAccountTokenAta, TAccountTokenEscrow, TAccountBondingCurve, TAccountTokenMint, TAccountSystemProgram, TAccountTokenProgram, TAccountAssociatedTokenProgram>, config?: {
+export declare function getBuyTokenInstructionAsync<TAccountSigner extends string, TAccountTokenAta extends string, TAccountTokenEscrow extends string, TAccountTokenMint extends string, TAccountBondingCurve extends string, TAccountSystemProgram extends string, TAccountTokenProgram extends string, TAccountAssociatedTokenProgram extends string, TProgramAddress extends Address = typeof PUMP_PROGRAM_ADDRESS>(input: BuyTokenAsyncInput<TAccountSigner, TAccountTokenAta, TAccountTokenEscrow, TAccountTokenMint, TAccountBondingCurve, TAccountSystemProgram, TAccountTokenProgram, TAccountAssociatedTokenProgram>, config?: {
     programAddress?: TProgramAddress;
-}): Promise<BuyTokenInstruction<TProgramAddress, TAccountSigner, TAccountTokenAta, TAccountTokenEscrow, TAccountBondingCurve, TAccountTokenMint, TAccountSystemProgram, TAccountTokenProgram, TAccountAssociatedTokenProgram>>;
-export type BuyTokenInput<TAccountSigner extends string = string, TAccountTokenAta extends string = string, TAccountTokenEscrow extends string = string, TAccountBondingCurve extends string = string, TAccountTokenMint extends string = string, TAccountSystemProgram extends string = string, TAccountTokenProgram extends string = string, TAccountAssociatedTokenProgram extends string = string> = {
+}): Promise<BuyTokenInstruction<TProgramAddress, TAccountSigner, TAccountTokenAta, TAccountTokenEscrow, TAccountTokenMint, TAccountBondingCurve, TAccountSystemProgram, TAccountTokenProgram, TAccountAssociatedTokenProgram>>;
+export type BuyTokenInput<TAccountSigner extends string = string, TAccountTokenAta extends string = string, TAccountTokenEscrow extends string = string, TAccountTokenMint extends string = string, TAccountBondingCurve extends string = string, TAccountSystemProgram extends string = string, TAccountTokenProgram extends string = string, TAccountAssociatedTokenProgram extends string = string> = {
     signer: TransactionSigner<TAccountSigner>;
     tokenAta: Address<TAccountTokenAta>;
     tokenEscrow: Address<TAccountTokenEscrow>;
-    bondingCurve: Address<TAccountBondingCurve>;
     tokenMint: Address<TAccountTokenMint>;
+    bondingCurve: Address<TAccountBondingCurve>;
     systemProgram?: Address<TAccountSystemProgram>;
     tokenProgram?: Address<TAccountTokenProgram>;
     associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
-    maxSol: BuyTokenInstructionDataArgs["maxSol"];
+    maxSol: BuyTokenInstructionDataArgs['maxSol'];
 };
-export declare function getBuyTokenInstruction<TAccountSigner extends string, TAccountTokenAta extends string, TAccountTokenEscrow extends string, TAccountBondingCurve extends string, TAccountTokenMint extends string, TAccountSystemProgram extends string, TAccountTokenProgram extends string, TAccountAssociatedTokenProgram extends string, TProgramAddress extends Address = typeof PUMP_PROGRAM_ADDRESS>(input: BuyTokenInput<TAccountSigner, TAccountTokenAta, TAccountTokenEscrow, TAccountBondingCurve, TAccountTokenMint, TAccountSystemProgram, TAccountTokenProgram, TAccountAssociatedTokenProgram>, config?: {
+export declare function getBuyTokenInstruction<TAccountSigner extends string, TAccountTokenAta extends string, TAccountTokenEscrow extends string, TAccountTokenMint extends string, TAccountBondingCurve extends string, TAccountSystemProgram extends string, TAccountTokenProgram extends string, TAccountAssociatedTokenProgram extends string, TProgramAddress extends Address = typeof PUMP_PROGRAM_ADDRESS>(input: BuyTokenInput<TAccountSigner, TAccountTokenAta, TAccountTokenEscrow, TAccountTokenMint, TAccountBondingCurve, TAccountSystemProgram, TAccountTokenProgram, TAccountAssociatedTokenProgram>, config?: {
     programAddress?: TProgramAddress;
-}): BuyTokenInstruction<TProgramAddress, TAccountSigner, TAccountTokenAta, TAccountTokenEscrow, TAccountBondingCurve, TAccountTokenMint, TAccountSystemProgram, TAccountTokenProgram, TAccountAssociatedTokenProgram>;
+}): BuyTokenInstruction<TProgramAddress, TAccountSigner, TAccountTokenAta, TAccountTokenEscrow, TAccountTokenMint, TAccountBondingCurve, TAccountSystemProgram, TAccountTokenProgram, TAccountAssociatedTokenProgram>;
 export type ParsedBuyTokenInstruction<TProgram extends string = typeof PUMP_PROGRAM_ADDRESS, TAccountMetas extends readonly IAccountMeta[] = readonly IAccountMeta[]> = {
     programAddress: Address<TProgram>;
     accounts: {
         signer: TAccountMetas[0];
         tokenAta: TAccountMetas[1];
         tokenEscrow: TAccountMetas[2];
-        bondingCurve: TAccountMetas[3];
-        tokenMint: TAccountMetas[4];
+        tokenMint: TAccountMetas[3];
+        bondingCurve: TAccountMetas[4];
         systemProgram: TAccountMetas[5];
         tokenProgram: TAccountMetas[6];
         associatedTokenProgram: TAccountMetas[7];

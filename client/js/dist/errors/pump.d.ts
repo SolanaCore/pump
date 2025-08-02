@@ -5,7 +5,7 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { type Address, type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM, type SolanaError } from "@solana/kit";
+import { type Address, type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM, type SolanaError } from '@solana/kit';
 /** OverflowDetected: Overflow detected */
 export declare const PUMP_ERROR__OVERFLOW_DETECTED = 6000;
 /** UnderflowDetected: Underflow detected */
@@ -16,7 +16,11 @@ export declare const PUMP_ERROR__INVALID_TOKEN_AMOUNT = 6002;
 export declare const PUMP_ERROR__INVALID_SOL_AMOUNT = 6003;
 /** InvalidInputs: Invalis Inputs check the that either name, ticker, uri or description are not empty */
 export declare const PUMP_ERROR__INVALID_INPUTS = 6004;
-export type PumpError = typeof PUMP_ERROR__INVALID_INPUTS | typeof PUMP_ERROR__INVALID_SOL_AMOUNT | typeof PUMP_ERROR__INVALID_TOKEN_AMOUNT | typeof PUMP_ERROR__OVERFLOW_DETECTED | typeof PUMP_ERROR__UNDERFLOW_DETECTED;
+/** InsufficientFunds: insufficient funds in the account 'from' account */
+export declare const PUMP_ERROR__INSUFFICIENT_FUNDS = 6005;
+/** InvalidOwner: the give token mint address is not owned by the bonding_curve */
+export declare const PUMP_ERROR__INVALID_OWNER = 6006;
+export type PumpError = typeof PUMP_ERROR__INSUFFICIENT_FUNDS | typeof PUMP_ERROR__INVALID_INPUTS | typeof PUMP_ERROR__INVALID_OWNER | typeof PUMP_ERROR__INVALID_SOL_AMOUNT | typeof PUMP_ERROR__INVALID_TOKEN_AMOUNT | typeof PUMP_ERROR__OVERFLOW_DETECTED | typeof PUMP_ERROR__UNDERFLOW_DETECTED;
 export declare function getPumpErrorMessage(code: PumpError): string;
 export declare function isPumpError<TProgramErrorCode extends PumpError>(error: unknown, transactionMessage: {
     instructions: Record<number, {
