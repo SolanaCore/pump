@@ -31,6 +31,9 @@ pub enum PumpError {
     /// 6006 - the give token mint address is not owned by the bonding_curve
     #[error("the give token mint address is not owned by the bonding_curve")]
     InvalidOwner = 0x1776,
+    /// 6007 - value didn't set MetadataFailed
+    #[error("value didn't set MetadataFailed")]
+    MetadataFailed = 0x1777,
 }
 
 impl solana_program_error::PrintProgramError for PumpError {

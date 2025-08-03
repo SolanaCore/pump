@@ -32,6 +32,7 @@ import {
 // Accounts.
 export type BuyTokenInstructionAccounts = {
   signer: Signer;
+  solEscrow?: PublicKey | Pda;
   tokenAta?: PublicKey | Pda;
   tokenEscrow?: PublicKey | Pda;
   tokenMint: PublicKey | Pda;
@@ -83,7 +84,7 @@ export function buyToken(
   // Program ID.
   const programId = context.programs.getPublicKey(
     'pump',
-    '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'
+    'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'
   );
 
   // Accounts.
@@ -93,38 +94,43 @@ export function buyToken(
       isWritable: true as boolean,
       value: input.signer ?? null,
     },
-    tokenAta: {
+    solEscrow: {
       index: 1,
+      isWritable: true as boolean,
+      value: input.solEscrow ?? null,
+    },
+    tokenAta: {
+      index: 2,
       isWritable: true as boolean,
       value: input.tokenAta ?? null,
     },
     tokenEscrow: {
-      index: 2,
+      index: 3,
       isWritable: true as boolean,
       value: input.tokenEscrow ?? null,
     },
     tokenMint: {
-      index: 3,
+      index: 4,
       isWritable: false as boolean,
       value: input.tokenMint ?? null,
     },
     bondingCurve: {
-      index: 4,
+      index: 5,
       isWritable: true as boolean,
       value: input.bondingCurve ?? null,
     },
     systemProgram: {
-      index: 5,
+      index: 6,
       isWritable: false as boolean,
       value: input.systemProgram ?? null,
     },
     tokenProgram: {
-      index: 6,
+      index: 7,
       isWritable: false as boolean,
       value: input.tokenProgram ?? null,
     },
     associatedTokenProgram: {
-      index: 7,
+      index: 8,
       isWritable: false as boolean,
       value: input.associatedTokenProgram ?? null,
     },
@@ -134,6 +140,29 @@ export function buyToken(
   const resolvedArgs: BuyTokenInstructionArgs = { ...input };
 
   // Default values.
+  if (!resolvedAccounts.bondingCurve.value) {
+    resolvedAccounts.bondingCurve.value = context.eddsa.findPda(programId, [
+      bytes().serialize(
+        new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
+      ),
+      publicKeySerializer().serialize(
+        expectPublicKey(resolvedAccounts.tokenMint.value)
+      ),
+    ]);
+  }
+  if (!resolvedAccounts.solEscrow.value) {
+    resolvedAccounts.solEscrow.value = context.eddsa.findPda(programId, [
+      bytes().serialize(
+        new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
+      ),
+      publicKeySerializer().serialize(
+        expectPublicKey(resolvedAccounts.tokenMint.value)
+      ),
+      publicKeySerializer().serialize(
+        expectPublicKey(resolvedAccounts.bondingCurve.value)
+      ),
+    ]);
+  }
   if (!resolvedAccounts.tokenAta.value) {
     resolvedAccounts.tokenAta.value = context.eddsa.findPda(
       context.programs.getPublicKey(
@@ -156,16 +185,6 @@ export function buyToken(
         ),
       ]
     );
-  }
-  if (!resolvedAccounts.bondingCurve.value) {
-    resolvedAccounts.bondingCurve.value = context.eddsa.findPda(programId, [
-      bytes().serialize(
-        new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
-      ),
-      publicKeySerializer().serialize(
-        expectPublicKey(resolvedAccounts.tokenMint.value)
-      ),
-    ]);
   }
   if (!resolvedAccounts.tokenEscrow.value) {
     resolvedAccounts.tokenEscrow.value = context.eddsa.findPda(

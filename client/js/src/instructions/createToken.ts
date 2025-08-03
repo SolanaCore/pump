@@ -61,6 +61,7 @@ export type CreateTokenInstruction<
   TProgram extends string = typeof PUMP_PROGRAM_ADDRESS,
   TAccountSigner extends string | IAccountMeta<string> = string,
   TAccountGlobalState extends string | IAccountMeta<string> = string,
+  TAccountSolEscrow extends string | IAccountMeta<string> = string,
   TAccountBondingCurve extends string | IAccountMeta<string> = string,
   TAccountMint extends string | IAccountMeta<string> = string,
   TAccountTokenEscrow extends string | IAccountMeta<string> = string,
@@ -92,6 +93,9 @@ export type CreateTokenInstruction<
       TAccountGlobalState extends string
         ? ReadonlyAccount<TAccountGlobalState>
         : TAccountGlobalState,
+      TAccountSolEscrow extends string
+        ? ReadonlyAccount<TAccountSolEscrow>
+        : TAccountSolEscrow,
       TAccountBondingCurve extends string
         ? WritableAccount<TAccountBondingCurve>
         : TAccountBondingCurve,
@@ -178,6 +182,7 @@ export function getCreateTokenInstructionDataCodec(): Codec<
 export type CreateTokenAsyncInput<
   TAccountSigner extends string = string,
   TAccountGlobalState extends string = string,
+  TAccountSolEscrow extends string = string,
   TAccountBondingCurve extends string = string,
   TAccountMint extends string = string,
   TAccountTokenEscrow extends string = string,
@@ -190,6 +195,7 @@ export type CreateTokenAsyncInput<
 > = {
   signer: TransactionSigner<TAccountSigner>;
   globalState: Address<TAccountGlobalState>;
+  solEscrow?: Address<TAccountSolEscrow>;
   bondingCurve?: Address<TAccountBondingCurve>;
   mint: TransactionSigner<TAccountMint>;
   tokenEscrow?: Address<TAccountTokenEscrow>;
@@ -209,6 +215,7 @@ export type CreateTokenAsyncInput<
 export async function getCreateTokenInstructionAsync<
   TAccountSigner extends string,
   TAccountGlobalState extends string,
+  TAccountSolEscrow extends string,
   TAccountBondingCurve extends string,
   TAccountMint extends string,
   TAccountTokenEscrow extends string,
@@ -223,6 +230,7 @@ export async function getCreateTokenInstructionAsync<
   input: CreateTokenAsyncInput<
     TAccountSigner,
     TAccountGlobalState,
+    TAccountSolEscrow,
     TAccountBondingCurve,
     TAccountMint,
     TAccountTokenEscrow,
@@ -239,6 +247,7 @@ export async function getCreateTokenInstructionAsync<
     TProgramAddress,
     TAccountSigner,
     TAccountGlobalState,
+    TAccountSolEscrow,
     TAccountBondingCurve,
     TAccountMint,
     TAccountTokenEscrow,
@@ -257,6 +266,7 @@ export async function getCreateTokenInstructionAsync<
   const originalAccounts = {
     signer: { value: input.signer ?? null, isWritable: true },
     globalState: { value: input.globalState ?? null, isWritable: false },
+    solEscrow: { value: input.solEscrow ?? null, isWritable: false },
     bondingCurve: { value: input.bondingCurve ?? null, isWritable: true },
     mint: { value: input.mint ?? null, isWritable: true },
     tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: true },
@@ -290,6 +300,18 @@ export async function getCreateTokenInstructionAsync<
           new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
         ),
         getAddressEncoder().encode(expectAddress(accounts.mint.value)),
+      ],
+    });
+  }
+  if (!accounts.solEscrow.value) {
+    accounts.solEscrow.value = await getProgramDerivedAddress({
+      programAddress,
+      seeds: [
+        getBytesEncoder().encode(
+          new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
+        ),
+        getAddressEncoder().encode(expectAddress(accounts.mint.value)),
+        getAddressEncoder().encode(expectAddress(accounts.bondingCurve.value)),
       ],
     });
   }
@@ -336,6 +358,7 @@ export async function getCreateTokenInstructionAsync<
     accounts: [
       getAccountMeta(accounts.signer),
       getAccountMeta(accounts.globalState),
+      getAccountMeta(accounts.solEscrow),
       getAccountMeta(accounts.bondingCurve),
       getAccountMeta(accounts.mint),
       getAccountMeta(accounts.tokenEscrow),
@@ -354,6 +377,7 @@ export async function getCreateTokenInstructionAsync<
     TProgramAddress,
     TAccountSigner,
     TAccountGlobalState,
+    TAccountSolEscrow,
     TAccountBondingCurve,
     TAccountMint,
     TAccountTokenEscrow,
@@ -371,6 +395,7 @@ export async function getCreateTokenInstructionAsync<
 export type CreateTokenInput<
   TAccountSigner extends string = string,
   TAccountGlobalState extends string = string,
+  TAccountSolEscrow extends string = string,
   TAccountBondingCurve extends string = string,
   TAccountMint extends string = string,
   TAccountTokenEscrow extends string = string,
@@ -383,6 +408,7 @@ export type CreateTokenInput<
 > = {
   signer: TransactionSigner<TAccountSigner>;
   globalState: Address<TAccountGlobalState>;
+  solEscrow: Address<TAccountSolEscrow>;
   bondingCurve: Address<TAccountBondingCurve>;
   mint: TransactionSigner<TAccountMint>;
   tokenEscrow: Address<TAccountTokenEscrow>;
@@ -402,6 +428,7 @@ export type CreateTokenInput<
 export function getCreateTokenInstruction<
   TAccountSigner extends string,
   TAccountGlobalState extends string,
+  TAccountSolEscrow extends string,
   TAccountBondingCurve extends string,
   TAccountMint extends string,
   TAccountTokenEscrow extends string,
@@ -416,6 +443,7 @@ export function getCreateTokenInstruction<
   input: CreateTokenInput<
     TAccountSigner,
     TAccountGlobalState,
+    TAccountSolEscrow,
     TAccountBondingCurve,
     TAccountMint,
     TAccountTokenEscrow,
@@ -431,6 +459,7 @@ export function getCreateTokenInstruction<
   TProgramAddress,
   TAccountSigner,
   TAccountGlobalState,
+  TAccountSolEscrow,
   TAccountBondingCurve,
   TAccountMint,
   TAccountTokenEscrow,
@@ -448,6 +477,7 @@ export function getCreateTokenInstruction<
   const originalAccounts = {
     signer: { value: input.signer ?? null, isWritable: true },
     globalState: { value: input.globalState ?? null, isWritable: false },
+    solEscrow: { value: input.solEscrow ?? null, isWritable: false },
     bondingCurve: { value: input.bondingCurve ?? null, isWritable: true },
     mint: { value: input.mint ?? null, isWritable: true },
     tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: true },
@@ -499,6 +529,7 @@ export function getCreateTokenInstruction<
     accounts: [
       getAccountMeta(accounts.signer),
       getAccountMeta(accounts.globalState),
+      getAccountMeta(accounts.solEscrow),
       getAccountMeta(accounts.bondingCurve),
       getAccountMeta(accounts.mint),
       getAccountMeta(accounts.tokenEscrow),
@@ -517,6 +548,7 @@ export function getCreateTokenInstruction<
     TProgramAddress,
     TAccountSigner,
     TAccountGlobalState,
+    TAccountSolEscrow,
     TAccountBondingCurve,
     TAccountMint,
     TAccountTokenEscrow,
@@ -539,15 +571,16 @@ export type ParsedCreateTokenInstruction<
   accounts: {
     signer: TAccountMetas[0];
     globalState: TAccountMetas[1];
-    bondingCurve: TAccountMetas[2];
-    mint: TAccountMetas[3];
-    tokenEscrow: TAccountMetas[4];
-    tokenProgram: TAccountMetas[5];
-    systemProgram: TAccountMetas[6];
-    rent: TAccountMetas[7];
-    associatedTokenProgram: TAccountMetas[8];
-    tokenMetadataProgram: TAccountMetas[9];
-    metadata: TAccountMetas[10];
+    solEscrow: TAccountMetas[2];
+    bondingCurve: TAccountMetas[3];
+    mint: TAccountMetas[4];
+    tokenEscrow: TAccountMetas[5];
+    tokenProgram: TAccountMetas[6];
+    systemProgram: TAccountMetas[7];
+    rent: TAccountMetas[8];
+    associatedTokenProgram: TAccountMetas[9];
+    tokenMetadataProgram: TAccountMetas[10];
+    metadata: TAccountMetas[11];
   };
   data: CreateTokenInstructionData;
 };
@@ -560,7 +593,7 @@ export function parseCreateTokenInstruction<
     IInstructionWithAccounts<TAccountMetas> &
     IInstructionWithData<Uint8Array>
 ): ParsedCreateTokenInstruction<TProgram, TAccountMetas> {
-  if (instruction.accounts.length < 11) {
+  if (instruction.accounts.length < 12) {
     // TODO: Coded error.
     throw new Error('Not enough accounts');
   }
@@ -575,6 +608,7 @@ export function parseCreateTokenInstruction<
     accounts: {
       signer: getNextAccount(),
       globalState: getNextAccount(),
+      solEscrow: getNextAccount(),
       bondingCurve: getNextAccount(),
       mint: getNextAccount(),
       tokenEscrow: getNextAccount(),

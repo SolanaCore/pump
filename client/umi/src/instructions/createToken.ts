@@ -34,6 +34,7 @@ import {
 export type CreateTokenInstructionAccounts = {
   signer: Signer;
   globalState: PublicKey | Pda;
+  solEscrow?: PublicKey | Pda;
   bondingCurve?: PublicKey | Pda;
   mint: Signer;
   tokenEscrow?: PublicKey | Pda;
@@ -101,7 +102,7 @@ export function createToken(
   // Program ID.
   const programId = context.programs.getPublicKey(
     'pump',
-    '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'
+    'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'
   );
 
   // Accounts.
@@ -116,40 +117,45 @@ export function createToken(
       isWritable: false as boolean,
       value: input.globalState ?? null,
     },
-    bondingCurve: {
+    solEscrow: {
       index: 2,
+      isWritable: false as boolean,
+      value: input.solEscrow ?? null,
+    },
+    bondingCurve: {
+      index: 3,
       isWritable: true as boolean,
       value: input.bondingCurve ?? null,
     },
-    mint: { index: 3, isWritable: true as boolean, value: input.mint ?? null },
+    mint: { index: 4, isWritable: true as boolean, value: input.mint ?? null },
     tokenEscrow: {
-      index: 4,
+      index: 5,
       isWritable: true as boolean,
       value: input.tokenEscrow ?? null,
     },
     tokenProgram: {
-      index: 5,
+      index: 6,
       isWritable: false as boolean,
       value: input.tokenProgram ?? null,
     },
     systemProgram: {
-      index: 6,
+      index: 7,
       isWritable: false as boolean,
       value: input.systemProgram ?? null,
     },
-    rent: { index: 7, isWritable: false as boolean, value: input.rent ?? null },
+    rent: { index: 8, isWritable: false as boolean, value: input.rent ?? null },
     associatedTokenProgram: {
-      index: 8,
+      index: 9,
       isWritable: false as boolean,
       value: input.associatedTokenProgram ?? null,
     },
     tokenMetadataProgram: {
-      index: 9,
+      index: 10,
       isWritable: false as boolean,
       value: input.tokenMetadataProgram ?? null,
     },
     metadata: {
-      index: 10,
+      index: 11,
       isWritable: true as boolean,
       value: input.metadata ?? null,
     },
@@ -166,6 +172,19 @@ export function createToken(
       ),
       publicKeySerializer().serialize(
         expectPublicKey(resolvedAccounts.mint.value)
+      ),
+    ]);
+  }
+  if (!resolvedAccounts.solEscrow.value) {
+    resolvedAccounts.solEscrow.value = context.eddsa.findPda(programId, [
+      bytes().serialize(
+        new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
+      ),
+      publicKeySerializer().serialize(
+        expectPublicKey(resolvedAccounts.mint.value)
+      ),
+      publicKeySerializer().serialize(
+        expectPublicKey(resolvedAccounts.bondingCurve.value)
       ),
     ]);
   }

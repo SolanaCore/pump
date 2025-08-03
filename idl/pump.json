@@ -1,5 +1,5 @@
 {
-  "address": "52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg",
+  "address": "FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q",
   "metadata": {
     "name": "pump",
     "version": "0.1.0",
@@ -24,6 +24,40 @@
           "name": "signer",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "sol_escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  66,
+                  79,
+                  78,
+                  68,
+                  73,
+                  78,
+                  71,
+                  95,
+                  67,
+                  85,
+                  82,
+                  86,
+                  69
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_mint"
+              },
+              {
+                "kind": "account",
+                "path": "bonding_curve"
+              }
+            ]
+          }
         },
         {
           "name": "token_ata",
@@ -280,6 +314,39 @@
           "name": "global_state"
         },
         {
+          "name": "sol_escrow",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  66,
+                  79,
+                  78,
+                  68,
+                  73,
+                  78,
+                  71,
+                  95,
+                  67,
+                  85,
+                  82,
+                  86,
+                  69
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              },
+              {
+                "kind": "account",
+                "path": "bonding_curve"
+              }
+            ]
+          }
+        },
+        {
           "name": "bonding_curve",
           "writable": true,
           "pda": {
@@ -527,6 +594,40 @@
           "writable": true
         },
         {
+          "name": "sol_escrow",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  66,
+                  79,
+                  78,
+                  68,
+                  73,
+                  78,
+                  71,
+                  95,
+                  67,
+                  85,
+                  82,
+                  86,
+                  69
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "token_mint"
+              },
+              {
+                "kind": "account",
+                "path": "bonding_curve"
+              }
+            ]
+          }
+        },
+        {
           "name": "token_escrow",
           "writable": true
         },
@@ -647,6 +748,11 @@
       "code": 6006,
       "name": "InvalidOwner",
       "msg": "the give token mint address is not owned by the bonding_curve"
+    },
+    {
+      "code": 6007,
+      "name": "MetadataFailed",
+      "msg": "value didn't set MetadataFailed"
     }
   ],
   "types": [

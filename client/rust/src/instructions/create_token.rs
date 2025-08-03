@@ -19,6 +19,9 @@ pub struct CreateToken {
           pub global_state: solana_pubkey::Pubkey,
           
               
+          pub sol_escrow: solana_pubkey::Pubkey,
+          
+              
           pub bonding_curve: solana_pubkey::Pubkey,
           
               
@@ -53,13 +56,17 @@ impl CreateToken {
   #[allow(clippy::arithmetic_side_effects)]
   #[allow(clippy::vec_init_then_push)]
   pub fn instruction_with_remaining_accounts(&self, args: CreateTokenInstructionArgs, remaining_accounts: &[solana_instruction::AccountMeta]) -> solana_instruction::Instruction {
-    let mut accounts = Vec::with_capacity(11+ remaining_accounts.len());
+    let mut accounts = Vec::with_capacity(12+ remaining_accounts.len());
                             accounts.push(solana_instruction::AccountMeta::new(
             self.signer,
             true
           ));
                                           accounts.push(solana_instruction::AccountMeta::new_readonly(
             self.global_state,
+            false
+          ));
+                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
+            self.sol_escrow,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new(
@@ -148,19 +155,21 @@ impl Default for CreateTokenInstructionData {
 ///
                       ///   0. `[writable, signer]` signer
           ///   1. `[]` global_state
-                ///   2. `[writable]` bonding_curve
-                      ///   3. `[writable, signer]` mint
-                ///   4. `[writable]` token_escrow
-                ///   5. `[optional]` token_program (default to `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`)
-                ///   6. `[optional]` system_program (default to `11111111111111111111111111111111`)
-                ///   7. `[optional]` rent (default to `SysvarRent111111111111111111111111111111111`)
-                ///   8. `[optional]` associated_token_program (default to `ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL`)
-                ///   9. `[optional]` token_metadata_program (default to `metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s`)
-                ///   10. `[writable]` metadata
+          ///   2. `[]` sol_escrow
+                ///   3. `[writable]` bonding_curve
+                      ///   4. `[writable, signer]` mint
+                ///   5. `[writable]` token_escrow
+                ///   6. `[optional]` token_program (default to `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`)
+                ///   7. `[optional]` system_program (default to `11111111111111111111111111111111`)
+                ///   8. `[optional]` rent (default to `SysvarRent111111111111111111111111111111111`)
+                ///   9. `[optional]` associated_token_program (default to `ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL`)
+                ///   10. `[optional]` token_metadata_program (default to `metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s`)
+                ///   11. `[writable]` metadata
 #[derive(Clone, Debug, Default)]
 pub struct CreateTokenBuilder {
             signer: Option<solana_pubkey::Pubkey>,
                 global_state: Option<solana_pubkey::Pubkey>,
+                sol_escrow: Option<solana_pubkey::Pubkey>,
                 bonding_curve: Option<solana_pubkey::Pubkey>,
                 mint: Option<solana_pubkey::Pubkey>,
                 token_escrow: Option<solana_pubkey::Pubkey>,
@@ -190,6 +199,11 @@ impl CreateTokenBuilder {
             #[inline(always)]
     pub fn global_state(&mut self, global_state: solana_pubkey::Pubkey) -> &mut Self {
                         self.global_state = Some(global_state);
+                    self
+    }
+            #[inline(always)]
+    pub fn sol_escrow(&mut self, sol_escrow: solana_pubkey::Pubkey) -> &mut Self {
+                        self.sol_escrow = Some(sol_escrow);
                     self
     }
             #[inline(always)]
@@ -284,6 +298,7 @@ impl CreateTokenBuilder {
     let accounts = CreateToken {
                               signer: self.signer.expect("signer is not set"),
                                         global_state: self.global_state.expect("global_state is not set"),
+                                        sol_escrow: self.sol_escrow.expect("sol_escrow is not set"),
                                         bonding_curve: self.bonding_curve.expect("bonding_curve is not set"),
                                         mint: self.mint.expect("mint is not set"),
                                         token_escrow: self.token_escrow.expect("token_escrow is not set"),
@@ -314,6 +329,9 @@ impl CreateTokenBuilder {
                 
                     
               pub global_state: &'b solana_account_info::AccountInfo<'a>,
+                
+                    
+              pub sol_escrow: &'b solana_account_info::AccountInfo<'a>,
                 
                     
               pub bonding_curve: &'b solana_account_info::AccountInfo<'a>,
@@ -355,6 +373,9 @@ pub struct CreateTokenCpi<'a, 'b> {
           pub global_state: &'b solana_account_info::AccountInfo<'a>,
           
               
+          pub sol_escrow: &'b solana_account_info::AccountInfo<'a>,
+          
+              
           pub bonding_curve: &'b solana_account_info::AccountInfo<'a>,
           
               
@@ -394,6 +415,7 @@ impl<'a, 'b> CreateTokenCpi<'a, 'b> {
       __program: program,
               signer: accounts.signer,
               global_state: accounts.global_state,
+              sol_escrow: accounts.sol_escrow,
               bonding_curve: accounts.bonding_curve,
               mint: accounts.mint,
               token_escrow: accounts.token_escrow,
@@ -426,13 +448,17 @@ impl<'a, 'b> CreateTokenCpi<'a, 'b> {
     signers_seeds: &[&[&[u8]]],
     remaining_accounts: &[(&'b solana_account_info::AccountInfo<'a>, bool, bool)]
   ) -> solana_program_entrypoint::ProgramResult {
-    let mut accounts = Vec::with_capacity(11+ remaining_accounts.len());
+    let mut accounts = Vec::with_capacity(12+ remaining_accounts.len());
                             accounts.push(solana_instruction::AccountMeta::new(
             *self.signer.key,
             true
           ));
                                           accounts.push(solana_instruction::AccountMeta::new_readonly(
             *self.global_state.key,
+            false
+          ));
+                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
+            *self.sol_escrow.key,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new(
@@ -487,10 +513,11 @@ impl<'a, 'b> CreateTokenCpi<'a, 'b> {
       accounts,
       data,
     };
-    let mut account_infos = Vec::with_capacity(12 + remaining_accounts.len());
+    let mut account_infos = Vec::with_capacity(13 + remaining_accounts.len());
     account_infos.push(self.__program.clone());
                   account_infos.push(self.signer.clone());
                         account_infos.push(self.global_state.clone());
+                        account_infos.push(self.sol_escrow.clone());
                         account_infos.push(self.bonding_curve.clone());
                         account_infos.push(self.mint.clone());
                         account_infos.push(self.token_escrow.clone());
@@ -516,15 +543,16 @@ impl<'a, 'b> CreateTokenCpi<'a, 'b> {
 ///
                       ///   0. `[writable, signer]` signer
           ///   1. `[]` global_state
-                ///   2. `[writable]` bonding_curve
-                      ///   3. `[writable, signer]` mint
-                ///   4. `[writable]` token_escrow
-          ///   5. `[]` token_program
-          ///   6. `[]` system_program
-          ///   7. `[]` rent
-          ///   8. `[]` associated_token_program
-          ///   9. `[]` token_metadata_program
-                ///   10. `[writable]` metadata
+          ///   2. `[]` sol_escrow
+                ///   3. `[writable]` bonding_curve
+                      ///   4. `[writable, signer]` mint
+                ///   5. `[writable]` token_escrow
+          ///   6. `[]` token_program
+          ///   7. `[]` system_program
+          ///   8. `[]` rent
+          ///   9. `[]` associated_token_program
+          ///   10. `[]` token_metadata_program
+                ///   11. `[writable]` metadata
 #[derive(Clone, Debug)]
 pub struct CreateTokenCpiBuilder<'a, 'b> {
   instruction: Box<CreateTokenCpiBuilderInstruction<'a, 'b>>,
@@ -536,6 +564,7 @@ impl<'a, 'b> CreateTokenCpiBuilder<'a, 'b> {
       __program: program,
               signer: None,
               global_state: None,
+              sol_escrow: None,
               bonding_curve: None,
               mint: None,
               token_escrow: None,
@@ -562,6 +591,11 @@ impl<'a, 'b> CreateTokenCpiBuilder<'a, 'b> {
       #[inline(always)]
     pub fn global_state(&mut self, global_state: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
                         self.instruction.global_state = Some(global_state);
+                    self
+    }
+      #[inline(always)]
+    pub fn sol_escrow(&mut self, sol_escrow: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
+                        self.instruction.sol_escrow = Some(sol_escrow);
                     self
     }
       #[inline(always)]
@@ -670,6 +704,8 @@ impl<'a, 'b> CreateTokenCpiBuilder<'a, 'b> {
                   
           global_state: self.instruction.global_state.expect("global_state is not set"),
                   
+          sol_escrow: self.instruction.sol_escrow.expect("sol_escrow is not set"),
+                  
           bonding_curve: self.instruction.bonding_curve.expect("bonding_curve is not set"),
                   
           mint: self.instruction.mint.expect("mint is not set"),
@@ -698,6 +734,7 @@ struct CreateTokenCpiBuilderInstruction<'a, 'b> {
   __program: &'b solana_account_info::AccountInfo<'a>,
             signer: Option<&'b solana_account_info::AccountInfo<'a>>,
                 global_state: Option<&'b solana_account_info::AccountInfo<'a>>,
+                sol_escrow: Option<&'b solana_account_info::AccountInfo<'a>>,
                 bonding_curve: Option<&'b solana_account_info::AccountInfo<'a>>,
                 mint: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_escrow: Option<&'b solana_account_info::AccountInfo<'a>>,

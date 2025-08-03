@@ -21,7 +21,7 @@ import {
 } from '../instructions';
 
 export const PUMP_PROGRAM_ADDRESS =
-  '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg' as Address<'52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'>;
+  'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q' as Address<'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'>;
 
 export enum PumpAccount {
   BondingCurve,
@@ -120,7 +120,7 @@ export function identifyPumpInstruction(
 }
 
 export type ParsedPumpInstruction<
-  TProgram extends string = '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg',
+  TProgram extends string = 'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q',
 > =
   | ({
       instructionType: PumpInstruction.BuyToken;

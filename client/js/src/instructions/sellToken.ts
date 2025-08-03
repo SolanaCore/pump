@@ -53,6 +53,7 @@ export type SellTokenInstruction<
   TProgram extends string = typeof PUMP_PROGRAM_ADDRESS,
   TAccountSigner extends string | IAccountMeta<string> = string,
   TAccountTokenAta extends string | IAccountMeta<string> = string,
+  TAccountSolEscrow extends string | IAccountMeta<string> = string,
   TAccountTokenEscrow extends string | IAccountMeta<string> = string,
   TAccountBondingCurve extends string | IAccountMeta<string> = string,
   TAccountTokenMint extends string | IAccountMeta<string> = string,
@@ -77,6 +78,9 @@ export type SellTokenInstruction<
       TAccountTokenAta extends string
         ? WritableAccount<TAccountTokenAta>
         : TAccountTokenAta,
+      TAccountSolEscrow extends string
+        ? WritableAccount<TAccountSolEscrow>
+        : TAccountSolEscrow,
       TAccountTokenEscrow extends string
         ? WritableAccount<TAccountTokenEscrow>
         : TAccountTokenEscrow,
@@ -136,6 +140,7 @@ export function getSellTokenInstructionDataCodec(): Codec<
 export type SellTokenAsyncInput<
   TAccountSigner extends string = string,
   TAccountTokenAta extends string = string,
+  TAccountSolEscrow extends string = string,
   TAccountTokenEscrow extends string = string,
   TAccountBondingCurve extends string = string,
   TAccountTokenMint extends string = string,
@@ -145,6 +150,7 @@ export type SellTokenAsyncInput<
 > = {
   signer: TransactionSigner<TAccountSigner>;
   tokenAta: Address<TAccountTokenAta>;
+  solEscrow?: Address<TAccountSolEscrow>;
   tokenEscrow: Address<TAccountTokenEscrow>;
   bondingCurve?: Address<TAccountBondingCurve>;
   tokenMint: Address<TAccountTokenMint>;
@@ -157,6 +163,7 @@ export type SellTokenAsyncInput<
 export async function getSellTokenInstructionAsync<
   TAccountSigner extends string,
   TAccountTokenAta extends string,
+  TAccountSolEscrow extends string,
   TAccountTokenEscrow extends string,
   TAccountBondingCurve extends string,
   TAccountTokenMint extends string,
@@ -168,6 +175,7 @@ export async function getSellTokenInstructionAsync<
   input: SellTokenAsyncInput<
     TAccountSigner,
     TAccountTokenAta,
+    TAccountSolEscrow,
     TAccountTokenEscrow,
     TAccountBondingCurve,
     TAccountTokenMint,
@@ -181,6 +189,7 @@ export async function getSellTokenInstructionAsync<
     TProgramAddress,
     TAccountSigner,
     TAccountTokenAta,
+    TAccountSolEscrow,
     TAccountTokenEscrow,
     TAccountBondingCurve,
     TAccountTokenMint,
@@ -196,6 +205,7 @@ export async function getSellTokenInstructionAsync<
   const originalAccounts = {
     signer: { value: input.signer ?? null, isWritable: true },
     tokenAta: { value: input.tokenAta ?? null, isWritable: true },
+    solEscrow: { value: input.solEscrow ?? null, isWritable: true },
     tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: true },
     bondingCurve: { value: input.bondingCurve ?? null, isWritable: true },
     tokenMint: { value: input.tokenMint ?? null, isWritable: false },
@@ -226,6 +236,18 @@ export async function getSellTokenInstructionAsync<
       ],
     });
   }
+  if (!accounts.solEscrow.value) {
+    accounts.solEscrow.value = await getProgramDerivedAddress({
+      programAddress,
+      seeds: [
+        getBytesEncoder().encode(
+          new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
+        ),
+        getAddressEncoder().encode(expectAddress(accounts.tokenMint.value)),
+        getAddressEncoder().encode(expectAddress(accounts.bondingCurve.value)),
+      ],
+    });
+  }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
       '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
@@ -244,6 +266,7 @@ export async function getSellTokenInstructionAsync<
     accounts: [
       getAccountMeta(accounts.signer),
       getAccountMeta(accounts.tokenAta),
+      getAccountMeta(accounts.solEscrow),
       getAccountMeta(accounts.tokenEscrow),
       getAccountMeta(accounts.bondingCurve),
       getAccountMeta(accounts.tokenMint),
@@ -259,6 +282,7 @@ export async function getSellTokenInstructionAsync<
     TProgramAddress,
     TAccountSigner,
     TAccountTokenAta,
+    TAccountSolEscrow,
     TAccountTokenEscrow,
     TAccountBondingCurve,
     TAccountTokenMint,
@@ -273,6 +297,7 @@ export async function getSellTokenInstructionAsync<
 export type SellTokenInput<
   TAccountSigner extends string = string,
   TAccountTokenAta extends string = string,
+  TAccountSolEscrow extends string = string,
   TAccountTokenEscrow extends string = string,
   TAccountBondingCurve extends string = string,
   TAccountTokenMint extends string = string,
@@ -282,6 +307,7 @@ export type SellTokenInput<
 > = {
   signer: TransactionSigner<TAccountSigner>;
   tokenAta: Address<TAccountTokenAta>;
+  solEscrow: Address<TAccountSolEscrow>;
   tokenEscrow: Address<TAccountTokenEscrow>;
   bondingCurve: Address<TAccountBondingCurve>;
   tokenMint: Address<TAccountTokenMint>;
@@ -294,6 +320,7 @@ export type SellTokenInput<
 export function getSellTokenInstruction<
   TAccountSigner extends string,
   TAccountTokenAta extends string,
+  TAccountSolEscrow extends string,
   TAccountTokenEscrow extends string,
   TAccountBondingCurve extends string,
   TAccountTokenMint extends string,
@@ -305,6 +332,7 @@ export function getSellTokenInstruction<
   input: SellTokenInput<
     TAccountSigner,
     TAccountTokenAta,
+    TAccountSolEscrow,
     TAccountTokenEscrow,
     TAccountBondingCurve,
     TAccountTokenMint,
@@ -317,6 +345,7 @@ export function getSellTokenInstruction<
   TProgramAddress,
   TAccountSigner,
   TAccountTokenAta,
+  TAccountSolEscrow,
   TAccountTokenEscrow,
   TAccountBondingCurve,
   TAccountTokenMint,
@@ -331,6 +360,7 @@ export function getSellTokenInstruction<
   const originalAccounts = {
     signer: { value: input.signer ?? null, isWritable: true },
     tokenAta: { value: input.tokenAta ?? null, isWritable: true },
+    solEscrow: { value: input.solEscrow ?? null, isWritable: true },
     tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: true },
     bondingCurve: { value: input.bondingCurve ?? null, isWritable: true },
     tokenMint: { value: input.tokenMint ?? null, isWritable: false },
@@ -368,6 +398,7 @@ export function getSellTokenInstruction<
     accounts: [
       getAccountMeta(accounts.signer),
       getAccountMeta(accounts.tokenAta),
+      getAccountMeta(accounts.solEscrow),
       getAccountMeta(accounts.tokenEscrow),
       getAccountMeta(accounts.bondingCurve),
       getAccountMeta(accounts.tokenMint),
@@ -383,6 +414,7 @@ export function getSellTokenInstruction<
     TProgramAddress,
     TAccountSigner,
     TAccountTokenAta,
+    TAccountSolEscrow,
     TAccountTokenEscrow,
     TAccountBondingCurve,
     TAccountTokenMint,
@@ -402,12 +434,13 @@ export type ParsedSellTokenInstruction<
   accounts: {
     signer: TAccountMetas[0];
     tokenAta: TAccountMetas[1];
-    tokenEscrow: TAccountMetas[2];
-    bondingCurve: TAccountMetas[3];
-    tokenMint: TAccountMetas[4];
-    systemProgram: TAccountMetas[5];
-    tokenProgram: TAccountMetas[6];
-    associatedTokenProgram: TAccountMetas[7];
+    solEscrow: TAccountMetas[2];
+    tokenEscrow: TAccountMetas[3];
+    bondingCurve: TAccountMetas[4];
+    tokenMint: TAccountMetas[5];
+    systemProgram: TAccountMetas[6];
+    tokenProgram: TAccountMetas[7];
+    associatedTokenProgram: TAccountMetas[8];
   };
   data: SellTokenInstructionData;
 };
@@ -420,7 +453,7 @@ export function parseSellTokenInstruction<
     IInstructionWithAccounts<TAccountMetas> &
     IInstructionWithData<Uint8Array>
 ): ParsedSellTokenInstruction<TProgram, TAccountMetas> {
-  if (instruction.accounts.length < 8) {
+  if (instruction.accounts.length < 9) {
     // TODO: Coded error.
     throw new Error('Not enough accounts');
   }
@@ -435,6 +468,7 @@ export function parseSellTokenInstruction<
     accounts: {
       signer: getNextAccount(),
       tokenAta: getNextAccount(),
+      solEscrow: getNextAccount(),
       tokenEscrow: getNextAccount(),
       bondingCurve: getNextAccount(),
       tokenMint: getNextAccount(),

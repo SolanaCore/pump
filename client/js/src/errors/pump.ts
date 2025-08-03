@@ -28,6 +28,8 @@ export const PUMP_ERROR__INVALID_INPUTS = 0x1774; // 6004
 export const PUMP_ERROR__INSUFFICIENT_FUNDS = 0x1775; // 6005
 /** InvalidOwner: the give token mint address is not owned by the bonding_curve */
 export const PUMP_ERROR__INVALID_OWNER = 0x1776; // 6006
+/** MetadataFailed: value didn't set MetadataFailed */
+export const PUMP_ERROR__METADATA_FAILED = 0x1777; // 6007
 
 export type PumpError =
   | typeof PUMP_ERROR__INSUFFICIENT_FUNDS
@@ -35,6 +37,7 @@ export type PumpError =
   | typeof PUMP_ERROR__INVALID_OWNER
   | typeof PUMP_ERROR__INVALID_SOL_AMOUNT
   | typeof PUMP_ERROR__INVALID_TOKEN_AMOUNT
+  | typeof PUMP_ERROR__METADATA_FAILED
   | typeof PUMP_ERROR__OVERFLOW_DETECTED
   | typeof PUMP_ERROR__UNDERFLOW_DETECTED;
 
@@ -46,6 +49,7 @@ if (process.env.NODE_ENV !== 'production') {
     [PUMP_ERROR__INVALID_OWNER]: `the give token mint address is not owned by the bonding_curve`,
     [PUMP_ERROR__INVALID_SOL_AMOUNT]: `the sol amount can't be zero`,
     [PUMP_ERROR__INVALID_TOKEN_AMOUNT]: `the token amount can't be zero`,
+    [PUMP_ERROR__METADATA_FAILED]: `value didn't set MetadataFailed`,
     [PUMP_ERROR__OVERFLOW_DETECTED]: `Overflow detected`,
     [PUMP_ERROR__UNDERFLOW_DETECTED]: `Underflow detected`,
   };

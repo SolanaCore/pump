@@ -114,6 +114,19 @@ export class InvalidOwnerError extends ProgramError {
 codeToErrorMap.set(0x1776, InvalidOwnerError);
 nameToErrorMap.set('InvalidOwner', InvalidOwnerError);
 
+/** MetadataFailed: value didn't set MetadataFailed */
+export class MetadataFailedError extends ProgramError {
+  override readonly name: string = 'MetadataFailed';
+
+  readonly code: number = 0x1777; // 6007
+
+  constructor(program: Program, cause?: Error) {
+    super("value didn't set MetadataFailed", program, cause);
+  }
+}
+codeToErrorMap.set(0x1777, MetadataFailedError);
+nameToErrorMap.set('MetadataFailed', MetadataFailedError);
+
 /**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors

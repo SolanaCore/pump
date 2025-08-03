@@ -19,6 +19,9 @@ pub struct SellToken {
           pub token_ata: solana_pubkey::Pubkey,
           
               
+          pub sol_escrow: solana_pubkey::Pubkey,
+          
+              
           pub token_escrow: solana_pubkey::Pubkey,
           
               
@@ -44,13 +47,17 @@ impl SellToken {
   #[allow(clippy::arithmetic_side_effects)]
   #[allow(clippy::vec_init_then_push)]
   pub fn instruction_with_remaining_accounts(&self, args: SellTokenInstructionArgs, remaining_accounts: &[solana_instruction::AccountMeta]) -> solana_instruction::Instruction {
-    let mut accounts = Vec::with_capacity(8+ remaining_accounts.len());
+    let mut accounts = Vec::with_capacity(9+ remaining_accounts.len());
                             accounts.push(solana_instruction::AccountMeta::new(
             self.signer,
             true
           ));
                                           accounts.push(solana_instruction::AccountMeta::new(
             self.token_ata,
+            false
+          ));
+                                          accounts.push(solana_instruction::AccountMeta::new(
+            self.sol_escrow,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new(
@@ -123,16 +130,18 @@ impl Default for SellTokenInstructionData {
 ///
                       ///   0. `[writable, signer]` signer
                 ///   1. `[writable]` token_ata
-                ///   2. `[writable]` token_escrow
-                ///   3. `[writable]` bonding_curve
-          ///   4. `[]` token_mint
-                ///   5. `[optional]` system_program (default to `11111111111111111111111111111111`)
-                ///   6. `[optional]` token_program (default to `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`)
-                ///   7. `[optional]` associated_token_program (default to `ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL`)
+                ///   2. `[writable]` sol_escrow
+                ///   3. `[writable]` token_escrow
+                ///   4. `[writable]` bonding_curve
+          ///   5. `[]` token_mint
+                ///   6. `[optional]` system_program (default to `11111111111111111111111111111111`)
+                ///   7. `[optional]` token_program (default to `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`)
+                ///   8. `[optional]` associated_token_program (default to `ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL`)
 #[derive(Clone, Debug, Default)]
 pub struct SellTokenBuilder {
             signer: Option<solana_pubkey::Pubkey>,
                 token_ata: Option<solana_pubkey::Pubkey>,
+                sol_escrow: Option<solana_pubkey::Pubkey>,
                 token_escrow: Option<solana_pubkey::Pubkey>,
                 bonding_curve: Option<solana_pubkey::Pubkey>,
                 token_mint: Option<solana_pubkey::Pubkey>,
@@ -155,6 +164,11 @@ impl SellTokenBuilder {
             #[inline(always)]
     pub fn token_ata(&mut self, token_ata: solana_pubkey::Pubkey) -> &mut Self {
                         self.token_ata = Some(token_ata);
+                    self
+    }
+            #[inline(always)]
+    pub fn sol_escrow(&mut self, sol_escrow: solana_pubkey::Pubkey) -> &mut Self {
+                        self.sol_escrow = Some(sol_escrow);
                     self
     }
             #[inline(always)]
@@ -212,6 +226,7 @@ impl SellTokenBuilder {
     let accounts = SellToken {
                               signer: self.signer.expect("signer is not set"),
                                         token_ata: self.token_ata.expect("token_ata is not set"),
+                                        sol_escrow: self.sol_escrow.expect("sol_escrow is not set"),
                                         token_escrow: self.token_escrow.expect("token_escrow is not set"),
                                         bonding_curve: self.bonding_curve.expect("bonding_curve is not set"),
                                         token_mint: self.token_mint.expect("token_mint is not set"),
@@ -235,6 +250,9 @@ impl SellTokenBuilder {
                 
                     
               pub token_ata: &'b solana_account_info::AccountInfo<'a>,
+                
+                    
+              pub sol_escrow: &'b solana_account_info::AccountInfo<'a>,
                 
                     
               pub token_escrow: &'b solana_account_info::AccountInfo<'a>,
@@ -267,6 +285,9 @@ pub struct SellTokenCpi<'a, 'b> {
           pub token_ata: &'b solana_account_info::AccountInfo<'a>,
           
               
+          pub sol_escrow: &'b solana_account_info::AccountInfo<'a>,
+          
+              
           pub token_escrow: &'b solana_account_info::AccountInfo<'a>,
           
               
@@ -297,6 +318,7 @@ impl<'a, 'b> SellTokenCpi<'a, 'b> {
       __program: program,
               signer: accounts.signer,
               token_ata: accounts.token_ata,
+              sol_escrow: accounts.sol_escrow,
               token_escrow: accounts.token_escrow,
               bonding_curve: accounts.bonding_curve,
               token_mint: accounts.token_mint,
@@ -326,13 +348,17 @@ impl<'a, 'b> SellTokenCpi<'a, 'b> {
     signers_seeds: &[&[&[u8]]],
     remaining_accounts: &[(&'b solana_account_info::AccountInfo<'a>, bool, bool)]
   ) -> solana_program_entrypoint::ProgramResult {
-    let mut accounts = Vec::with_capacity(8+ remaining_accounts.len());
+    let mut accounts = Vec::with_capacity(9+ remaining_accounts.len());
                             accounts.push(solana_instruction::AccountMeta::new(
             *self.signer.key,
             true
           ));
                                           accounts.push(solana_instruction::AccountMeta::new(
             *self.token_ata.key,
+            false
+          ));
+                                          accounts.push(solana_instruction::AccountMeta::new(
+            *self.sol_escrow.key,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new(
@@ -375,10 +401,11 @@ impl<'a, 'b> SellTokenCpi<'a, 'b> {
       accounts,
       data,
     };
-    let mut account_infos = Vec::with_capacity(9 + remaining_accounts.len());
+    let mut account_infos = Vec::with_capacity(10 + remaining_accounts.len());
     account_infos.push(self.__program.clone());
                   account_infos.push(self.signer.clone());
                         account_infos.push(self.token_ata.clone());
+                        account_infos.push(self.sol_escrow.clone());
                         account_infos.push(self.token_escrow.clone());
                         account_infos.push(self.bonding_curve.clone());
                         account_infos.push(self.token_mint.clone());
@@ -401,12 +428,13 @@ impl<'a, 'b> SellTokenCpi<'a, 'b> {
 ///
                       ///   0. `[writable, signer]` signer
                 ///   1. `[writable]` token_ata
-                ///   2. `[writable]` token_escrow
-                ///   3. `[writable]` bonding_curve
-          ///   4. `[]` token_mint
-          ///   5. `[]` system_program
-          ///   6. `[]` token_program
-          ///   7. `[]` associated_token_program
+                ///   2. `[writable]` sol_escrow
+                ///   3. `[writable]` token_escrow
+                ///   4. `[writable]` bonding_curve
+          ///   5. `[]` token_mint
+          ///   6. `[]` system_program
+          ///   7. `[]` token_program
+          ///   8. `[]` associated_token_program
 #[derive(Clone, Debug)]
 pub struct SellTokenCpiBuilder<'a, 'b> {
   instruction: Box<SellTokenCpiBuilderInstruction<'a, 'b>>,
@@ -418,6 +446,7 @@ impl<'a, 'b> SellTokenCpiBuilder<'a, 'b> {
       __program: program,
               signer: None,
               token_ata: None,
+              sol_escrow: None,
               token_escrow: None,
               bonding_curve: None,
               token_mint: None,
@@ -437,6 +466,11 @@ impl<'a, 'b> SellTokenCpiBuilder<'a, 'b> {
       #[inline(always)]
     pub fn token_ata(&mut self, token_ata: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
                         self.instruction.token_ata = Some(token_ata);
+                    self
+    }
+      #[inline(always)]
+    pub fn sol_escrow(&mut self, sol_escrow: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
+                        self.instruction.sol_escrow = Some(sol_escrow);
                     self
     }
       #[inline(always)]
@@ -506,6 +540,8 @@ impl<'a, 'b> SellTokenCpiBuilder<'a, 'b> {
                   
           token_ata: self.instruction.token_ata.expect("token_ata is not set"),
                   
+          sol_escrow: self.instruction.sol_escrow.expect("sol_escrow is not set"),
+                  
           token_escrow: self.instruction.token_escrow.expect("token_escrow is not set"),
                   
           bonding_curve: self.instruction.bonding_curve.expect("bonding_curve is not set"),
@@ -528,6 +564,7 @@ struct SellTokenCpiBuilderInstruction<'a, 'b> {
   __program: &'b solana_account_info::AccountInfo<'a>,
             signer: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_ata: Option<&'b solana_account_info::AccountInfo<'a>>,
+                sol_escrow: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_escrow: Option<&'b solana_account_info::AccountInfo<'a>>,
                 bonding_curve: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_mint: Option<&'b solana_account_info::AccountInfo<'a>>,

@@ -69,7 +69,7 @@ export function initGlobalConfig(
   // Program ID.
   const programId = context.programs.getPublicKey(
     'pump',
-    '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'
+    'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'
   );
 
   // Accounts.
