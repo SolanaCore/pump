@@ -1,0 +1,68 @@
+[33m04ac031[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull --rebase: Fast-forward
+[33m54de520[m HEAD@{1}: checkout: moving from bug/#40 to main
+[33meb8d4a9[m[33m ([m[1;32mbug/#40[m[33m)[m HEAD@{2}: commit: Published: released v0.0.5 of @solanacore/bonding_curve
+[33me2593a7[m HEAD@{3}: commit: Feat: system account - derived pda for holding sol and also fixed the testcases for the program
+[33m1471664[m HEAD@{4}: commit: sol_escrow(pda - program has the authority) - system_account for sol_holding
+[33m2d189a1[m[33m ([m[1;31morigin/blinks/new-feat[m[33m, [m[1;32mblinks/new-feat[m[33m)[m HEAD@{5}: checkout: moving from blinks/new-feat to bug/#40
+[33m2d189a1[m[33m ([m[1;31morigin/blinks/new-feat[m[33m, [m[1;32mblinks/new-feat[m[33m)[m HEAD@{6}: commit: blinks
+[33mc0e5432[m HEAD@{7}: checkout: moving from blinks/pump to blinks/new-feat
+[33m268b4dc[m[33m ([m[1;31morigin/blinks/pump[m[33m, [m[1;32mblinks/pump[m[33m)[m HEAD@{8}: commit: updated the deploy config in the netlify
+[33m4641c2b[m HEAD@{9}: commit: fixed: next build error by adding some configs in the next.config.ts
+[33m94c10e1[m[33m ([m[1;31morigin/test/pump[m[33m, [m[1;32mtest/pump[m[33m)[m HEAD@{10}: checkout: moving from test/pump to blinks/pump
+[33m94c10e1[m[33m ([m[1;31morigin/test/pump[m[33m, [m[1;32mtest/pump[m[33m)[m HEAD@{11}: commit: completed writing testcases for the pump program
+[33mcb18d05[m[33m ([m[1;32mpackage/#35[m[33m)[m HEAD@{12}: checkout: moving from package/#35 to test/pump
+[33mcb18d05[m[33m ([m[1;32mpackage/#35[m[33m)[m HEAD@{13}: commit: fix: smart contract transfer error and also completed the testcases along with the cfg(test) in the bonding curve state to check the logic of the buy and sell
+[33m2c766b2[m[33m ([m[1;31morigin/package/#35[m[33m)[m HEAD@{14}: commit: feat: changes the solana-setup-action version to latest which supports xray static analysis
+[33ma60ea20[m HEAD@{15}: commit: added @solana/actions @solana/spl-token @solana/web3.js
+[33m82883f1[m HEAD@{16}: commit: added scripts for updating package version and publishing the package
+[33m6ce94de[m HEAD@{17}: commit: feat: created the dist folder for the those who don;t use ts and published on https://www.npmjs.com/package/@solanacore/bonding_curve
+[33md75cbd9[m[33m ([m[1;31morigin/blinks/#31[m[33m, [m[1;32mblinks/#31[m[33m)[m HEAD@{18}: checkout: moving from blinks/#31 to package/#35
+[33md75cbd9[m[33m ([m[1;31morigin/blinks/#31[m[33m, [m[1;32mblinks/#31[m[33m)[m HEAD@{19}: commit: refactor: using @solanacore/bonding_curve package instead of importing from client/js
+[33m946e8e2[m HEAD@{20}: checkout: moving from main to blinks/#31
+[33m54de520[m HEAD@{21}: pull --rebase origin main: Fast-forward
+[33m2c97fcc[m[33m ([m[1;31morigin/docs[m[33m, [m[1;32mfix/folder-structur[m[33m, [m[1;32mdocs/#5[m[33m, [m[1;32mdoc/#5[m[33m)[m HEAD@{22}: checkout: moving from blinks/#31 to main
+[33m946e8e2[m HEAD@{23}: commit: fixed: package.json
+[33mf057b1e[m HEAD@{24}: revert: Revert "publised the ts package on npm: https://www.npmjs.com/package/@solanacore/bonding_curve"
+[33m5dd6f3c[m HEAD@{25}: commit: publised the ts package on npm: https://www.npmjs.com/package/@solanacore/bonding_curve
+[33mbade525[m HEAD@{26}: commit: Removed: Node Modules from the github remote repo
+[33md034477[m HEAD@{27}: commit: built a basic blinks for the pump program
+[33mf95d842[m[33m ([m[1;32mtest/#22[m[33m)[m HEAD@{28}: checkout: moving from test/#22 to blinks/#31
+[33mf95d842[m[33m ([m[1;32mtest/#22[m[33m)[m HEAD@{29}: pull --rebase origin main: Fast-forward
+[33m59e4b23[m HEAD@{30}: checkout: moving from idl to test/#22
+[33m40dc34f[m[33m ([m[1;32midl[m[33m)[m HEAD@{31}: commit: added idl json inside the idl/pump.json
+[33m3881272[m HEAD@{32}: reset: moving to HEAD~
+[33mb836ed5[m[33m ([m[1;31morigin/idl[m[33m)[m HEAD@{33}: commit: added idl json inside the idl/pump.json
+[33m3881272[m HEAD@{34}: commit: created a seperate directory for the the anchor_idl
+[33m2a64506[m[33m ([m[1;31morigin/client/#23[m[33m, [m[1;32mclient/#23[m[33m)[m HEAD@{35}: checkout: moving from client/#23 to idl
+[33m2a64506[m[33m ([m[1;31morigin/client/#23[m[33m, [m[1;32mclient/#23[m[33m)[m HEAD@{36}: commit: generate umi, rust, js clients using codama
+[33m59e4b23[m HEAD@{37}: checkout: moving from test/#22 to client/#23
+[33m59e4b23[m HEAD@{38}: commit: test: wrote the testcase for create_token
+[33md77d024[m[33m ([m[1;31morigin/feat/instructions[m[33m, [m[1;32mfeat/instructions[m[33m)[m HEAD@{39}: checkout: moving from feat/instructions to test/#22
+[33md77d024[m[33m ([m[1;31morigin/feat/instructions[m[33m, [m[1;32mfeat/instructions[m[33m)[m HEAD@{40}: commit: fixed: added metadata field in the CreateToken struct and also added create_token function
+[33mf29e389[m HEAD@{41}: commit: feat: completed writing context structs and instruction handlers and also completed writing the funtions in the src/lib.rs along with that fixed some transferd_logic error
+[33m0df0eed[m HEAD@{42}: commit: feat: completed writing context structs and instruction handlers and also completed writing the funtions in the src/lib.rs along with that fixed some transferd_logic error
+[33m56245a8[m[33m ([m[1;31morigin/feat/#11[m[33m, [m[1;32mfeat/#11[m[33m)[m HEAD@{43}: checkout: moving from feat/#11 to feat/instructions
+[33m56245a8[m[33m ([m[1;31morigin/feat/#11[m[33m, [m[1;32mfeat/#11[m[33m)[m HEAD@{44}: commit: fixed: transfer logic for solana and spl_tokens
+[33m97eb2e5[m HEAD@{45}: commit: feat: created buy_token and create_token context struct
+[33m162f90d[m[33m ([m[1;32mfeat/#8[m[33m)[m HEAD@{46}: commit: fixed: unresolved import from src/instructions/create_token.rs
+[33m8309419[m HEAD@{47}: commit: removed the utils folder and removed the import from src/lib.rs
+[33mdeb27ee[m HEAD@{48}: commit: refactor: change the token logic because the previous error was not working properly
+[33m3999416[m HEAD@{49}: commit: feat: create the token logic in src/utils
+[33m0ff95e8[m[33m ([m[1;31morigin/feat/#7[m[33m, [m[1;32mfeat/#7[m[33m)[m HEAD@{50}: checkout: moving from feat/#7 to feat/#11
+[33m0ff95e8[m[33m ([m[1;31morigin/feat/#7[m[33m, [m[1;32mfeat/#7[m[33m)[m HEAD@{51}: reset: moving to HEAD~1
+[33m06e37a7[m HEAD@{52}: checkout: moving from feat/#11 to feat/#7
+[33m0ff95e8[m[33m ([m[1;31morigin/feat/#7[m[33m, [m[1;32mfeat/#7[m[33m)[m HEAD@{53}: checkout: moving from feat/#7 to feat/#11
+[33m06e37a7[m HEAD@{54}: commit: feat: create the logic for tokens
+[33m0ff95e8[m[33m ([m[1;31morigin/feat/#7[m[33m, [m[1;32mfeat/#7[m[33m)[m HEAD@{55}: commit: formatted the code
+[33m6b8be06[m HEAD@{56}: commit: feat: created account structs in the src/state folder
+[33m9174397[m[33m ([m[1;32mfixes/folder-structure[m[33m, [m[1;32mfix/folder-structure[m[33m)[m HEAD@{57}: checkout: moving from fixes/folder-structure to feat/#7
+[33m9174397[m[33m ([m[1;32mfixes/folder-structure[m[33m, [m[1;32mfix/folder-structure[m[33m)[m HEAD@{58}: checkout: moving from fix/folder-structure to fixes/folder-structure
+[33m9174397[m[33m ([m[1;32mfixes/folder-structure[m[33m, [m[1;32mfix/folder-structure[m[33m)[m HEAD@{59}: commit: removed the yarn.lock
+[33m910e40e[m HEAD@{60}: commit (merge): Merge remote-tracking branch 'origin' into fix/folder-structure
+[33m4764742[m HEAD@{61}: commit: fixed: shifted to multiple file template instead of default one
+[33m2c97fcc[m[33m ([m[1;31morigin/docs[m[33m, [m[1;32mfix/folder-structur[m[33m, [m[1;32mdocs/#5[m[33m, [m[1;32mdoc/#5[m[33m)[m HEAD@{62}: checkout: moving from docs/#5 to fix/folder-structure
+[33m2c97fcc[m[33m ([m[1;31morigin/docs[m[33m, [m[1;32mfix/folder-structur[m[33m, [m[1;32mdocs/#5[m[33m, [m[1;32mdoc/#5[m[33m)[m HEAD@{63}: checkout: moving from main to docs/#5
+[33m2c97fcc[m[33m ([m[1;31morigin/docs[m[33m, [m[1;32mfix/folder-structur[m[33m, [m[1;32mdocs/#5[m[33m, [m[1;32mdoc/#5[m[33m)[m HEAD@{64}: commit: docs: system design
+[33me45ead7[m HEAD@{65}: pull --rebase: Fast-forward
+[33m9f1636b[m HEAD@{66}: commit: init
+[33mae3b070[m HEAD@{67}: clone: from https://github.com/SolanaCore/pump.git
