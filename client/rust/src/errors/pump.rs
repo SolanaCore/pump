@@ -25,6 +25,12 @@ pub enum PumpError {
     /// 6004 - Invalis Inputs check the that either name, ticker, uri or description are not empty
     #[error("Invalis Inputs check the that either name, ticker, uri or description are not empty")]
     InvalidInputs = 0x1774,
+    /// 6005 - insufficient funds in the account 'from' account
+    #[error("insufficient funds in the account 'from' account")]
+    InsufficientFunds = 0x1775,
+    /// 6006 - the give token mint address is not owned by the bonding_curve
+    #[error("the give token mint address is not owned by the bonding_curve")]
+    InvalidOwner = 0x1776,
 }
 
 impl solana_program_error::PrintProgramError for PumpError {

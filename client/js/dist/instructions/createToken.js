@@ -5,9 +5,9 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { addDecoderSizePrefix, addEncoderSizePrefix, combineCodec, fixDecoderSize, fixEncoderSize, getAddressEncoder, getBytesDecoder, getBytesEncoder, getProgramDerivedAddress, getStructDecoder, getStructEncoder, getU32Decoder, getU32Encoder, getU64Decoder, getU64Encoder, getUtf8Decoder, getUtf8Encoder, transformEncoder, } from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
-import { expectAddress, getAccountMetaFactory, } from "../shared";
+import { addDecoderSizePrefix, addEncoderSizePrefix, combineCodec, fixDecoderSize, fixEncoderSize, getAddressEncoder, getBytesDecoder, getBytesEncoder, getProgramDerivedAddress, getStructDecoder, getStructEncoder, getU32Decoder, getU32Encoder, getU64Decoder, getU64Encoder, getUtf8Decoder, getUtf8Encoder, transformEncoder, } from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
+import { expectAddress, getAccountMetaFactory, } from '../shared';
 export const CREATE_TOKEN_DISCRIMINATOR = new Uint8Array([
     84, 52, 204, 228, 24, 140, 234, 75,
 ]);
@@ -16,22 +16,22 @@ export function getCreateTokenDiscriminatorBytes() {
 }
 export function getCreateTokenInstructionDataEncoder() {
     return transformEncoder(getStructEncoder([
-        ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
-        ["solReserve", getU64Encoder()],
-        ["tokenReserve", getU64Encoder()],
-        ["name", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-        ["ticker", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-        ["uri", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+        ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
+        ['solReserve', getU64Encoder()],
+        ['tokenReserve', getU64Encoder()],
+        ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+        ['ticker', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+        ['uri', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
     ]), (value) => (Object.assign(Object.assign({}, value), { discriminator: CREATE_TOKEN_DISCRIMINATOR })));
 }
 export function getCreateTokenInstructionDataDecoder() {
     return getStructDecoder([
-        ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
-        ["solReserve", getU64Decoder()],
-        ["tokenReserve", getU64Decoder()],
-        ["name", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-        ["ticker", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-        ["uri", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+        ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+        ['solReserve', getU64Decoder()],
+        ['tokenReserve', getU64Decoder()],
+        ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+        ['ticker', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+        ['uri', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
     ]);
 }
 export function getCreateTokenInstructionDataCodec() {
@@ -47,7 +47,7 @@ export async function getCreateTokenInstructionAsync(input, config) {
         globalState: { value: (_c = input.globalState) !== null && _c !== void 0 ? _c : null, isWritable: false },
         bondingCurve: { value: (_d = input.bondingCurve) !== null && _d !== void 0 ? _d : null, isWritable: true },
         mint: { value: (_e = input.mint) !== null && _e !== void 0 ? _e : null, isWritable: true },
-        bondingCurveAta: { value: (_f = input.bondingCurveAta) !== null && _f !== void 0 ? _f : null, isWritable: true },
+        tokenEscrow: { value: (_f = input.tokenEscrow) !== null && _f !== void 0 ? _f : null, isWritable: true },
         tokenProgram: { value: (_g = input.tokenProgram) !== null && _g !== void 0 ? _g : null, isWritable: false },
         systemProgram: { value: (_h = input.systemProgram) !== null && _h !== void 0 ? _h : null, isWritable: false },
         rent: { value: (_j = input.rent) !== null && _j !== void 0 ? _j : null, isWritable: false },
@@ -69,14 +69,14 @@ export async function getCreateTokenInstructionAsync(input, config) {
         accounts.bondingCurve.value = await getProgramDerivedAddress({
             programAddress,
             seeds: [
-                getBytesEncoder().encode(new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 83, 69, 69, 68])),
+                getBytesEncoder().encode(new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])),
                 getAddressEncoder().encode(expectAddress(accounts.mint.value)),
             ],
         });
     }
-    if (!accounts.bondingCurveAta.value) {
-        accounts.bondingCurveAta.value = await getProgramDerivedAddress({
-            programAddress: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+    if (!accounts.tokenEscrow.value) {
+        accounts.tokenEscrow.value = await getProgramDerivedAddress({
+            programAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
             seeds: [
                 getAddressEncoder().encode(expectAddress(accounts.bondingCurve.value)),
                 getBytesEncoder().encode(new Uint8Array([
@@ -90,32 +90,32 @@ export async function getCreateTokenInstructionAsync(input, config) {
     }
     if (!accounts.tokenProgram.value) {
         accounts.tokenProgram.value =
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
     }
     if (!accounts.systemProgram.value) {
         accounts.systemProgram.value =
-            "11111111111111111111111111111111";
+            '11111111111111111111111111111111';
     }
     if (!accounts.rent.value) {
         accounts.rent.value =
-            "SysvarRent111111111111111111111111111111111";
+            'SysvarRent111111111111111111111111111111111';
     }
     if (!accounts.associatedTokenProgram.value) {
         accounts.associatedTokenProgram.value =
-            "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
+            'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL';
     }
     if (!accounts.tokenMetadataProgram.value) {
         accounts.tokenMetadataProgram.value =
-            "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s";
+            'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s';
     }
-    const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+    const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
     const instruction = {
         accounts: [
             getAccountMeta(accounts.signer),
             getAccountMeta(accounts.globalState),
             getAccountMeta(accounts.bondingCurve),
             getAccountMeta(accounts.mint),
-            getAccountMeta(accounts.bondingCurveAta),
+            getAccountMeta(accounts.tokenEscrow),
             getAccountMeta(accounts.tokenProgram),
             getAccountMeta(accounts.systemProgram),
             getAccountMeta(accounts.rent),
@@ -138,7 +138,7 @@ export function getCreateTokenInstruction(input, config) {
         globalState: { value: (_c = input.globalState) !== null && _c !== void 0 ? _c : null, isWritable: false },
         bondingCurve: { value: (_d = input.bondingCurve) !== null && _d !== void 0 ? _d : null, isWritable: true },
         mint: { value: (_e = input.mint) !== null && _e !== void 0 ? _e : null, isWritable: true },
-        bondingCurveAta: { value: (_f = input.bondingCurveAta) !== null && _f !== void 0 ? _f : null, isWritable: true },
+        tokenEscrow: { value: (_f = input.tokenEscrow) !== null && _f !== void 0 ? _f : null, isWritable: true },
         tokenProgram: { value: (_g = input.tokenProgram) !== null && _g !== void 0 ? _g : null, isWritable: false },
         systemProgram: { value: (_h = input.systemProgram) !== null && _h !== void 0 ? _h : null, isWritable: false },
         rent: { value: (_j = input.rent) !== null && _j !== void 0 ? _j : null, isWritable: false },
@@ -158,32 +158,32 @@ export function getCreateTokenInstruction(input, config) {
     // Resolve default values.
     if (!accounts.tokenProgram.value) {
         accounts.tokenProgram.value =
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
     }
     if (!accounts.systemProgram.value) {
         accounts.systemProgram.value =
-            "11111111111111111111111111111111";
+            '11111111111111111111111111111111';
     }
     if (!accounts.rent.value) {
         accounts.rent.value =
-            "SysvarRent111111111111111111111111111111111";
+            'SysvarRent111111111111111111111111111111111';
     }
     if (!accounts.associatedTokenProgram.value) {
         accounts.associatedTokenProgram.value =
-            "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
+            'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL';
     }
     if (!accounts.tokenMetadataProgram.value) {
         accounts.tokenMetadataProgram.value =
-            "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s";
+            'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s';
     }
-    const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+    const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
     const instruction = {
         accounts: [
             getAccountMeta(accounts.signer),
             getAccountMeta(accounts.globalState),
             getAccountMeta(accounts.bondingCurve),
             getAccountMeta(accounts.mint),
-            getAccountMeta(accounts.bondingCurveAta),
+            getAccountMeta(accounts.tokenEscrow),
             getAccountMeta(accounts.tokenProgram),
             getAccountMeta(accounts.systemProgram),
             getAccountMeta(accounts.rent),
@@ -199,7 +199,7 @@ export function getCreateTokenInstruction(input, config) {
 export function parseCreateTokenInstruction(instruction) {
     if (instruction.accounts.length < 11) {
         // TODO: Coded error.
-        throw new Error("Not enough accounts");
+        throw new Error('Not enough accounts');
     }
     let accountIndex = 0;
     const getNextAccount = () => {
@@ -214,7 +214,7 @@ export function parseCreateTokenInstruction(instruction) {
             globalState: getNextAccount(),
             bondingCurve: getNextAccount(),
             mint: getNextAccount(),
-            bondingCurveAta: getNextAccount(),
+            tokenEscrow: getNextAccount(),
             tokenProgram: getNextAccount(),
             systemProgram: getNextAccount(),
             rent: getNextAccount(),

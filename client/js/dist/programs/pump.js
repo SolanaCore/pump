@@ -5,22 +5,22 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { containsBytes, fixEncoderSize, getBytesEncoder, } from "@solana/kit";
-export const PUMP_PROGRAM_ADDRESS = "FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q";
+import { containsBytes, fixEncoderSize, getBytesEncoder, } from '@solana/kit';
+export const PUMP_PROGRAM_ADDRESS = '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg';
 export var PumpAccount;
 (function (PumpAccount) {
     PumpAccount[PumpAccount["BondingCurve"] = 0] = "BondingCurve";
     PumpAccount[PumpAccount["GlobalConfig"] = 1] = "GlobalConfig";
 })(PumpAccount || (PumpAccount = {}));
 export function identifyPumpAccount(account) {
-    const data = "data" in account ? account.data : account;
+    const data = 'data' in account ? account.data : account;
     if (containsBytes(data, fixEncoderSize(getBytesEncoder(), 8).encode(new Uint8Array([23, 183, 248, 55, 96, 216, 172, 96])), 0)) {
         return PumpAccount.BondingCurve;
     }
     if (containsBytes(data, fixEncoderSize(getBytesEncoder(), 8).encode(new Uint8Array([149, 8, 156, 202, 160, 252, 176, 217])), 0)) {
         return PumpAccount.GlobalConfig;
     }
-    throw new Error("The provided account could not be identified as a pump account.");
+    throw new Error('The provided account could not be identified as a pump account.');
 }
 export var PumpInstruction;
 (function (PumpInstruction) {
@@ -30,7 +30,7 @@ export var PumpInstruction;
     PumpInstruction[PumpInstruction["SellToken"] = 3] = "SellToken";
 })(PumpInstruction || (PumpInstruction = {}));
 export function identifyPumpInstruction(instruction) {
-    const data = "data" in instruction ? instruction.data : instruction;
+    const data = 'data' in instruction ? instruction.data : instruction;
     if (containsBytes(data, fixEncoderSize(getBytesEncoder(), 8).encode(new Uint8Array([138, 127, 14, 91, 38, 87, 115, 105])), 0)) {
         return PumpInstruction.BuyToken;
     }
@@ -43,5 +43,5 @@ export function identifyPumpInstruction(instruction) {
     if (containsBytes(data, fixEncoderSize(getBytesEncoder(), 8).encode(new Uint8Array([109, 61, 40, 187, 230, 176, 135, 174])), 0)) {
         return PumpInstruction.SellToken;
     }
-    throw new Error("The provided instruction could not be identified as a pump instruction.");
+    throw new Error('The provided instruction could not be identified as a pump instruction.');
 }

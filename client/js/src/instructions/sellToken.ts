@@ -33,13 +33,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
+} from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from "../shared";
+} from '../shared';
 
 export const SELL_TOKEN_DISCRIMINATOR = new Uint8Array([
   109, 61, 40, 187, 230, 176, 135, 174,
@@ -58,13 +58,13 @@ export type SellTokenInstruction<
   TAccountTokenMint extends string | IAccountMeta<string> = string,
   TAccountSystemProgram extends
     | string
-    | IAccountMeta<string> = "11111111111111111111111111111111",
+    | IAccountMeta<string> = '11111111111111111111111111111111',
   TAccountTokenProgram extends
     | string
-    | IAccountMeta<string> = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    | IAccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
   TAccountAssociatedTokenProgram extends
     | string
-    | IAccountMeta<string> = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+    | IAccountMeta<string> = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
   TRemainingAccounts extends readonly IAccountMeta<string>[] = [],
 > = IInstruction<TProgram> &
   IInstructionWithData<Uint8Array> &
@@ -78,10 +78,10 @@ export type SellTokenInstruction<
         ? WritableAccount<TAccountTokenAta>
         : TAccountTokenAta,
       TAccountTokenEscrow extends string
-        ? ReadonlyAccount<TAccountTokenEscrow>
+        ? WritableAccount<TAccountTokenEscrow>
         : TAccountTokenEscrow,
       TAccountBondingCurve extends string
-        ? ReadonlyAccount<TAccountBondingCurve>
+        ? WritableAccount<TAccountBondingCurve>
         : TAccountBondingCurve,
       TAccountTokenMint extends string
         ? ReadonlyAccount<TAccountTokenMint>
@@ -109,17 +109,17 @@ export type SellTokenInstructionDataArgs = { maxToken: number | bigint };
 export function getSellTokenInstructionDataEncoder(): Encoder<SellTokenInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
-      ["maxToken", getU64Encoder()],
+      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
+      ['maxToken', getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: SELL_TOKEN_DISCRIMINATOR }),
+    (value) => ({ ...value, discriminator: SELL_TOKEN_DISCRIMINATOR })
   );
 }
 
 export function getSellTokenInstructionDataDecoder(): Decoder<SellTokenInstructionData> {
   return getStructDecoder([
-    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
-    ["maxToken", getU64Decoder()],
+    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ['maxToken', getU64Decoder()],
   ]);
 }
 
@@ -129,7 +129,7 @@ export function getSellTokenInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getSellTokenInstructionDataEncoder(),
-    getSellTokenInstructionDataDecoder(),
+    getSellTokenInstructionDataDecoder()
   );
 }
 
@@ -144,14 +144,14 @@ export type SellTokenAsyncInput<
   TAccountAssociatedTokenProgram extends string = string,
 > = {
   signer: TransactionSigner<TAccountSigner>;
-  tokenAta?: Address<TAccountTokenAta>;
-  tokenEscrow?: Address<TAccountTokenEscrow>;
+  tokenAta: Address<TAccountTokenAta>;
+  tokenEscrow: Address<TAccountTokenEscrow>;
   bondingCurve?: Address<TAccountBondingCurve>;
   tokenMint: Address<TAccountTokenMint>;
   systemProgram?: Address<TAccountSystemProgram>;
   tokenProgram?: Address<TAccountTokenProgram>;
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
-  maxToken: SellTokenInstructionDataArgs["maxToken"];
+  maxToken: SellTokenInstructionDataArgs['maxToken'];
 };
 
 export async function getSellTokenInstructionAsync<
@@ -175,7 +175,7 @@ export async function getSellTokenInstructionAsync<
     TAccountTokenProgram,
     TAccountAssociatedTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress },
+  config?: { programAddress?: TProgramAddress }
 ): Promise<
   SellTokenInstruction<
     TProgramAddress,
@@ -196,8 +196,8 @@ export async function getSellTokenInstructionAsync<
   const originalAccounts = {
     signer: { value: input.signer ?? null, isWritable: true },
     tokenAta: { value: input.tokenAta ?? null, isWritable: true },
-    tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: false },
-    bondingCurve: { value: input.bondingCurve ?? null, isWritable: false },
+    tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: true },
+    bondingCurve: { value: input.bondingCurve ?? null, isWritable: true },
     tokenMint: { value: input.tokenMint ?? null, isWritable: false },
     systemProgram: { value: input.systemProgram ?? null, isWritable: false },
     tokenProgram: { value: input.tokenProgram ?? null, isWritable: false },
@@ -215,46 +215,12 @@ export async function getSellTokenInstructionAsync<
   const args = { ...input };
 
   // Resolve default values.
-  if (!accounts.tokenAta.value) {
-    accounts.tokenAta.value = await getProgramDerivedAddress({
-      programAddress:
-        "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">,
-      seeds: [
-        getAddressEncoder().encode(expectAddress(accounts.signer.value)),
-        getBytesEncoder().encode(
-          new Uint8Array([
-            6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206, 235,
-            121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140, 245, 133,
-            126, 255, 0, 169,
-          ]),
-        ),
-        getAddressEncoder().encode(expectAddress(accounts.tokenMint.value)),
-      ],
-    });
-  }
   if (!accounts.bondingCurve.value) {
     accounts.bondingCurve.value = await getProgramDerivedAddress({
       programAddress,
       seeds: [
         getBytesEncoder().encode(
-          new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69]),
-        ),
-        getAddressEncoder().encode(expectAddress(accounts.tokenMint.value)),
-      ],
-    });
-  }
-  if (!accounts.tokenEscrow.value) {
-    accounts.tokenEscrow.value = await getProgramDerivedAddress({
-      programAddress:
-        "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">,
-      seeds: [
-        getAddressEncoder().encode(expectAddress(accounts.bondingCurve.value)),
-        getBytesEncoder().encode(
-          new Uint8Array([
-            6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206, 235,
-            121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140, 245, 133,
-            126, 255, 0, 169,
-          ]),
+          new Uint8Array([66, 79, 78, 68, 73, 78, 71, 95, 67, 85, 82, 86, 69])
         ),
         getAddressEncoder().encode(expectAddress(accounts.tokenMint.value)),
       ],
@@ -262,18 +228,18 @@ export async function getSellTokenInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
+      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
+      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
   }
   if (!accounts.associatedTokenProgram.value) {
     accounts.associatedTokenProgram.value =
-      "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">;
+      'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
   const instruction = {
     accounts: [
       getAccountMeta(accounts.signer),
@@ -287,7 +253,7 @@ export async function getSellTokenInstructionAsync<
     ],
     programAddress,
     data: getSellTokenInstructionDataEncoder().encode(
-      args as SellTokenInstructionDataArgs,
+      args as SellTokenInstructionDataArgs
     ),
   } as SellTokenInstruction<
     TProgramAddress,
@@ -322,7 +288,7 @@ export type SellTokenInput<
   systemProgram?: Address<TAccountSystemProgram>;
   tokenProgram?: Address<TAccountTokenProgram>;
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
-  maxToken: SellTokenInstructionDataArgs["maxToken"];
+  maxToken: SellTokenInstructionDataArgs['maxToken'];
 };
 
 export function getSellTokenInstruction<
@@ -346,7 +312,7 @@ export function getSellTokenInstruction<
     TAccountTokenProgram,
     TAccountAssociatedTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress },
+  config?: { programAddress?: TProgramAddress }
 ): SellTokenInstruction<
   TProgramAddress,
   TAccountSigner,
@@ -365,8 +331,8 @@ export function getSellTokenInstruction<
   const originalAccounts = {
     signer: { value: input.signer ?? null, isWritable: true },
     tokenAta: { value: input.tokenAta ?? null, isWritable: true },
-    tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: false },
-    bondingCurve: { value: input.bondingCurve ?? null, isWritable: false },
+    tokenEscrow: { value: input.tokenEscrow ?? null, isWritable: true },
+    bondingCurve: { value: input.bondingCurve ?? null, isWritable: true },
     tokenMint: { value: input.tokenMint ?? null, isWritable: false },
     systemProgram: { value: input.systemProgram ?? null, isWritable: false },
     tokenProgram: { value: input.tokenProgram ?? null, isWritable: false },
@@ -386,18 +352,18 @@ export function getSellTokenInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
+      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
+      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
   }
   if (!accounts.associatedTokenProgram.value) {
     accounts.associatedTokenProgram.value =
-      "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">;
+      'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
   const instruction = {
     accounts: [
       getAccountMeta(accounts.signer),
@@ -411,7 +377,7 @@ export function getSellTokenInstruction<
     ],
     programAddress,
     data: getSellTokenInstructionDataEncoder().encode(
-      args as SellTokenInstructionDataArgs,
+      args as SellTokenInstructionDataArgs
     ),
   } as SellTokenInstruction<
     TProgramAddress,
@@ -452,11 +418,11 @@ export function parseSellTokenInstruction<
 >(
   instruction: IInstruction<TProgram> &
     IInstructionWithAccounts<TAccountMetas> &
-    IInstructionWithData<Uint8Array>,
+    IInstructionWithData<Uint8Array>
 ): ParsedSellTokenInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 8) {
     // TODO: Coded error.
-    throw new Error("Not enough accounts");
+    throw new Error('Not enough accounts');
   }
   let accountIndex = 0;
   const getNextAccount = () => {

@@ -25,7 +25,7 @@ pub struct CreateToken {
           pub mint: solana_pubkey::Pubkey,
           
               
-          pub bonding_curve_ata: solana_pubkey::Pubkey,
+          pub token_escrow: solana_pubkey::Pubkey,
           
               
           pub token_program: solana_pubkey::Pubkey,
@@ -71,7 +71,7 @@ impl CreateToken {
             true
           ));
                                           accounts.push(solana_instruction::AccountMeta::new(
-            self.bonding_curve_ata,
+            self.token_escrow,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new_readonly(
@@ -150,7 +150,7 @@ impl Default for CreateTokenInstructionData {
           ///   1. `[]` global_state
                 ///   2. `[writable]` bonding_curve
                       ///   3. `[writable, signer]` mint
-                ///   4. `[writable]` bonding_curve_ata
+                ///   4. `[writable]` token_escrow
                 ///   5. `[optional]` token_program (default to `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`)
                 ///   6. `[optional]` system_program (default to `11111111111111111111111111111111`)
                 ///   7. `[optional]` rent (default to `SysvarRent111111111111111111111111111111111`)
@@ -163,7 +163,7 @@ pub struct CreateTokenBuilder {
                 global_state: Option<solana_pubkey::Pubkey>,
                 bonding_curve: Option<solana_pubkey::Pubkey>,
                 mint: Option<solana_pubkey::Pubkey>,
-                bonding_curve_ata: Option<solana_pubkey::Pubkey>,
+                token_escrow: Option<solana_pubkey::Pubkey>,
                 token_program: Option<solana_pubkey::Pubkey>,
                 system_program: Option<solana_pubkey::Pubkey>,
                 rent: Option<solana_pubkey::Pubkey>,
@@ -203,8 +203,8 @@ impl CreateTokenBuilder {
                     self
     }
             #[inline(always)]
-    pub fn bonding_curve_ata(&mut self, bonding_curve_ata: solana_pubkey::Pubkey) -> &mut Self {
-                        self.bonding_curve_ata = Some(bonding_curve_ata);
+    pub fn token_escrow(&mut self, token_escrow: solana_pubkey::Pubkey) -> &mut Self {
+                        self.token_escrow = Some(token_escrow);
                     self
     }
             /// `[optional account, default to 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA']`
@@ -286,7 +286,7 @@ impl CreateTokenBuilder {
                                         global_state: self.global_state.expect("global_state is not set"),
                                         bonding_curve: self.bonding_curve.expect("bonding_curve is not set"),
                                         mint: self.mint.expect("mint is not set"),
-                                        bonding_curve_ata: self.bonding_curve_ata.expect("bonding_curve_ata is not set"),
+                                        token_escrow: self.token_escrow.expect("token_escrow is not set"),
                                         token_program: self.token_program.unwrap_or(solana_pubkey::pubkey!("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")),
                                         system_program: self.system_program.unwrap_or(solana_pubkey::pubkey!("11111111111111111111111111111111")),
                                         rent: self.rent.unwrap_or(solana_pubkey::pubkey!("SysvarRent111111111111111111111111111111111")),
@@ -322,7 +322,7 @@ impl CreateTokenBuilder {
               pub mint: &'b solana_account_info::AccountInfo<'a>,
                 
                     
-              pub bonding_curve_ata: &'b solana_account_info::AccountInfo<'a>,
+              pub token_escrow: &'b solana_account_info::AccountInfo<'a>,
                 
                     
               pub token_program: &'b solana_account_info::AccountInfo<'a>,
@@ -361,7 +361,7 @@ pub struct CreateTokenCpi<'a, 'b> {
           pub mint: &'b solana_account_info::AccountInfo<'a>,
           
               
-          pub bonding_curve_ata: &'b solana_account_info::AccountInfo<'a>,
+          pub token_escrow: &'b solana_account_info::AccountInfo<'a>,
           
               
           pub token_program: &'b solana_account_info::AccountInfo<'a>,
@@ -396,7 +396,7 @@ impl<'a, 'b> CreateTokenCpi<'a, 'b> {
               global_state: accounts.global_state,
               bonding_curve: accounts.bonding_curve,
               mint: accounts.mint,
-              bonding_curve_ata: accounts.bonding_curve_ata,
+              token_escrow: accounts.token_escrow,
               token_program: accounts.token_program,
               system_program: accounts.system_program,
               rent: accounts.rent,
@@ -444,7 +444,7 @@ impl<'a, 'b> CreateTokenCpi<'a, 'b> {
             true
           ));
                                           accounts.push(solana_instruction::AccountMeta::new(
-            *self.bonding_curve_ata.key,
+            *self.token_escrow.key,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new_readonly(
@@ -493,7 +493,7 @@ impl<'a, 'b> CreateTokenCpi<'a, 'b> {
                         account_infos.push(self.global_state.clone());
                         account_infos.push(self.bonding_curve.clone());
                         account_infos.push(self.mint.clone());
-                        account_infos.push(self.bonding_curve_ata.clone());
+                        account_infos.push(self.token_escrow.clone());
                         account_infos.push(self.token_program.clone());
                         account_infos.push(self.system_program.clone());
                         account_infos.push(self.rent.clone());
@@ -518,7 +518,7 @@ impl<'a, 'b> CreateTokenCpi<'a, 'b> {
           ///   1. `[]` global_state
                 ///   2. `[writable]` bonding_curve
                       ///   3. `[writable, signer]` mint
-                ///   4. `[writable]` bonding_curve_ata
+                ///   4. `[writable]` token_escrow
           ///   5. `[]` token_program
           ///   6. `[]` system_program
           ///   7. `[]` rent
@@ -538,7 +538,7 @@ impl<'a, 'b> CreateTokenCpiBuilder<'a, 'b> {
               global_state: None,
               bonding_curve: None,
               mint: None,
-              bonding_curve_ata: None,
+              token_escrow: None,
               token_program: None,
               system_program: None,
               rent: None,
@@ -575,8 +575,8 @@ impl<'a, 'b> CreateTokenCpiBuilder<'a, 'b> {
                     self
     }
       #[inline(always)]
-    pub fn bonding_curve_ata(&mut self, bonding_curve_ata: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.bonding_curve_ata = Some(bonding_curve_ata);
+    pub fn token_escrow(&mut self, token_escrow: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
+                        self.instruction.token_escrow = Some(token_escrow);
                     self
     }
       #[inline(always)]
@@ -674,7 +674,7 @@ impl<'a, 'b> CreateTokenCpiBuilder<'a, 'b> {
                   
           mint: self.instruction.mint.expect("mint is not set"),
                   
-          bonding_curve_ata: self.instruction.bonding_curve_ata.expect("bonding_curve_ata is not set"),
+          token_escrow: self.instruction.token_escrow.expect("token_escrow is not set"),
                   
           token_program: self.instruction.token_program.expect("token_program is not set"),
                   
@@ -700,7 +700,7 @@ struct CreateTokenCpiBuilderInstruction<'a, 'b> {
                 global_state: Option<&'b solana_account_info::AccountInfo<'a>>,
                 bonding_curve: Option<&'b solana_account_info::AccountInfo<'a>>,
                 mint: Option<&'b solana_account_info::AccountInfo<'a>>,
-                bonding_curve_ata: Option<&'b solana_account_info::AccountInfo<'a>>,
+                token_escrow: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_program: Option<&'b solana_account_info::AccountInfo<'a>>,
                 system_program: Option<&'b solana_account_info::AccountInfo<'a>>,
                 rent: Option<&'b solana_account_info::AccountInfo<'a>>,

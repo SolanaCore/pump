@@ -5,6 +5,6 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-export * from "./bondingCurve";
-export * from "./globalConfig";
+export * from './bondingCurve';
+export * from './globalConfig';
 //# sourceMappingURL=index.d.ts.map

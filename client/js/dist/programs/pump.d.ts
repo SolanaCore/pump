@@ -5,9 +5,9 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { type Address, type ReadonlyUint8Array } from "@solana/kit";
-import { type ParsedBuyTokenInstruction, type ParsedCreateTokenInstruction, type ParsedInitGlobalConfigInstruction, type ParsedSellTokenInstruction } from "../instructions";
-export declare const PUMP_PROGRAM_ADDRESS: Address<"FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q">;
+import { type Address, type ReadonlyUint8Array } from '@solana/kit';
+import { type ParsedBuyTokenInstruction, type ParsedCreateTokenInstruction, type ParsedInitGlobalConfigInstruction, type ParsedSellTokenInstruction } from '../instructions';
+export declare const PUMP_PROGRAM_ADDRESS: Address<"52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg">;
 export declare enum PumpAccount {
     BondingCurve = 0,
     GlobalConfig = 1
@@ -24,7 +24,7 @@ export declare enum PumpInstruction {
 export declare function identifyPumpInstruction(instruction: {
     data: ReadonlyUint8Array;
 } | ReadonlyUint8Array): PumpInstruction;
-export type ParsedPumpInstruction<TProgram extends string = "FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q"> = ({
+export type ParsedPumpInstruction<TProgram extends string = '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'> = ({
     instructionType: PumpInstruction.BuyToken;
 } & ParsedBuyTokenInstruction<TProgram>) | ({
     instructionType: PumpInstruction.CreateToken;

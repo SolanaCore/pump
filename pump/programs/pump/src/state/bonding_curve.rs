@@ -244,6 +244,7 @@ impl<'info> BondingCurve {
         to: &AccountInfo<'info>,
         amount: u64,
         signer_seeds:&[&[&[u8]]],
+        //task: remove this system_program from the args as it is of no use.
         system_program: AccountInfo<'info>,
     ) -> Result<()> {
         let ix = system_instruction::transfer(&from.key(), &to.key(), amount);
@@ -339,7 +340,8 @@ mod tests {
             virtual_token_reserve: u64::MAX,
             ..get_default_curve()
         };
-        let result = bonding_curve.buy_logic(1);
+        let result = bonding_curve.buy_logic(1_000_000_000);
+        
         assert!(result.is_err());
     }
 

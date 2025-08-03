@@ -1,5 +1,5 @@
 {
-  "address": "FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q",
+  "address": "52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg",
   "metadata": {
     "name": "pump",
     "version": "0.1.0",
@@ -117,6 +117,7 @@
         },
         {
           "name": "token_escrow",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -205,7 +206,11 @@
           }
         },
         {
+          "name": "token_mint"
+        },
+        {
           "name": "bonding_curve",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -232,9 +237,6 @@
               }
             ]
           }
-        },
-        {
-          "name": "token_mint"
         },
         {
           "name": "system_program",
@@ -293,10 +295,11 @@
                   78,
                   71,
                   95,
-                  83,
-                  69,
-                  69,
-                  68
+                  67,
+                  85,
+                  82,
+                  86,
+                  69
                 ]
               },
               {
@@ -312,7 +315,7 @@
           "signer": true
         },
         {
-          "name": "bonding_curve_ata",
+          "name": "token_escrow",
           "writable": true,
           "pda": {
             "seeds": [
@@ -521,185 +524,15 @@
         },
         {
           "name": "token_ata",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "signer"
-              },
-              {
-                "kind": "const",
-                "value": [
-                  6,
-                  221,
-                  246,
-                  225,
-                  215,
-                  101,
-                  161,
-                  147,
-                  217,
-                  203,
-                  225,
-                  70,
-                  206,
-                  235,
-                  121,
-                  172,
-                  28,
-                  180,
-                  133,
-                  237,
-                  95,
-                  91,
-                  55,
-                  145,
-                  58,
-                  140,
-                  245,
-                  133,
-                  126,
-                  255,
-                  0,
-                  169
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "token_mint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
+          "writable": true
         },
         {
           "name": "token_escrow",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "bonding_curve"
-              },
-              {
-                "kind": "const",
-                "value": [
-                  6,
-                  221,
-                  246,
-                  225,
-                  215,
-                  101,
-                  161,
-                  147,
-                  217,
-                  203,
-                  225,
-                  70,
-                  206,
-                  235,
-                  121,
-                  172,
-                  28,
-                  180,
-                  133,
-                  237,
-                  95,
-                  91,
-                  55,
-                  145,
-                  58,
-                  140,
-                  245,
-                  133,
-                  126,
-                  255,
-                  0,
-                  169
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "token_mint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
+          "writable": true
         },
         {
           "name": "bonding_curve",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -804,6 +637,16 @@
       "code": 6004,
       "name": "InvalidInputs",
       "msg": "Invalis Inputs check the that either name, ticker, uri or description are not empty"
+    },
+    {
+      "code": 6005,
+      "name": "InsufficientFunds",
+      "msg": "insufficient funds in the account 'from' account"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidOwner",
+      "msg": "the give token mint address is not owned by the bonding_curve"
     }
   ],
   "types": [

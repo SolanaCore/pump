@@ -5,7 +5,7 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { fetchEncodedAccount, fetchEncodedAccounts, type Account, type Address, type Codec, type Decoder, type EncodedAccount, type Encoder, type FetchAccountConfig, type FetchAccountsConfig, type MaybeAccount, type MaybeEncodedAccount, type ReadonlyUint8Array } from "@solana/kit";
+import { fetchEncodedAccount, fetchEncodedAccounts, type Account, type Address, type Codec, type Decoder, type EncodedAccount, type Encoder, type FetchAccountConfig, type FetchAccountsConfig, type MaybeAccount, type MaybeEncodedAccount, type ReadonlyUint8Array } from '@solana/kit';
 export declare const BONDING_CURVE_DISCRIMINATOR: Uint8Array<ArrayBuffer>;
 export declare function getBondingCurveDiscriminatorBytes(): ReadonlyUint8Array;
 export type BondingCurve = {

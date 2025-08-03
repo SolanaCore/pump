@@ -5,9 +5,9 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { combineCodec, fixDecoderSize, fixEncoderSize, getAddressEncoder, getBytesDecoder, getBytesEncoder, getProgramDerivedAddress, getStructDecoder, getStructEncoder, getU64Decoder, getU64Encoder, transformEncoder, } from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
-import { expectAddress, getAccountMetaFactory, } from "../shared";
+import { combineCodec, fixDecoderSize, fixEncoderSize, getAddressEncoder, getBytesDecoder, getBytesEncoder, getProgramDerivedAddress, getStructDecoder, getStructEncoder, getU64Decoder, getU64Encoder, transformEncoder, } from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
+import { expectAddress, getAccountMetaFactory, } from '../shared';
 export const SELL_TOKEN_DISCRIMINATOR = new Uint8Array([
     109, 61, 40, 187, 230, 176, 135, 174,
 ]);
@@ -16,14 +16,14 @@ export function getSellTokenDiscriminatorBytes() {
 }
 export function getSellTokenInstructionDataEncoder() {
     return transformEncoder(getStructEncoder([
-        ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
-        ["maxToken", getU64Encoder()],
+        ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
+        ['maxToken', getU64Encoder()],
     ]), (value) => (Object.assign(Object.assign({}, value), { discriminator: SELL_TOKEN_DISCRIMINATOR })));
 }
 export function getSellTokenInstructionDataDecoder() {
     return getStructDecoder([
-        ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
-        ["maxToken", getU64Decoder()],
+        ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+        ['maxToken', getU64Decoder()],
     ]);
 }
 export function getSellTokenInstructionDataCodec() {
@@ -37,8 +37,8 @@ export async function getSellTokenInstructionAsync(input, config) {
     const originalAccounts = {
         signer: { value: (_b = input.signer) !== null && _b !== void 0 ? _b : null, isWritable: true },
         tokenAta: { value: (_c = input.tokenAta) !== null && _c !== void 0 ? _c : null, isWritable: true },
-        tokenEscrow: { value: (_d = input.tokenEscrow) !== null && _d !== void 0 ? _d : null, isWritable: false },
-        bondingCurve: { value: (_e = input.bondingCurve) !== null && _e !== void 0 ? _e : null, isWritable: false },
+        tokenEscrow: { value: (_d = input.tokenEscrow) !== null && _d !== void 0 ? _d : null, isWritable: true },
+        bondingCurve: { value: (_e = input.bondingCurve) !== null && _e !== void 0 ? _e : null, isWritable: true },
         tokenMint: { value: (_f = input.tokenMint) !== null && _f !== void 0 ? _f : null, isWritable: false },
         systemProgram: { value: (_g = input.systemProgram) !== null && _g !== void 0 ? _g : null, isWritable: false },
         tokenProgram: { value: (_h = input.tokenProgram) !== null && _h !== void 0 ? _h : null, isWritable: false },
@@ -51,20 +51,6 @@ export async function getSellTokenInstructionAsync(input, config) {
     // Original args.
     const args = Object.assign({}, input);
     // Resolve default values.
-    if (!accounts.tokenAta.value) {
-        accounts.tokenAta.value = await getProgramDerivedAddress({
-            programAddress: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
-            seeds: [
-                getAddressEncoder().encode(expectAddress(accounts.signer.value)),
-                getBytesEncoder().encode(new Uint8Array([
-                    6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206, 235,
-                    121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140, 245, 133,
-                    126, 255, 0, 169,
-                ])),
-                getAddressEncoder().encode(expectAddress(accounts.tokenMint.value)),
-            ],
-        });
-    }
     if (!accounts.bondingCurve.value) {
         accounts.bondingCurve.value = await getProgramDerivedAddress({
             programAddress,
@@ -74,33 +60,19 @@ export async function getSellTokenInstructionAsync(input, config) {
             ],
         });
     }
-    if (!accounts.tokenEscrow.value) {
-        accounts.tokenEscrow.value = await getProgramDerivedAddress({
-            programAddress: "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
-            seeds: [
-                getAddressEncoder().encode(expectAddress(accounts.bondingCurve.value)),
-                getBytesEncoder().encode(new Uint8Array([
-                    6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206, 235,
-                    121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140, 245, 133,
-                    126, 255, 0, 169,
-                ])),
-                getAddressEncoder().encode(expectAddress(accounts.tokenMint.value)),
-            ],
-        });
-    }
     if (!accounts.systemProgram.value) {
         accounts.systemProgram.value =
-            "11111111111111111111111111111111";
+            '11111111111111111111111111111111';
     }
     if (!accounts.tokenProgram.value) {
         accounts.tokenProgram.value =
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
     }
     if (!accounts.associatedTokenProgram.value) {
         accounts.associatedTokenProgram.value =
-            "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
+            'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL';
     }
-    const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+    const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
     const instruction = {
         accounts: [
             getAccountMeta(accounts.signer),
@@ -125,8 +97,8 @@ export function getSellTokenInstruction(input, config) {
     const originalAccounts = {
         signer: { value: (_b = input.signer) !== null && _b !== void 0 ? _b : null, isWritable: true },
         tokenAta: { value: (_c = input.tokenAta) !== null && _c !== void 0 ? _c : null, isWritable: true },
-        tokenEscrow: { value: (_d = input.tokenEscrow) !== null && _d !== void 0 ? _d : null, isWritable: false },
-        bondingCurve: { value: (_e = input.bondingCurve) !== null && _e !== void 0 ? _e : null, isWritable: false },
+        tokenEscrow: { value: (_d = input.tokenEscrow) !== null && _d !== void 0 ? _d : null, isWritable: true },
+        bondingCurve: { value: (_e = input.bondingCurve) !== null && _e !== void 0 ? _e : null, isWritable: true },
         tokenMint: { value: (_f = input.tokenMint) !== null && _f !== void 0 ? _f : null, isWritable: false },
         systemProgram: { value: (_g = input.systemProgram) !== null && _g !== void 0 ? _g : null, isWritable: false },
         tokenProgram: { value: (_h = input.tokenProgram) !== null && _h !== void 0 ? _h : null, isWritable: false },
@@ -141,17 +113,17 @@ export function getSellTokenInstruction(input, config) {
     // Resolve default values.
     if (!accounts.systemProgram.value) {
         accounts.systemProgram.value =
-            "11111111111111111111111111111111";
+            '11111111111111111111111111111111';
     }
     if (!accounts.tokenProgram.value) {
         accounts.tokenProgram.value =
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
     }
     if (!accounts.associatedTokenProgram.value) {
         accounts.associatedTokenProgram.value =
-            "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL";
+            'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL';
     }
-    const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
+    const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
     const instruction = {
         accounts: [
             getAccountMeta(accounts.signer),
@@ -171,7 +143,7 @@ export function getSellTokenInstruction(input, config) {
 export function parseSellTokenInstruction(instruction) {
     if (instruction.accounts.length < 8) {
         // TODO: Coded error.
-        throw new Error("Not enough accounts");
+        throw new Error('Not enough accounts');
     }
     let accountIndex = 0;
     const getNextAccount = () => {

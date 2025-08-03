@@ -84,6 +84,36 @@ export class InvalidInputsError extends ProgramError {
 codeToErrorMap.set(0x1774, InvalidInputsError);
 nameToErrorMap.set('InvalidInputs', InvalidInputsError);
 
+/** InsufficientFunds: insufficient funds in the account 'from' account */
+export class InsufficientFundsError extends ProgramError {
+  override readonly name: string = 'InsufficientFunds';
+
+  readonly code: number = 0x1775; // 6005
+
+  constructor(program: Program, cause?: Error) {
+    super("insufficient funds in the account 'from' account", program, cause);
+  }
+}
+codeToErrorMap.set(0x1775, InsufficientFundsError);
+nameToErrorMap.set('InsufficientFunds', InsufficientFundsError);
+
+/** InvalidOwner: the give token mint address is not owned by the bonding_curve */
+export class InvalidOwnerError extends ProgramError {
+  override readonly name: string = 'InvalidOwner';
+
+  readonly code: number = 0x1776; // 6006
+
+  constructor(program: Program, cause?: Error) {
+    super(
+      'the give token mint address is not owned by the bonding_curve',
+      program,
+      cause
+    );
+  }
+}
+codeToErrorMap.set(0x1776, InvalidOwnerError);
+nameToErrorMap.set('InvalidOwner', InvalidOwnerError);
+
 /**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors

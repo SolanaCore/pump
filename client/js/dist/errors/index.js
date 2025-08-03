@@ -5,4 +5,4 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-export * from "./pump";
+export * from './pump';

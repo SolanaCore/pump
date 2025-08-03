@@ -34,8 +34,8 @@ export type BuyTokenInstructionAccounts = {
   signer: Signer;
   tokenAta?: PublicKey | Pda;
   tokenEscrow?: PublicKey | Pda;
-  bondingCurve?: PublicKey | Pda;
   tokenMint: PublicKey | Pda;
+  bondingCurve?: PublicKey | Pda;
   systemProgram?: PublicKey | Pda;
   tokenProgram?: PublicKey | Pda;
   associatedTokenProgram?: PublicKey | Pda;
@@ -83,7 +83,7 @@ export function buyToken(
   // Program ID.
   const programId = context.programs.getPublicKey(
     'pump',
-    'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'
+    '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'
   );
 
   // Accounts.
@@ -100,18 +100,18 @@ export function buyToken(
     },
     tokenEscrow: {
       index: 2,
-      isWritable: false as boolean,
+      isWritable: true as boolean,
       value: input.tokenEscrow ?? null,
     },
-    bondingCurve: {
+    tokenMint: {
       index: 3,
       isWritable: false as boolean,
-      value: input.bondingCurve ?? null,
-    },
-    tokenMint: {
-      index: 4,
-      isWritable: false as boolean,
       value: input.tokenMint ?? null,
+    },
+    bondingCurve: {
+      index: 4,
+      isWritable: true as boolean,
+      value: input.bondingCurve ?? null,
     },
     systemProgram: {
       index: 5,

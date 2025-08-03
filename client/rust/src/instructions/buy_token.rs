@@ -22,10 +22,10 @@ pub struct BuyToken {
           pub token_escrow: solana_pubkey::Pubkey,
           
               
-          pub bonding_curve: solana_pubkey::Pubkey,
+          pub token_mint: solana_pubkey::Pubkey,
           
               
-          pub token_mint: solana_pubkey::Pubkey,
+          pub bonding_curve: solana_pubkey::Pubkey,
           
               
           pub system_program: solana_pubkey::Pubkey,
@@ -53,16 +53,16 @@ impl BuyToken {
             self.token_ata,
             false
           ));
-                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
+                                          accounts.push(solana_instruction::AccountMeta::new(
             self.token_escrow,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new_readonly(
-            self.bonding_curve,
+            self.token_mint,
             false
           ));
-                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
-            self.token_mint,
+                                          accounts.push(solana_instruction::AccountMeta::new(
+            self.bonding_curve,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new_readonly(
@@ -123,9 +123,9 @@ impl Default for BuyTokenInstructionData {
 ///
                       ///   0. `[writable, signer]` signer
                 ///   1. `[writable]` token_ata
-          ///   2. `[]` token_escrow
-          ///   3. `[]` bonding_curve
-          ///   4. `[]` token_mint
+                ///   2. `[writable]` token_escrow
+          ///   3. `[]` token_mint
+                ///   4. `[writable]` bonding_curve
                 ///   5. `[optional]` system_program (default to `11111111111111111111111111111111`)
                 ///   6. `[optional]` token_program (default to `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`)
                 ///   7. `[optional]` associated_token_program (default to `ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL`)
@@ -134,8 +134,8 @@ pub struct BuyTokenBuilder {
             signer: Option<solana_pubkey::Pubkey>,
                 token_ata: Option<solana_pubkey::Pubkey>,
                 token_escrow: Option<solana_pubkey::Pubkey>,
-                bonding_curve: Option<solana_pubkey::Pubkey>,
                 token_mint: Option<solana_pubkey::Pubkey>,
+                bonding_curve: Option<solana_pubkey::Pubkey>,
                 system_program: Option<solana_pubkey::Pubkey>,
                 token_program: Option<solana_pubkey::Pubkey>,
                 associated_token_program: Option<solana_pubkey::Pubkey>,
@@ -163,13 +163,13 @@ impl BuyTokenBuilder {
                     self
     }
             #[inline(always)]
-    pub fn bonding_curve(&mut self, bonding_curve: solana_pubkey::Pubkey) -> &mut Self {
-                        self.bonding_curve = Some(bonding_curve);
+    pub fn token_mint(&mut self, token_mint: solana_pubkey::Pubkey) -> &mut Self {
+                        self.token_mint = Some(token_mint);
                     self
     }
             #[inline(always)]
-    pub fn token_mint(&mut self, token_mint: solana_pubkey::Pubkey) -> &mut Self {
-                        self.token_mint = Some(token_mint);
+    pub fn bonding_curve(&mut self, bonding_curve: solana_pubkey::Pubkey) -> &mut Self {
+                        self.bonding_curve = Some(bonding_curve);
                     self
     }
             /// `[optional account, default to '11111111111111111111111111111111']`
@@ -213,8 +213,8 @@ impl BuyTokenBuilder {
                               signer: self.signer.expect("signer is not set"),
                                         token_ata: self.token_ata.expect("token_ata is not set"),
                                         token_escrow: self.token_escrow.expect("token_escrow is not set"),
-                                        bonding_curve: self.bonding_curve.expect("bonding_curve is not set"),
                                         token_mint: self.token_mint.expect("token_mint is not set"),
+                                        bonding_curve: self.bonding_curve.expect("bonding_curve is not set"),
                                         system_program: self.system_program.unwrap_or(solana_pubkey::pubkey!("11111111111111111111111111111111")),
                                         token_program: self.token_program.unwrap_or(solana_pubkey::pubkey!("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")),
                                         associated_token_program: self.associated_token_program.unwrap_or(solana_pubkey::pubkey!("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL")),
@@ -240,10 +240,10 @@ impl BuyTokenBuilder {
               pub token_escrow: &'b solana_account_info::AccountInfo<'a>,
                 
                     
-              pub bonding_curve: &'b solana_account_info::AccountInfo<'a>,
+              pub token_mint: &'b solana_account_info::AccountInfo<'a>,
                 
                     
-              pub token_mint: &'b solana_account_info::AccountInfo<'a>,
+              pub bonding_curve: &'b solana_account_info::AccountInfo<'a>,
                 
                     
               pub system_program: &'b solana_account_info::AccountInfo<'a>,
@@ -270,10 +270,10 @@ pub struct BuyTokenCpi<'a, 'b> {
           pub token_escrow: &'b solana_account_info::AccountInfo<'a>,
           
               
-          pub bonding_curve: &'b solana_account_info::AccountInfo<'a>,
+          pub token_mint: &'b solana_account_info::AccountInfo<'a>,
           
               
-          pub token_mint: &'b solana_account_info::AccountInfo<'a>,
+          pub bonding_curve: &'b solana_account_info::AccountInfo<'a>,
           
               
           pub system_program: &'b solana_account_info::AccountInfo<'a>,
@@ -298,8 +298,8 @@ impl<'a, 'b> BuyTokenCpi<'a, 'b> {
               signer: accounts.signer,
               token_ata: accounts.token_ata,
               token_escrow: accounts.token_escrow,
-              bonding_curve: accounts.bonding_curve,
               token_mint: accounts.token_mint,
+              bonding_curve: accounts.bonding_curve,
               system_program: accounts.system_program,
               token_program: accounts.token_program,
               associated_token_program: accounts.associated_token_program,
@@ -335,16 +335,16 @@ impl<'a, 'b> BuyTokenCpi<'a, 'b> {
             *self.token_ata.key,
             false
           ));
-                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
+                                          accounts.push(solana_instruction::AccountMeta::new(
             *self.token_escrow.key,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new_readonly(
-            *self.bonding_curve.key,
+            *self.token_mint.key,
             false
           ));
-                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
-            *self.token_mint.key,
+                                          accounts.push(solana_instruction::AccountMeta::new(
+            *self.bonding_curve.key,
             false
           ));
                                           accounts.push(solana_instruction::AccountMeta::new_readonly(
@@ -380,8 +380,8 @@ impl<'a, 'b> BuyTokenCpi<'a, 'b> {
                   account_infos.push(self.signer.clone());
                         account_infos.push(self.token_ata.clone());
                         account_infos.push(self.token_escrow.clone());
-                        account_infos.push(self.bonding_curve.clone());
                         account_infos.push(self.token_mint.clone());
+                        account_infos.push(self.bonding_curve.clone());
                         account_infos.push(self.system_program.clone());
                         account_infos.push(self.token_program.clone());
                         account_infos.push(self.associated_token_program.clone());
@@ -401,9 +401,9 @@ impl<'a, 'b> BuyTokenCpi<'a, 'b> {
 ///
                       ///   0. `[writable, signer]` signer
                 ///   1. `[writable]` token_ata
-          ///   2. `[]` token_escrow
-          ///   3. `[]` bonding_curve
-          ///   4. `[]` token_mint
+                ///   2. `[writable]` token_escrow
+          ///   3. `[]` token_mint
+                ///   4. `[writable]` bonding_curve
           ///   5. `[]` system_program
           ///   6. `[]` token_program
           ///   7. `[]` associated_token_program
@@ -419,8 +419,8 @@ impl<'a, 'b> BuyTokenCpiBuilder<'a, 'b> {
               signer: None,
               token_ata: None,
               token_escrow: None,
-              bonding_curve: None,
               token_mint: None,
+              bonding_curve: None,
               system_program: None,
               token_program: None,
               associated_token_program: None,
@@ -445,13 +445,13 @@ impl<'a, 'b> BuyTokenCpiBuilder<'a, 'b> {
                     self
     }
       #[inline(always)]
-    pub fn bonding_curve(&mut self, bonding_curve: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.bonding_curve = Some(bonding_curve);
+    pub fn token_mint(&mut self, token_mint: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
+                        self.instruction.token_mint = Some(token_mint);
                     self
     }
       #[inline(always)]
-    pub fn token_mint(&mut self, token_mint: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
-                        self.instruction.token_mint = Some(token_mint);
+    pub fn bonding_curve(&mut self, bonding_curve: &'b solana_account_info::AccountInfo<'a>) -> &mut Self {
+                        self.instruction.bonding_curve = Some(bonding_curve);
                     self
     }
       #[inline(always)]
@@ -508,9 +508,9 @@ impl<'a, 'b> BuyTokenCpiBuilder<'a, 'b> {
                   
           token_escrow: self.instruction.token_escrow.expect("token_escrow is not set"),
                   
-          bonding_curve: self.instruction.bonding_curve.expect("bonding_curve is not set"),
-                  
           token_mint: self.instruction.token_mint.expect("token_mint is not set"),
+                  
+          bonding_curve: self.instruction.bonding_curve.expect("bonding_curve is not set"),
                   
           system_program: self.instruction.system_program.expect("system_program is not set"),
                   
@@ -529,8 +529,8 @@ struct BuyTokenCpiBuilderInstruction<'a, 'b> {
             signer: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_ata: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_escrow: Option<&'b solana_account_info::AccountInfo<'a>>,
-                bonding_curve: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_mint: Option<&'b solana_account_info::AccountInfo<'a>>,
+                bonding_curve: Option<&'b solana_account_info::AccountInfo<'a>>,
                 system_program: Option<&'b solana_account_info::AccountInfo<'a>>,
                 token_program: Option<&'b solana_account_info::AccountInfo<'a>>,
                 associated_token_program: Option<&'b solana_account_info::AccountInfo<'a>>,

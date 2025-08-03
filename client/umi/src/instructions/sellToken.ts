@@ -32,8 +32,8 @@ import {
 // Accounts.
 export type SellTokenInstructionAccounts = {
   signer: Signer;
-  tokenAta?: PublicKey | Pda;
-  tokenEscrow?: PublicKey | Pda;
+  tokenAta: PublicKey | Pda;
+  tokenEscrow: PublicKey | Pda;
   bondingCurve?: PublicKey | Pda;
   tokenMint: PublicKey | Pda;
   systemProgram?: PublicKey | Pda;
@@ -83,7 +83,7 @@ export function sellToken(
   // Program ID.
   const programId = context.programs.getPublicKey(
     'pump',
-    'FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q'
+    '52nvBaMXujpVYf6zBUvmQtHEZc4kAncRJccXG99F6yrg'
   );
 
   // Accounts.
@@ -100,12 +100,12 @@ export function sellToken(
     },
     tokenEscrow: {
       index: 2,
-      isWritable: false as boolean,
+      isWritable: true as boolean,
       value: input.tokenEscrow ?? null,
     },
     bondingCurve: {
       index: 3,
-      isWritable: false as boolean,
+      isWritable: true as boolean,
       value: input.bondingCurve ?? null,
     },
     tokenMint: {
@@ -134,29 +134,6 @@ export function sellToken(
   const resolvedArgs: SellTokenInstructionArgs = { ...input };
 
   // Default values.
-  if (!resolvedAccounts.tokenAta.value) {
-    resolvedAccounts.tokenAta.value = context.eddsa.findPda(
-      context.programs.getPublicKey(
-        'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-        'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'
-      ),
-      [
-        publicKeySerializer().serialize(
-          expectPublicKey(resolvedAccounts.signer.value)
-        ),
-        bytes().serialize(
-          new Uint8Array([
-            6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206, 235,
-            121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140, 245, 133,
-            126, 255, 0, 169,
-          ])
-        ),
-        publicKeySerializer().serialize(
-          expectPublicKey(resolvedAccounts.tokenMint.value)
-        ),
-      ]
-    );
-  }
   if (!resolvedAccounts.bondingCurve.value) {
     resolvedAccounts.bondingCurve.value = context.eddsa.findPda(programId, [
       bytes().serialize(
@@ -166,29 +143,6 @@ export function sellToken(
         expectPublicKey(resolvedAccounts.tokenMint.value)
       ),
     ]);
-  }
-  if (!resolvedAccounts.tokenEscrow.value) {
-    resolvedAccounts.tokenEscrow.value = context.eddsa.findPda(
-      context.programs.getPublicKey(
-        'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-        'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'
-      ),
-      [
-        publicKeySerializer().serialize(
-          expectPublicKey(resolvedAccounts.bondingCurve.value)
-        ),
-        bytes().serialize(
-          new Uint8Array([
-            6, 221, 246, 225, 215, 101, 161, 147, 217, 203, 225, 70, 206, 235,
-            121, 172, 28, 180, 133, 237, 95, 91, 55, 145, 58, 140, 245, 133,
-            126, 255, 0, 169,
-          ])
-        ),
-        publicKeySerializer().serialize(
-          expectPublicKey(resolvedAccounts.tokenMint.value)
-        ),
-      ]
-    );
   }
   if (!resolvedAccounts.systemProgram.value) {
     resolvedAccounts.systemProgram.value = context.programs.getPublicKey(

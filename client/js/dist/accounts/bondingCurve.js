@@ -5,7 +5,7 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { assertAccountExists, assertAccountsExist, combineCodec, decodeAccount, fetchEncodedAccount, fetchEncodedAccounts, fixDecoderSize, fixEncoderSize, getAddressDecoder, getAddressEncoder, getBooleanDecoder, getBooleanEncoder, getBytesDecoder, getBytesEncoder, getStructDecoder, getStructEncoder, getU64Decoder, getU64Encoder, getU8Decoder, getU8Encoder, transformEncoder, } from "@solana/kit";
+import { assertAccountExists, assertAccountsExist, combineCodec, decodeAccount, fetchEncodedAccount, fetchEncodedAccounts, fixDecoderSize, fixEncoderSize, getAddressDecoder, getAddressEncoder, getBooleanDecoder, getBooleanEncoder, getBytesDecoder, getBytesEncoder, getStructDecoder, getStructEncoder, getU64Decoder, getU64Encoder, getU8Decoder, getU8Encoder, transformEncoder, } from '@solana/kit';
 export const BONDING_CURVE_DISCRIMINATOR = new Uint8Array([
     23, 183, 248, 55, 96, 216, 172, 96,
 ]);
@@ -14,24 +14,24 @@ export function getBondingCurveDiscriminatorBytes() {
 }
 export function getBondingCurveEncoder() {
     return transformEncoder(getStructEncoder([
-        ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
-        ["virtualSolReserve", getU64Encoder()],
-        ["virtualTokenReserve", getU64Encoder()],
-        ["tokenSold", getU64Encoder()],
-        ["tokenMint", getAddressEncoder()],
-        ["isActive", getBooleanEncoder()],
-        ["bump", getU8Encoder()],
+        ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
+        ['virtualSolReserve', getU64Encoder()],
+        ['virtualTokenReserve', getU64Encoder()],
+        ['tokenSold', getU64Encoder()],
+        ['tokenMint', getAddressEncoder()],
+        ['isActive', getBooleanEncoder()],
+        ['bump', getU8Encoder()],
     ]), (value) => (Object.assign(Object.assign({}, value), { discriminator: BONDING_CURVE_DISCRIMINATOR })));
 }
 export function getBondingCurveDecoder() {
     return getStructDecoder([
-        ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
-        ["virtualSolReserve", getU64Decoder()],
-        ["virtualTokenReserve", getU64Decoder()],
-        ["tokenSold", getU64Decoder()],
-        ["tokenMint", getAddressDecoder()],
-        ["isActive", getBooleanDecoder()],
-        ["bump", getU8Decoder()],
+        ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+        ['virtualSolReserve', getU64Decoder()],
+        ['virtualTokenReserve', getU64Decoder()],
+        ['tokenSold', getU64Decoder()],
+        ['tokenMint', getAddressDecoder()],
+        ['isActive', getBooleanDecoder()],
+        ['bump', getU8Decoder()],
     ]);
 }
 export function getBondingCurveCodec() {

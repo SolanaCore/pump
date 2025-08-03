@@ -4,23 +4,27 @@ export const GET = async () => {
   const payload: ActionsJson = {
     rules: [
       // Map all action routes
-    //   {
-    //     pathPattern: "/api/actions/buy",
-    //     apiPath: "/api/actions/buy",
-    //   },
-    //   {
-    //     pathPattern: "/api/actions/sell",
-    //     apiPath: "/api/actions/sell",
-    //   },
+      {
+        pathPattern: "/api/actions/buy-token",
+        apiPath: "/api/actions/buy-token",
+      },
+      {
+        pathPattern: "/api/actions/sell-token",
+        apiPath: "/api/actions/sell-token",
+      },
       {
         pathPattern: "/api/actions/create-token",
         apiPath: "/api/actions/create-token",
       },
     ],
   }
-
+  
   return new Response(JSON.stringify(payload), {
-    headers: ACTIONS_CORS_HEADERS,
+    headers: {
+      ...ACTIONS_CORS_HEADERS,
+      "X-Action-Version": "2.2.0",
+      "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+    },
   })
 }
 

@@ -5,8 +5,8 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { isProgramError, } from "@solana/kit";
-import { PUMP_PROGRAM_ADDRESS } from "../programs";
+import { isProgramError, } from '@solana/kit';
+import { PUMP_PROGRAM_ADDRESS } from '../programs';
 /** OverflowDetected: Overflow detected */
 export const PUMP_ERROR__OVERFLOW_DETECTED = 0x1770; // 6000
 /** UnderflowDetected: Underflow detected */
@@ -17,10 +17,16 @@ export const PUMP_ERROR__INVALID_TOKEN_AMOUNT = 0x1772; // 6002
 export const PUMP_ERROR__INVALID_SOL_AMOUNT = 0x1773; // 6003
 /** InvalidInputs: Invalis Inputs check the that either name, ticker, uri or description are not empty */
 export const PUMP_ERROR__INVALID_INPUTS = 0x1774; // 6004
+/** InsufficientFunds: insufficient funds in the account 'from' account */
+export const PUMP_ERROR__INSUFFICIENT_FUNDS = 0x1775; // 6005
+/** InvalidOwner: the give token mint address is not owned by the bonding_curve */
+export const PUMP_ERROR__INVALID_OWNER = 0x1776; // 6006
 let pumpErrorMessages;
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
     pumpErrorMessages = {
+        [PUMP_ERROR__INSUFFICIENT_FUNDS]: `insufficient funds in the account 'from' account`,
         [PUMP_ERROR__INVALID_INPUTS]: `Invalis Inputs check the that either name, ticker, uri or description are not empty`,
+        [PUMP_ERROR__INVALID_OWNER]: `the give token mint address is not owned by the bonding_curve`,
         [PUMP_ERROR__INVALID_SOL_AMOUNT]: `the sol amount can't be zero`,
         [PUMP_ERROR__INVALID_TOKEN_AMOUNT]: `the token amount can't be zero`,
         [PUMP_ERROR__OVERFLOW_DETECTED]: `Overflow detected`,
@@ -28,10 +34,10 @@ if (process.env.NODE_ENV !== "production") {
     };
 }
 export function getPumpErrorMessage(code) {
-    if (process.env.NODE_ENV !== "production") {
+    if (process.env.NODE_ENV !== 'production') {
         return pumpErrorMessages[code];
     }
-    return "Error message not available in production bundles.";
+    return 'Error message not available in production bundles.';
 }
 export function isPumpError(error, transactionMessage, code) {
     return isProgramError(error, transactionMessage, PUMP_PROGRAM_ADDRESS, code);

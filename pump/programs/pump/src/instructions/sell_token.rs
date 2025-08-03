@@ -30,26 +30,33 @@ pub struct SellToken<'info>{
         constraint = token_ata.mint == token_mint.key(),
         constraint = token_ata.owner == signer.key(),
         )]
-    pub token_ata: Account<'info, TokenAccount>,
+    pub token_ata: Box<Account<'info, TokenAccount>>,
+
+        #[account(
+            mut,
+        seeds = [BONDING_SEED.as_bytes(), token_mint.key().as_ref(), bonding_curve.key().as_ref()],
+        bump,
+    )]
+    pub sol_escrow: SystemAccount<'info>,
 
     #[account(
     mut,
     constraint = token_escrow.mint == token_mint.key(),
     constraint = token_escrow.owner == bonding_curve.key(),
     )]
-    pub token_escrow: Account<'info, TokenAccount>,
+    pub token_escrow: Box<Account<'info, TokenAccount>>,
 
     #[account(
         mut,
         seeds = [b"BONDING_CURVE", token_mint.key().as_ref()],
         bump,
     )]
-    pub bonding_curve: Account<'info, BondingCurve>,
+    pub bonding_curve: Box<Account<'info, BondingCurve>>,
 
     #[account(
         constraint = bonding_curve.token_mint == token_mint.key()
     )]
-    pub token_mint: Account<'info, Mint>,
+    pub token_mint: Box<Account<'info, Mint>>,
 
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
@@ -58,22 +65,27 @@ pub struct SellToken<'info>{
 
 
 pub fn sell_token(ctx: &mut Context<SellToken>, max_token: u64) -> Result<()> {
-    
-    let mut bonding_curve = &mut ctx.accounts.bonding_curve; // ✅ MUTABLE borrow
+    let bonding_curve = &mut ctx.accounts.bonding_curve; // ✅ MUTABLE borrow
     let swap_amount: SwapAmount = bonding_curve.sell_logic(max_token)?;
 
-    let bonding_curve_info = bonding_curve.to_account_info();
-    let signer_info = ctx.accounts.signer.to_account_info();
-
     // ✅ Check if PDA has enough lamports
-    require!(
-        **bonding_curve_info.lamports.borrow() >= swap_amount.max_sol,
-        ErrorCode::InsufficientFunds
-    );
+    
 
     // ✅ Transfer lamports
-    **bonding_curve_info.try_borrow_mut_lamports()? -= swap_amount.max_sol;
-    **signer_info.try_borrow_mut_lamports()? += swap_amount.max_sol;
+    let sol_escrow = ctx.accounts.sol_escrow.to_account_info();
+    let signer_info = ctx.accounts.signer.to_account_info();
+    
+    require!(
+        **sol_escrow.lamports.borrow() >= swap_amount.max_sol,
+        ErrorCode::InsufficientFunds
+    );
+    let binding = bonding_curve.token_mint.key();
+    let bonding_curve_key = bonding_curve.key();
+    let signer_seeds_sol: &[&[&[u8]]] = &[&[b"BONDING_CURVE", binding.as_ref(), bonding_curve_key.as_ref(), &[ctx.bumps.sol_escrow]]];
+    // ✅ Transfer SOL from bonding curve to signer
+            &bonding_curve.transfer_sol(&ctx.accounts.sol_escrow.to_account_info(), &signer_info.to_account_info(), swap_amount.max_sol,  signer_seeds_sol, ctx.accounts.system_program.to_account_info());
+
+
 
     // ✅ Prepare signer seeds
     let binding = ctx.accounts.token_mint.key();
@@ -81,8 +93,9 @@ pub fn sell_token(ctx: &mut Context<SellToken>, max_token: u64) -> Result<()> {
     let signer = &[b"BONDING_CURVE", binding.as_ref(), &[bump]];
     let signer_seeds: &[&[&[u8]]] = &[&signer[..]];
 
+
     // ✅ Token transfer (using mutable bonding_curve)
-    &bonding_curve.transfer_token(
+    let _ = &bonding_curve.transfer_token(
         ctx.accounts.token_ata.to_account_info(),
         ctx.accounts.token_escrow.to_account_info(),
         signer_seeds,

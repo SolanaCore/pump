@@ -53,11 +53,11 @@ impl SellToken {
             self.token_ata,
             false
           ));
-                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
+                                          accounts.push(solana_instruction::AccountMeta::new(
             self.token_escrow,
             false
           ));
-                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
+                                          accounts.push(solana_instruction::AccountMeta::new(
             self.bonding_curve,
             false
           ));
@@ -123,8 +123,8 @@ impl Default for SellTokenInstructionData {
 ///
                       ///   0. `[writable, signer]` signer
                 ///   1. `[writable]` token_ata
-          ///   2. `[]` token_escrow
-          ///   3. `[]` bonding_curve
+                ///   2. `[writable]` token_escrow
+                ///   3. `[writable]` bonding_curve
           ///   4. `[]` token_mint
                 ///   5. `[optional]` system_program (default to `11111111111111111111111111111111`)
                 ///   6. `[optional]` token_program (default to `TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA`)
@@ -335,11 +335,11 @@ impl<'a, 'b> SellTokenCpi<'a, 'b> {
             *self.token_ata.key,
             false
           ));
-                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
+                                          accounts.push(solana_instruction::AccountMeta::new(
             *self.token_escrow.key,
             false
           ));
-                                          accounts.push(solana_instruction::AccountMeta::new_readonly(
+                                          accounts.push(solana_instruction::AccountMeta::new(
             *self.bonding_curve.key,
             false
           ));
@@ -401,8 +401,8 @@ impl<'a, 'b> SellTokenCpi<'a, 'b> {
 ///
                       ///   0. `[writable, signer]` signer
                 ///   1. `[writable]` token_ata
-          ///   2. `[]` token_escrow
-          ///   3. `[]` bonding_curve
+                ///   2. `[writable]` token_escrow
+                ///   3. `[writable]` bonding_curve
           ///   4. `[]` token_mint
           ///   5. `[]` system_program
           ///   6. `[]` token_program

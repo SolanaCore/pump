@@ -46,7 +46,6 @@ jobs:
       - name: Anchor Test
         run: anchor test
         working-directory: ./pump
-
     
 
       # Optional: if x-ray supports outputting SARIF

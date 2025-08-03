@@ -5,7 +5,7 @@
  *
  * @see https://github.com/codama-idl/codama
  */
-import { type Address, type IAccountMeta, type IAccountSignerMeta, type ProgramDerivedAddress, type TransactionSigner } from "@solana/kit";
+import { type Address, type IAccountMeta, type IAccountSignerMeta, type ProgramDerivedAddress, type TransactionSigner } from '@solana/kit';
 /**
  * Asserts that the given value is not null or undefined.
  * @internal
@@ -45,6 +45,6 @@ export type IInstructionWithByteDelta = {
  * Get account metas and signers from resolved accounts.
  * @internal
  */
-export declare function getAccountMetaFactory(programAddress: Address, optionalAccountStrategy: "omitted" | "programId"): (account: ResolvedAccount) => IAccountMeta | IAccountSignerMeta | undefined;
+export declare function getAccountMetaFactory(programAddress: Address, optionalAccountStrategy: 'omitted' | 'programId'): (account: ResolvedAccount) => IAccountMeta | IAccountSignerMeta | undefined;
 export declare function isTransactionSigner<TAddress extends string = string>(value: Address<TAddress> | ProgramDerivedAddress<TAddress> | TransactionSigner<TAddress>): value is TransactionSigner<TAddress>;
 //# sourceMappingURL=index.d.ts.map
