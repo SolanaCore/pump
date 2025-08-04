@@ -7,7 +7,7 @@ import {
   TransactionInstruction,
   Transaction,
 } from "@solana/web3.js"
-import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from "@solana/spl-token"
+import {ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from "@solana/spl-token"
 import {
   ACTIONS_CORS_HEADERS,
   type ActionGetResponse,
@@ -16,10 +16,10 @@ import {
   createPostResponse,
 } from "@solana/actions"
 import { getCreateTokenInstructionAsync } from "@solanacore/bonding_curve"
-const PROGRAM_ID = new PublicKey("FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q")
-const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
-const RENT_PROGRAM_ID = new PublicKey("SysvarRent111111111111111111111111111111111")
-
+const PROGRAM_ID = new PublicKey("FPf834XQpnVNgFTKtihkik9Bc9c57859SdXAMNrQ554Q");
+const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
+const RENT_PROGRAM_ID = new PublicKey("SysvarRent111111111111111111111111111111111");
+const TOKEN_PROGRAM_ID  = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 // GET request handler
 export async function GET(request: Request) {
   
