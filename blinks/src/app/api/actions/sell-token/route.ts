@@ -37,7 +37,7 @@ export async function GET(request: Request) {
         {
           type: "message",
           label: "Buy Token",
-          href: `${url.origin}/api/actions/buy-token?tokenMint={tokenMint}&maxSol={maxSol}`,
+          href: `${url.origin}/api/actions/sell-token?tokenMint={tokenMint}&maxToken={maxToken}`,
           parameters: [
             {
               name: "tokenMint",
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
               required: true,
             },
             {
-              name: "maxSol",
+              name: "maxToken",
               label: "Maximum token to sell ",
               required: true,
             },
@@ -83,7 +83,7 @@ export async function POST(request: Request) {
     const url = new URL(request.url)
 
     const tokenMintParam = url.searchParams.get("tokenMint")
-    const maxTokenParamRaw = url.searchParams.get("maxSol")
+    const maxTokenParamRaw = url.searchParams.get("maxToken")
 
     if (!tokenMintParam || !maxTokenParamRaw) {
       return new Response(JSON.stringify({ error: { message: "Missing required parameters." } }), {
