@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@solanacore/bonding_curve": "^0.0.4",
+    "@solanacore/bonding_curve": "0.0.5",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/bn.js": "^5.2.0",
     "@types/node": "^20.19.8",

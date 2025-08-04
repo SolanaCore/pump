@@ -22,7 +22,10 @@ const RENT_PROGRAM_ID = new PublicKey("SysvarRent1111111111111111111111111111111
 
 // GET request handler
 export async function GET(request: Request) {
+  
   const url = new URL(request.url)
+    console.log(url.origin);
+
 
   const payload: ActionGetResponse = {
     icon: "https://ucarecdn.com/7aa46c85-08a4-4bc7-9376-88ec48bb1f43/-/preview/880x864/-/quality/smart/-/format/auto/",

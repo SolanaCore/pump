@@ -196,9 +196,31 @@ export async function POST(request: Request) {
           tokenProgram: TOKEN_PROGRAM,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM,
     */ 
+   const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
+    const [sol_escrow, sol_escrow_bump] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("BONDING_CURVE"), // ✅ no utils needed
+        tokenMint.toBuffer(),
+        bondingCurve.toBuffer()
+      ],
+      PROGRAM_ID
+    );
+
+   /**
+    * signer: payerPublicKey,
+          solEscrow: sol_escrow,
+          tokenAta,
+          tokenEscrow: bondingCurveAta,
+          bondingCurve,
+          tokenMint: mint.publicKey,
+          systemProgram: SYSTEM_PROGRAM,
+          tokenProgram: TOKEN_PROGRAM,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM,
+    */
     const instruction = await getBuyTokenInstructionAsync(
       {
         signer: sender.toBase58(),
+        solEscrow: sol_escrow,
         tokenAta: tokenAta.toBase58(),
         tokenEscrow: bondingCurveAta.toBase58(),
         bondingCurve: bondingCurve.toBase58(),
