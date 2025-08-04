@@ -37,8 +37,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       '@solanacore/bonding_curve':
-        specifier: ^0.0.4
-        version: 0.0.4(fastestsmallesttextencoderdecoder@1.0.22)(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+        specifier: 0.0.5
+        version: 0.0.5(fastestsmallesttextencoderdecoder@1.0.22)(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@tailwindcss/postcss':
         specifier: ^4.1.11
         version: 4.1.11
@@ -689,8 +689,8 @@ packages:
   '@solanacore/bonding_curve@0.0.1':
     resolution: {integrity: sha512-OOCii5QoB6wbCmz4dtvOIa/89wYDSsg60AzSMgkw4X6PNOwC9ea5WuyYB4tG/3Pw+ZQauLG6ey4LQyZ7DCXmXw==}
 
-  '@solanacore/bonding_curve@0.0.4':
-    resolution: {integrity: sha512-7lrmzupvDRR5bfGGz8StH0zWMoDVQBQSQj/+sCAkhUW7hdLyaUTbJi1LXGiv+QARgay7fnMIX3T0UQsKpigOZg==}
+  '@solanacore/bonding_curve@0.0.5':
+    resolution: {integrity: sha512-r838J2f7XgrJih6eXQglHJP4MCow9LesAE2XRMlUrSlD/K2NacavZuCbGDZq/TVs8l2UuyZUfK+gR3PFR/ojqA==}
 
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
@@ -3184,7 +3184,7 @@ snapshots:
       - fastestsmallesttextencoderdecoder
       - ws
 
-  '@solanacore/bonding_curve@0.0.4(fastestsmallesttextencoderdecoder@1.0.22)(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))':
+  '@solanacore/bonding_curve@0.0.5(fastestsmallesttextencoderdecoder@1.0.22)(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))':
     dependencies:
       '@solana/kit': 2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.8.3)(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@solanacore/bonding_curve': 0.0.1(fastestsmallesttextencoderdecoder@1.0.22)(ws@7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10))
