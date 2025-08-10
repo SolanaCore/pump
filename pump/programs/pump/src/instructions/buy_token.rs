@@ -62,7 +62,8 @@ pub struct BuyToken<'info>{
 }
 
 pub fn buy_token(ctx: &mut Context<BuyToken>, max_sol:u64) -> Result<()> {
-    let bonding_curve = &mut ctx.accounts.bonding_curve.clone();
+    let bonding_curve_info = ctx.accounts.bonding_curve.to_account_info();
+    let bonding_curve = &mut ctx.accounts.bonding_curve;
     let swap_amount:SwapAmount = bonding_curve.buy_logic(max_sol)?;
     /*
     from:  AccountInfo<'info>,
@@ -79,7 +80,13 @@ pub fn buy_token(ctx: &mut Context<BuyToken>, max_sol:u64) -> Result<()> {
 
     // sol_escrow.add_lamports(swap_amount.max_sol)?;
     // signer_info.sub_lamports(swap_amount.max_sol)?;
-        &bonding_curve.transfer_sol(&ctx.accounts.signer.to_account_info(), &sol_escrow.to_account_info(), swap_amount.max_sol,  &[],ctx.accounts.system_program.to_account_info());
+    bonding_curve.transfer_sol(
+        &signer_info, 
+        &sol_escrow, 
+        swap_amount.max_sol,  
+        &[],
+        ctx.accounts.system_program.to_account_info()
+    )?;
 
     /*
        // ✅ Transfer lamports
@@ -88,10 +95,19 @@ pub fn buy_token(ctx: &mut Context<BuyToken>, max_sol:u64) -> Result<()> {
     */
     //token_escrow -> token_ata
     let binding = ctx.accounts.token_mint.key();
-    let signer = &[b"BONDING_CURVE", binding.as_ref(), &[bonding_curve.bump.clone()]];
-    let signer_seeds:&[&[&[u8]]] = &[&signer[..]];
+    let signer = &[b"BONDING_CURVE", binding.as_ref(), &[bonding_curve.bump]];
+    let signer_seeds: &[&[&[u8]]] = &[&signer[..]];
 
     //transfer token
-    let _ = &bonding_curve.transfer_token(ctx.accounts.token_escrow.to_account_info(), ctx.accounts.token_ata.to_account_info(), signer_seeds, swap_amount.token_to_send, ctx.accounts.bonding_curve.to_account_info(),ctx.accounts.token_mint.to_account_info(), ctx.accounts.token_program.to_account_info());
+    bonding_curve.transfer_token(
+        ctx.accounts.token_escrow.to_account_info(), 
+        ctx.accounts.token_ata.to_account_info(), 
+        signer_seeds, 
+        swap_amount.token_to_send, 
+        bonding_curve_info,  // authority parameter
+        ctx.accounts.token_mint.to_account_info(), 
+        ctx.accounts.token_program.to_account_info()
+    )?;
+    
     Ok(())
 }

@@ -81,11 +81,20 @@ pub fn sell_token(ctx: &mut Context<SellToken>, max_token: u64) -> Result<()> {
     );
     let binding = bonding_curve.token_mint.key();
     let bonding_curve_key = bonding_curve.key();
-    let signer_seeds_sol: &[&[&[u8]]] = &[&[b"BONDING_CURVE", binding.as_ref(), bonding_curve_key.as_ref(), &[ctx.bumps.sol_escrow]]];
-    // ✅ Transfer SOL from bonding curve to signer
-            &bonding_curve.transfer_sol(&ctx.accounts.sol_escrow.to_account_info(), &signer_info.to_account_info(), swap_amount.max_sol,  signer_seeds_sol, ctx.accounts.system_program.to_account_info());
+    let signer_seeds_sol: &[&[&[u8]]] = &[&[
+        b"BONDING_CURVE", 
+        binding.as_ref(), 
+        bonding_curve_key.as_ref(), 
+        &[ctx.bumps.sol_escrow]
+    ]];
 
-
+    &bonding_curve.transfer_sol(
+        &ctx.accounts.sol_escrow.to_account_info(), 
+        &signer_info.to_account_info(), 
+        swap_amount.max_sol,  
+        signer_seeds_sol, 
+        ctx.accounts.system_program.to_account_info()
+    );
 
     // ✅ Prepare signer seeds
     let binding = ctx.accounts.token_mint.key();

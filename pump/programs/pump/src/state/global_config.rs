@@ -34,4 +34,22 @@ impl GlobalConfig {
     pub fn bump(&self) -> u8 {
         self.bump
     }
+    pub fn load_virtual_token_reserve(&self) -> Result<u64> {
+        Ok(self.virtual_token_reserve)
+    }
+    
+    pub fn load_virtual_sol_reserve(&self) -> Result<u64> {
+        Ok(self.virtual_sol_reserve)
+    }
+    pub fn load_token_to_sell(&self) -> Result<u64> {
+        Ok(self.token_to_sell)
+    }
+    
+    pub fn load_token_to_mint(&self) -> Result<u64> {
+        Ok(self.token_to_mint)
+    }
+    
+    pub fn load_bump(&self) -> Result<u8> {
+        Ok(self.bump)
+    }
 }

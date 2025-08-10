@@ -251,6 +251,30 @@ impl<'info> BondingCurve {
         invoke_signed(&ix, &[from.clone(), to.clone()],signer_seeds)?;
         Ok(())
     }
+    
+    pub fn load_virtual_sol_reserve(&self) -> Result<u64> {
+        Ok(self.virtual_sol_reserve)
+    }
+    
+    pub fn load_virtual_token_reserve(&self) -> Result<u64> {
+        Ok(self.virtual_token_reserve)
+    }
+    
+    pub fn load_token_sold(&self) -> Result<u64> {
+        Ok(self.token_sold)
+    }
+    
+    pub fn load_token_mint(&self) -> Result<Pubkey> {
+        Ok(self.token_mint)
+    }
+    
+    pub fn load_is_active(&self) -> Result<bool> {
+        Ok(self.is_active)
+    }
+    
+    pub fn load_bump(&self) -> Result<u8> {
+        Ok(self.bump)
+    }
 }
 
 #[cfg(test)]

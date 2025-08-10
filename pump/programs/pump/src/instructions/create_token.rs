@@ -18,20 +18,20 @@ use crate::{
 
 use crate::state::{BondingCurve, GlobalConfig};
 use crate::constants::{ANCHOR_DISCRIMINATOR, BONDING_SEED};
-// use crate::utils::*; // assumes mint_token and create_metadata_account_v3 are here
-use crate::error::*;
 use anchor_spl::token::TokenAccount;
 use anchor_spl::token::Mint;
+use crate::state::global_config::LazyGlobalConfig;
 #[derive(Accounts)]
 pub struct CreateToken<'info>{
     #[account(mut)]
     pub signer: Signer<'info>,
-    pub global_state: Box<Account<'info, GlobalConfig>>,
-        #[account(
-            seeds = [BONDING_SEED.as_bytes(), mint.key().as_ref(), bonding_curve.key().as_ref()],
-            bump,
-        )]
-        pub sol_escrow: SystemAccount<'info>,
+    
+    pub global_state: LazyAccount<'info, GlobalConfig>,
+    #[account(
+        seeds = [BONDING_SEED.as_bytes(), mint.key().as_ref(), bonding_curve.key().as_ref()],
+        bump,
+    )]
+    pub sol_escrow: SystemAccount<'info>,
 
     #[account(
         init_if_needed,
@@ -80,10 +80,23 @@ pub fn create_token(
     ticker: &str,
     uri: &str,
 ) -> Result<()> {
+    let virtual_token_reserve = ctx.accounts.global_state.load_virtual_token_reserve()?;
+    let virtual_sol_reserve = ctx.accounts.global_state.load_virtual_sol_reserve()?;
+    
+    // Validation using lazy-loaded values
+    require!(
+        *token_reserve == *virtual_token_reserve, 
+        ErrorCode::InvalidTokenAmount
+    );
+    require!(
+        *sol_reserve == *virtual_sol_reserve, 
+        ErrorCode::InvalidSolAmount
+    );
+
     // Step 1: Initialize bonding curve state
-    let result  = ctx.accounts.bonding_curve.init_bonding_curve(
-        &sol_reserve,
-        &token_reserve,
+    let result = ctx.accounts.bonding_curve.init_bonding_curve(
+        sol_reserve,
+        token_reserve,
         &ctx.accounts.mint.key(),
         &ctx.bumps.bonding_curve.clone(),
     )?;
@@ -118,7 +131,15 @@ pub fn create_token(
     /*
     token_program: &AccountInfo<'info>,to: &AccountInfo<'info>, mint_authority: &AccountInfo<'info>, signer_seeds: &[&[&[u8]]],   mint_amount: u64
     */
-    let _ = ctx.accounts.bonding_curve.mint_token(&ctx.accounts.token_program.to_account_info(), &ctx.accounts.token_escrow.to_account_info(), &ctx.accounts.mint.to_account_info(), &ctx.accounts.bonding_curve.to_account_info(), signer_seeds);
+
+    // Step 4: Mint tokens
+    let _ = ctx.accounts.bonding_curve.mint_token(
+        &ctx.accounts.token_program.to_account_info(), 
+        &ctx.accounts.token_escrow.to_account_info(), 
+        &ctx.accounts.mint.to_account_info(), 
+        &ctx.accounts.bonding_curve.to_account_info(), 
+        signer_seeds
+    );
 
     Ok(())
 }
