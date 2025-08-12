@@ -41,18 +41,29 @@ impl GlobalConfig {
     }
 }
 
-// ✅ CRITICAL: Implement the LazyGlobalConfig trait for LazyAccount compatibility
-pub trait LazyGlobalConfig {
-    fn load_virtual_token_reserve(&self) -> Result<u64>;
-    fn load_virtual_sol_reserve(&self) -> Result<u64>;
+// ✅ Create a trait for selective field access
+pub trait GlobalConfigLoader {
+    fn get_virtual_token_reserve(&self) -> Result<u64>;
+    fn get_virtual_sol_reserve(&self) -> Result<u64>;
 }
 
-impl LazyGlobalConfig for LazyAccount<'_, GlobalConfig> {
-    fn load_virtual_token_reserve(&self) -> Result<u64> {
-        Ok(self.virtual_token_reserve)
+// ✅ Implement the trait for LazyAccount
+impl<'info> GlobalConfigLoader for LazyAccount<'info, GlobalConfig> {
+    fn get_virtual_token_reserve(&self) -> Result<u64> {
+        // Read only the specific 8 bytes for virtual_token_reserve
+        // Offset: 8 (discriminator) + 8 (token_to_sell) + 8 (token_to_mint) = 24 bytes
+        let account_info = self.to_account_info();
+        let data = account_info.try_borrow_data()?;
+        let bytes = &data[24..32]; // 8 bytes for u64
+        Ok(u64::from_le_bytes(bytes.try_into().unwrap()))
     }
     
-    fn load_virtual_sol_reserve(&self) -> Result<u64> {
-        Ok(self.virtual_sol_reserve)
+    fn get_virtual_sol_reserve(&self) -> Result<u64> {
+        // Read only the specific 8 bytes for virtual_sol_reserve  
+        // Offset: 8 (discriminator) + 8 (token_to_sell) + 8 (token_to_mint) + 8 (virtual_token_reserve) = 32 bytes
+        let account_info = self.to_account_info();
+        let data = account_info.try_borrow_data()?;
+        let bytes = &data[32..40]; // 8 bytes for u64
+        Ok(u64::from_le_bytes(bytes.try_into().unwrap()))
     }
 }

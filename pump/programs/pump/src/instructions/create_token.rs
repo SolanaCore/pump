@@ -16,6 +16,7 @@ use crate::{
 };
 
 use crate::state::{BondingCurve, GlobalConfig};
+use crate::state::global_config::GlobalConfigLoader; // ✅ Import the trait
 use crate::constants::{ANCHOR_DISCRIMINATOR, BONDING_SEED};
 use anchor_spl::token::TokenAccount;
 use anchor_spl::token::Mint;
@@ -25,12 +26,12 @@ pub struct CreateToken<'info>{
     #[account(mut)]
     pub signer: Signer<'info>,
     
-    // ✅ Use regular Account for read-only access to GlobalConfig
+    // ✅ Use LazyAccount for selective field deserialization
     #[account(
         seeds = [b"global_config"],
         bump,
     )]
-    pub global_state: Account<'info, GlobalConfig>,
+    pub global_state: LazyAccount<'info, GlobalConfig>,
     
     #[account(
         seeds = [BONDING_SEED.as_bytes(), mint.key().as_ref(), bonding_curve.key().as_ref()],
@@ -85,9 +86,9 @@ pub fn create_token(
     ticker: &str,
     uri: &str,
 ) -> Result<()> {
-    // ✅ Direct field access from Account
-    let virtual_token_reserve = ctx.accounts.global_state.virtual_token_reserve;
-    let virtual_sol_reserve = ctx.accounts.global_state.virtual_sol_reserve;
+    // ✅ Use custom methods to read only specific fields (selective deserialization)
+    let virtual_token_reserve = ctx.accounts.global_state.get_virtual_token_reserve()?;
+    let virtual_sol_reserve = ctx.accounts.global_state.get_virtual_sol_reserve()?;
     
     // Validation using directly accessed values
     require!(
