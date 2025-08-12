@@ -16,7 +16,7 @@ use crate::{
 };
 
 use crate::state::{BondingCurve, GlobalConfig};
-use crate::state::global_config::GlobalConfigLoader; // ✅ Import the trait
+use crate::state::global_config::GlobalConfigLoader;
 use crate::constants::{ANCHOR_DISCRIMINATOR, BONDING_SEED};
 use anchor_spl::token::TokenAccount;
 use anchor_spl::token::Mint;
