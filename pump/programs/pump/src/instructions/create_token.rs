@@ -14,28 +14,23 @@ use anchor_spl::{
 use crate::{
     error::ErrorCode,
 };
-// use anchor_lang::prelude::{Mint, TokenAccount}; // ✅ Fix: Use the correct types for Anchor compatibility
 
 use crate::state::{BondingCurve, GlobalConfig};
 use crate::constants::{ANCHOR_DISCRIMINATOR, BONDING_SEED};
-// use crate::utils::*; // assumes mint_token and create_metadata_account_v3 are here
 use anchor_spl::token::TokenAccount;
 use anchor_spl::token::Mint;
-
-// ✅ Import the LazyGlobalConfig trait
-use crate::state::global_config::LazyGlobalConfig;
 
 #[derive(Accounts)]
 pub struct CreateToken<'info>{
     #[account(mut)]
     pub signer: Signer<'info>,
     
-    // ✅ Use LazyAccount for read-only access to GlobalConfig
+    // ✅ Use regular Account for read-only access to GlobalConfig
     #[account(
         seeds = [b"global_config"],
         bump,
     )]
-    pub global_state: LazyAccount<'info, GlobalConfig>,
+    pub global_state: Account<'info, GlobalConfig>,
     
     #[account(
         seeds = [BONDING_SEED.as_bytes(), mint.key().as_ref(), bonding_curve.key().as_ref()],
@@ -90,11 +85,11 @@ pub fn create_token(
     ticker: &str,
     uri: &str,
 ) -> Result<()> {
-    // ✅ Use LazyAccount methods to load only required fields
-    let virtual_token_reserve = ctx.accounts.global_state.load_virtual_token_reserve()?;
-    let virtual_sol_reserve = ctx.accounts.global_state.load_virtual_sol_reserve()?;
+    // ✅ Direct field access from Account
+    let virtual_token_reserve = ctx.accounts.global_state.virtual_token_reserve;
+    let virtual_sol_reserve = ctx.accounts.global_state.virtual_sol_reserve;
     
-    // Validation using lazy-loaded values
+    // Validation using directly accessed values
     require!(
         *token_reserve == virtual_token_reserve, 
         ErrorCode::InvalidTokenAmount
@@ -142,9 +137,6 @@ pub fn create_token(
         &ctx.accounts.rent.to_account_info(),
         signer_seeds,
     );
-    /*
-    token_program: &AccountInfo<'info>,to: &AccountInfo<'info>, mint_authority: &AccountInfo<'info>, signer_seeds: &[&[&[u8]]],   mint_amount: u64
-    */
 
     // Step 4: Mint tokens
     let _ = ctx.accounts.bonding_curve.mint_token(
