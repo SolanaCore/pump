@@ -35,3 +35,18 @@ impl GlobalConfig {
         self.bump
     }
 }
+
+pub trait LazyGlobalConfig {
+    fn load_virtual_token_reserve(&self) -> Result<u64>;
+    fn load_virtual_sol_reserve(&self) -> Result<u64>;
+}
+
+impl LazyGlobalConfig for LazyAccount<'_, GlobalConfig> {
+    fn load_virtual_token_reserve(&self) -> Result<u64> {
+        Ok(self.virtual_token_reserve)
+    }
+    
+    fn load_virtual_sol_reserve(&self) -> Result<u64> {
+        Ok(self.virtual_sol_reserve)
+    }
+}
