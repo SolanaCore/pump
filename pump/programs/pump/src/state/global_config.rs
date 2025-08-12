@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+
 #[account]
 #[derive(InitSpace)]
 pub struct GlobalConfig {
@@ -10,7 +11,7 @@ pub struct GlobalConfig {
 }
 
 impl GlobalConfig {
-    pub fn init_global_config(&mut self, bump:&u8) -> Result<()> {
+    pub fn init_global_config(&mut self, bump: &u8) -> Result<()> {
         self.token_to_sell = 800_000_000; 
         self.token_to_mint = 1_000_000_000; 
         self.virtual_token_reserve = 800_000_000; 
@@ -18,9 +19,11 @@ impl GlobalConfig {
         self.bump = *bump; 
         Ok(())
     }
+    
     pub fn virtual_token_reserve(&self) -> u64 {
         self.virtual_token_reserve
     }
+    
     pub fn virtual_sol_reserve(&self) -> u64 {
         self.virtual_sol_reserve
     }
@@ -28,14 +31,17 @@ impl GlobalConfig {
     pub fn token_to_mint(&self) -> u64 {
         self.token_to_mint
     }
+    
     pub fn token_to_sell(&self) -> u64 {
         self.token_to_sell
     }
+    
     pub fn bump(&self) -> u8 {
         self.bump
     }
 }
 
+// ✅ CRITICAL: Implement the LazyGlobalConfig trait for LazyAccount compatibility
 pub trait LazyGlobalConfig {
     fn load_virtual_token_reserve(&self) -> Result<u64>;
     fn load_virtual_sol_reserve(&self) -> Result<u64>;
