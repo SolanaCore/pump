@@ -1,55 +1,28 @@
-name:  CI
-
+name: PUMP CI
 on:
   pull_request:
+    branches: [ "main" ]
+  push:
     branches: [ "main" ]
 
 jobs:
   build-and-test-program:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       - name: Setup Solana Environment
-        uses: DhruvWebDev/solana-setup-action@v0.1.0
+        uses: DhruvWebDev/solana-setup-action@v0.1.4
         with:
           node-version: '20'
           solana-cli-version: '1.18.26'
           anchor-version: 'v0.31.1'
+          solana-network-url: 'https://api.devnet.solana.com'
+          solana-airdrop-amount: '5'
+          solana-wallet-setup: true
+          build-script: 'anchor build'
+          test-script: 'anchor test'
+          deploy-script: 'anchor deploy'
           x-ray-enabled: true
-
-      - name: Verify Solana CLI version
-        run: solana --version
-
-      - name: solana config
-        run: |
-          solana config get
-          solana config set --url devnet
-          solana-keygen new --no-bip39-passphrase
-          solana address 
-          solana airdrop 3
-          solana balance 
-
-      - name: Verify Anchor CLI version
-        run: anchor --version
-
-      - name: Anchor Build
-        run: anchor build
-        working-directory: ./pump
-
-      - name: Install npm packages
-        run: npm install
-        working-directory: ./pump
-
-      - name: Anchor Test
-        run: anchor test
-        working-directory: ./pump
-    
-
-      # Optional: if x-ray supports outputting SARIF
-      # - name: Upload SARIF report
-      #   uses: github/codeql-action/upload-sarif@v3
-      #   with:
-      #     sarif_file: multisig/output.sarif
+          working-directory: './pump'
